@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import Hero from "./components/Hero";
 import Services from "./components/Services";
+import Skills from "./components/Skills";
 import Testimonials from "./components/Testimonials";
 
 export default function Home() {
@@ -32,6 +33,7 @@ export default function Home() {
       {/* Sections */}
       <Hero />
       <Services />
+      <Skills />
       <Testimonials />
     </>
   );
