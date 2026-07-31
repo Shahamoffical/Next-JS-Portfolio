@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-mono: 'Fira Code', monospace;
+
+  /* Light theme colors - Deep Crimson Scheme */
+  --color-primary: #c00000; /* Deep Crimson Red */
+  --color-primary-dark: #820000; /* Dark Crimson Hover */
+  --color-indigo: #d93838; /* Accent light red for gradients */
+  --color-accent: #c00000;
+
+  --color-bg: #ffffff;
+  --color-bg-alt: #f9fafb;
+  --color-card: #FFFFFF;
+  --color-card-hover: #fcfcfc;
+
+  --color-text-heading: #111827; /* Darker black */
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #4b5563; /* Medium gray */
+  --color-text-muted: #9ca3af;
+
+  --color-border: #f3f4f6;
+  --color-border-light: #f9fafb;
+  --color-border-hover: #e5e7eb;
+
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.03);
+  --shadow-card-hover: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.03);
+  --shadow-elevated: 0 8px 32px rgba(0,0,0,0.06);
+  --shadow-glow-blue: 0 0 20px rgba(239,68,68,0.12); /* Renamed class but kept var name for compatibility */
+}
+
+:root {
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+html, body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-weight: 400; /* Regular body weight */
+}
+
+/* Enforce uniform heading styles site-wide */
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--color-text-heading);
+    letter-spacing: -0.02em;
+  }
+  
+  /* The serif italic accent style */
+  .font-accent {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 500;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f9fafb;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+  border: 2px solid #f9fafb;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c00000;
+}
+
+/* Frosted Glass Card (light) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+}
+
+.glass-card-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-4px);
+}
+
+/* Accent text glow (subtle for light) */
+.text-glow-blue {
+  text-shadow: 0 0 20px rgba(192, 0, 0, 0.15);
+}
+
+.text-glow-indigo {
+  text-shadow: 0 0 20px rgba(217, 56, 56, 0.15);
+}
+
+/* Button Glow */
+.btn-glow {
+  box-shadow: 0 0 0px rgba(192, 0, 0, 0);
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-glow:hover {
+  box-shadow: 0 4px 20px rgba(192, 0, 0, 0.25);
+}
+
+/* Radial background decorations */
+.radial-bg-blue {
+  background: radial-gradient(circle at 50% 50%, rgba(192, 0, 0, 0.03) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+.radial-bg-indigo {
+  background: radial-gradient(circle at 50% 50%, rgba(217, 56, 56, 0.03) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+/* Timeline line */
+.timeline-line {
+  background: linear-gradient(to bottom, #c00000, #d93838, #c00000);
+}
+
+/* Scroll Progress Bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(to right, #c00000, #d93838);
+  z-index: 100;
+}
+
+/* Animated Border Card */
+.animated-border-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.animated-border-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent,
+    transparent,
+    #c00000,
+    transparent
+  );
+  animation: rotate 6s linear infinite;
+  z-index: 1;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.card-inner {
+  position: relative;
+  z-index: 2;
+  margin: 1px;
+  background: #ffffff;
+  border-radius: 11px;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #c00000, #d93838);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Dot grid pattern */
+.dot-grid {
+  background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Section Specific CSS Classes */
+.header-section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.header-main-bar {
+  border-radius: 9999px !important;
+  box-shadow: 0 0 35px rgba(192, 0, 0, 0.35), 0 12px 40px rgba(130, 0, 0, 0.12);
+}
+
+.header-main-bar.is-scrolled {
+  box-shadow: 0 0 45px rgba(192, 0, 0, 0.5), 0 12px 40px rgba(130, 0, 0, 0.2);
+}
+
+.hero-section {
+  position: relative;
+  width: 100%;
+}
+
+.services-section {
+  position: relative;
+}
+
+.skills-section {
+  position: relative;
+}
+
+.experience-section {
+  position: relative;
+}
+
+.projects-section {
+  position: relative;
+}
+
+.testimonials-section {
+  position: relative;
+}
+
+.pricing-section {
+  position: relative;
+}
+
+.cta-section {
+  position: relative;
+  width: 100%;
+}
+
+.footer-section {
+  position: relative;
+  width: 100%;
+}
+
+
