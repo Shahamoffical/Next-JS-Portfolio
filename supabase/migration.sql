@@ -1,5 +1,5 @@
 -- ============================================
--- DevShaham Portfolio — Supabase Migration SQL
+-- DevShaham Portfolio — Safe Idempotent Migration SQL
 -- Run this in: Supabase Dashboard → SQL Editor
 -- ============================================
 
@@ -16,6 +16,11 @@ CREATE TABLE IF NOT EXISTS projects (
 );
 
 ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read projects" ON projects;
+DROP POLICY IF EXISTS "Auth insert projects" ON projects;
+DROP POLICY IF EXISTS "Auth update projects" ON projects;
+DROP POLICY IF EXISTS "Auth delete projects" ON projects;
+
 CREATE POLICY "Public read projects" ON projects FOR SELECT USING (true);
 CREATE POLICY "Auth insert projects" ON projects FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 CREATE POLICY "Auth update projects" ON projects FOR UPDATE USING (auth.role() = 'authenticated');
@@ -46,6 +51,11 @@ CREATE TABLE IF NOT EXISTS blog_posts (
 );
 
 ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read published posts" ON blog_posts;
+DROP POLICY IF EXISTS "Auth insert posts" ON blog_posts;
+DROP POLICY IF EXISTS "Auth update posts" ON blog_posts;
+DROP POLICY IF EXISTS "Auth delete posts" ON blog_posts;
+
 CREATE POLICY "Public read published posts" ON blog_posts FOR SELECT USING (true);
 CREATE POLICY "Auth insert posts" ON blog_posts FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 CREATE POLICY "Auth update posts" ON blog_posts FOR UPDATE USING (auth.role() = 'authenticated');
@@ -68,6 +78,11 @@ CREATE TABLE IF NOT EXISTS pages (
 );
 
 ALTER TABLE pages ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read pages" ON pages;
+DROP POLICY IF EXISTS "Auth insert pages" ON pages;
+DROP POLICY IF EXISTS "Auth update pages" ON pages;
+DROP POLICY IF EXISTS "Auth delete pages" ON pages;
+
 CREATE POLICY "Public read pages" ON pages FOR SELECT USING (true);
 CREATE POLICY "Auth insert pages" ON pages FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 CREATE POLICY "Auth update pages" ON pages FOR UPDATE USING (auth.role() = 'authenticated');
@@ -89,6 +104,11 @@ CREATE TABLE IF NOT EXISTS leads (
 );
 
 ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public insert leads" ON leads;
+DROP POLICY IF EXISTS "Auth read leads" ON leads;
+DROP POLICY IF EXISTS "Auth update leads" ON leads;
+DROP POLICY IF EXISTS "Auth delete leads" ON leads;
+
 CREATE POLICY "Public insert leads" ON leads FOR INSERT WITH CHECK (true);
 CREATE POLICY "Auth read leads" ON leads FOR SELECT USING (auth.role() = 'authenticated');
 CREATE POLICY "Auth update leads" ON leads FOR UPDATE USING (auth.role() = 'authenticated');
@@ -107,6 +127,9 @@ CREATE TABLE IF NOT EXISTS reviews (
 );
 
 ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read published reviews" ON reviews;
+DROP POLICY IF EXISTS "Auth full access reviews" ON reviews;
+
 CREATE POLICY "Public read published reviews" ON reviews FOR SELECT USING (status = 'Published');
 CREATE POLICY "Auth full access reviews" ON reviews FOR ALL USING (auth.role() = 'authenticated');
 
@@ -120,6 +143,9 @@ CREATE TABLE IF NOT EXISTS settings (
 );
 
 ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Public read settings" ON settings;
+DROP POLICY IF EXISTS "Auth update settings" ON settings;
+
 CREATE POLICY "Public read settings" ON settings FOR SELECT USING (true);
 CREATE POLICY "Auth update settings" ON settings FOR ALL USING (auth.role() = 'authenticated');
 
@@ -127,6 +153,10 @@ CREATE POLICY "Auth update settings" ON settings FOR ALL USING (auth.role() = 'a
 -- 7. STORAGE BUCKET
 INSERT INTO storage.buckets (id, name, public) VALUES ('media', 'media', true)
 ON CONFLICT (id) DO NOTHING;
+
+DROP POLICY IF EXISTS "Public read media" ON storage.objects;
+DROP POLICY IF EXISTS "Auth upload media" ON storage.objects;
+DROP POLICY IF EXISTS "Auth delete media" ON storage.objects;
 
 CREATE POLICY "Public read media" ON storage.objects FOR SELECT USING (bucket_id = 'media');
 CREATE POLICY "Auth upload media" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'media' AND auth.role() = 'authenticated');
@@ -141,6 +171,10 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS blog_posts_updated_at ON blog_posts;
+DROP TRIGGER IF EXISTS pages_updated_at ON pages;
+DROP TRIGGER IF EXISTS settings_updated_at ON settings;
 
 CREATE TRIGGER blog_posts_updated_at BEFORE UPDATE ON blog_posts FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 CREATE TRIGGER pages_updated_at BEFORE UPDATE ON pages FOR EACH ROW EXECUTE FUNCTION update_updated_at();

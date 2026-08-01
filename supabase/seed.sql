@@ -1,5 +1,5 @@
 -- ============================================
--- DevShaham Portfolio — Seed Data
+-- DevShaham Portfolio — Safe Idempotent Seed Data
 -- Run AFTER migration.sql in Supabase SQL Editor
 -- ============================================
 
@@ -8,7 +8,8 @@ INSERT INTO projects (title, url, category, status, leads, date) VALUES
   ('MobileCart E-Commerce', 'https://mobilecart.ca', 'Shopify Plus', 'Published', 14, '2026-07-28'),
   ('Chateau Salon & Spa', 'https://chateausalon.com', 'WordPress & Booking', 'Published', 22, '2026-07-22'),
   ('Eat Arra Organic Store', 'https://eatarra.com', 'WooCommerce & WhatsApp', 'Published', 18, '2026-07-15'),
-  ('Saferdot Cybersecurity', 'https://saferdot.com', 'MERN Stack Web App', 'Published', 9, '2026-07-08');
+  ('Saferdot Cybersecurity', 'https://saferdot.com', 'MERN Stack Web App', 'Published', 9, '2026-07-08')
+ON CONFLICT DO NOTHING;
 
 -- BLOG POSTS
 INSERT INTO blog_posts (title, slug, category, author, views, status, content, tags, excerpt, faqs, seo_title, seo_desc) VALUES
@@ -50,7 +51,8 @@ INSERT INTO blog_posts (title, slug, category, author, views, status, content, t
    'Comprehensive speed optimization guide for web applications.',
    '',
    'Website Speed Optimization Guide',
-   'How to pass Core Web Vitals with sub-2s load speeds.');
+   'How to pass Core Web Vitals with sub-2s load speeds.')
+ON CONFLICT (slug) DO NOTHING;
 
 -- PAGES
 INSERT INTO pages (title, slug, live_url, status, content, meta_title, meta_desc) VALUES
@@ -77,16 +79,19 @@ INSERT INTO pages (title, slug, live_url, status, content, meta_title, meta_desc
   ('Contact Page', '/contact', 'devshaham.com/contact', 'Published',
    '<p>Contact Us page content — edit from the dashboard.</p>',
    'Contact Us - Digital Solutions Agency',
-   'Get in touch with our expert Shopify, WordPress and MERN stack developers for a custom quote.');
+   'Get in touch with our expert Shopify, WordPress and MERN stack developers for a custom quote.')
+ON CONFLICT (slug) DO NOTHING;
 
 -- LEADS
 INSERT INTO leads (name, product, source, type, status) VALUES
   ('Alexander Wright', 'Shopify Plus Replatforming', '/services/shopify', 'Quote', 'New'),
   ('Chateau Beauty Salon', 'Vagaro Booking Integration', '/projects/chateausalon', 'General', 'In Contact'),
   ('Arra Organic Foods', 'WhatsApp Automated Checkout', '/projects/eatarra', 'Order', 'Completed'),
-  ('Saferdot Tech', 'MERN Stack API Security Audit', '/contact', 'Quote', 'New');
+  ('Saferdot Tech', 'MERN Stack API Security Audit', '/contact', 'Quote', 'New')
+ON CONFLICT DO NOTHING;
 
 -- SETTINGS
 INSERT INTO settings (key, value) VALUES
   ('brand', '{"primaryColor": "#c00000", "hoverColor": "#820000", "headingFont": "Plus Jakarta Sans", "bodyFont": "Inter"}'),
-  ('seo', '{"defaultTitle": "DevShaham - Premium Custom Website Development", "defaultDesc": "Scaling E-commerce & Digital Experiences", "coreWebVitalsTarget": "Sub-2s"}');
+  ('seo', '{"defaultTitle": "DevShaham - Premium Custom Website Development", "defaultDesc": "Scaling E-commerce & Digital Experiences", "coreWebVitalsTarget": "Sub-2s"}')
+ON CONFLICT (key) DO NOTHING;
