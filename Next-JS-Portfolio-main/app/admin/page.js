@@ -254,7 +254,27 @@ export default function AdminDashboard() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState(null);
 
-  // Data State (loaded from Supabase)
+  // Analytics State (dynamic Vercel API integration)
+  const [analyticsData, setAnalyticsData] = useState(null);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
+
+  const fetchVercelAnalytics = async () => {
+    setAnalyticsLoading(true);
+    try {
+      const res = await fetch("/api/analytics");
+      const data = await res.json();
+      setAnalyticsData(data);
+    } catch (err) {
+      setAnalyticsData({ configured: false, error: err.message });
+    }
+    setAnalyticsLoading(false);
+  };
+
+  useEffect(() => {
+    if (activeTab === "analytics") {
+      fetchVercelAnalytics();
+    }
+  }, [activeTab]);
   const [projectsList, setProjectsList] = useState([]);
   const [leadsList, setLeadsList] = useState([]);
   const [articlesList, setArticlesList] = useState([]);
@@ -1982,165 +2002,174 @@ export default function AdminDashboard() {
                   </p>
                   <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
                     Vercel &amp; Real-Time Analytics
-                    <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-mono text-xs font-bold flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                      Vercel Analytics Active
+                    <span className={`px-3 py-1 rounded-full font-mono text-xs font-bold flex items-center gap-1.5 ${
+                      analyticsData?.live
+                        ? "bg-emerald-100 text-emerald-700"
+                        : "bg-amber-100 text-amber-800"
+                    }`}>
+                      <span className={`w-2 h-2 rounded-full ${
+                        analyticsData?.live ? "bg-emerald-500 animate-pulse" : "bg-amber-500"
+                      }`}></span>
+                      {analyticsData?.live ? "Vercel API Live Data" : "API Setup Required"}
                     </span>
                   </h2>
                   <p className="text-xs text-slate-500 font-light mt-1">
-                    Real-time traffic metrics, Core Web Vitals, pageviews, and visitor acquisition powered by @vercel/analytics.
+                    Dynamic real-time traffic metrics, pageviews, and visitor acquisition queried live from Vercel API.
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
+                  <button
+                    onClick={fetchVercelAnalytics}
+                    disabled={analyticsLoading}
+                    className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors shadow-sm flex items-center gap-1.5"
+                  >
+                    {analyticsLoading ? "Refreshing..." : "🔄 Refresh Data"}
+                  </button>
                   <a
-                    href="https://vercel.com"
+                    href="https://vercel.com/account/tokens"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition-colors shadow-sm"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition-colors shadow-sm"
                   >
-                    Open Vercel Dashboard
+                    Get Vercel Token
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
               </div>
 
-              {/* Metric Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-slate-500">Total Visitors (30d)</span>
-                    <div className="p-2 rounded-xl bg-blue-50 text-blue-600">
-                      <Users className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <div className="text-3xl font-extrabold text-slate-900 tracking-tight">12,480</div>
-                  <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-bold font-mono">
-                    <span>↑ +18.4%</span>
-                    <span className="text-slate-400 font-normal">vs previous period</span>
-                  </div>
+              {analyticsLoading ? (
+                <div className="py-20 text-center space-y-3">
+                  <div className="w-8 h-8 rounded-full border-4 border-primary/20 border-t-primary animate-spin mx-auto"></div>
+                  <p className="text-xs font-mono text-slate-500">Querying Vercel REST API...</p>
                 </div>
-
-                <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-slate-500">Total Pageviews</span>
-                    <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600">
-                      <TrendingUp className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <div className="text-3xl font-extrabold text-slate-900 tracking-tight">34,920</div>
-                  <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-bold font-mono">
-                    <span>2.8 pages</span>
-                    <span className="text-slate-400 font-normal">avg session depth</span>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-slate-500">Avg Duration</span>
-                    <div className="p-2 rounded-xl bg-purple-50 text-purple-600">
-                      <Clock className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <div className="text-3xl font-extrabold text-slate-900 tracking-tight">2m 45s</div>
-                  <div className="flex items-center gap-1 text-[11px] text-purple-600 font-bold font-mono">
-                    <span>High engagement</span>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-slate-500">Core Web Vitals</span>
-                    <div className="p-2 rounded-xl bg-amber-50 text-amber-600">
-                      <Globe className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <div className="text-3xl font-extrabold text-slate-900 tracking-tight">98 / 100</div>
-                  <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-bold font-mono">
-                    <span>Sub-2s load time</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Top Pages & Traffic Channels */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Most Visited Pages */}
-                <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-5">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                    <h3 className="text-sm font-bold text-slate-900">Top Visited Pages</h3>
-                    <span className="text-[10px] font-mono text-slate-400">Past 30 Days</span>
-                  </div>
-                  <div className="space-y-4">
-                    {[
-                      { path: "/", name: "Homepage", views: "14,200", percent: 40.6 },
-                      { path: "/services", name: "Services & Pricing", views: "8,400", percent: 24.1 },
-                      { path: "/blog", name: "Technical Blog", views: "5,600", percent: 16.0 },
-                      { path: "/contact", name: "Contact & Inquiry", views: "4,200", percent: 12.0 },
-                      { path: "/about", name: "About Us", views: "2,520", percent: 7.3 }
-                    ].map((pg, i) => (
-                      <div key={i} className="space-y-1.5">
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="font-semibold text-slate-800">{pg.name} <span className="font-mono text-[10px] text-slate-400 font-normal">({pg.path})</span></span>
-                          <span className="font-bold text-slate-900 font-mono">{pg.views} ({pg.percent}%)</span>
-                        </div>
-                        <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-                          <div
-                            className="h-full bg-primary rounded-full transition-all duration-500"
-                            style={{ width: `${pg.percent}%` }}
-                          ></div>
+              ) : analyticsData?.live && analyticsData?.data ? (
+                <>
+                  {/* Dynamic Metric Cards */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-slate-500">Total Unique Visitors</span>
+                        <div className="p-2 rounded-xl bg-blue-50 text-blue-600">
+                          <Users className="w-4 h-4" />
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                      <div className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                        {analyticsData.data.visitors.toLocaleString()}
+                      </div>
+                      <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-bold font-mono">
+                        <span>Live Vercel Metric</span>
+                      </div>
+                    </div>
 
-                {/* Traffic Acquisition Channels */}
-                <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-5">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                    <h3 className="text-sm font-bold text-slate-900">Traffic Acquisition Channels</h3>
-                    <span className="text-[10px] font-mono text-slate-400">Sources</span>
-                  </div>
-                  <div className="space-y-4">
-                    {[
-                      { source: "Google Organic Search", percent: 48, count: "6,000 visitors", color: "#10b981" },
-                      { source: "Direct / Bookmarks", percent: 28, count: "3,500 visitors", color: "#3b82f6" },
-                      { source: "LinkedIn & Social", percent: 14, count: "1,750 visitors", color: "#6366f1" },
-                      { source: "GitHub & Tech Blogs", percent: 10, count: "1,230 visitors", color: "#f59e0b" }
-                    ].map((channel, i) => (
-                      <div key={i} className="space-y-1.5">
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="font-semibold text-slate-800 flex items-center gap-2">
-                            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: channel.color }}></span>
-                            {channel.source}
-                          </span>
-                          <span className="font-bold text-slate-900 font-mono">{channel.percent}% ({channel.count})</span>
-                        </div>
-                        <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-                          <div
-                            className="h-full rounded-full transition-all duration-500"
-                            style={{ width: `${channel.percent}%`, backgroundColor: channel.color }}
-                          ></div>
+                    <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-slate-500">Total Pageviews</span>
+                        <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600">
+                          <TrendingUp className="w-4 h-4" />
                         </div>
                       </div>
-                    ))}
+                      <div className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                        {analyticsData.data.pageviews.toLocaleString()}
+                      </div>
+                      <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-bold font-mono">
+                        <span>Live Vercel Metric</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-slate-500">Pages Managed</span>
+                        <div className="p-2 rounded-xl bg-purple-50 text-purple-600">
+                          <Layers className="w-4 h-4" />
+                        </div>
+                      </div>
+                      <div className="text-3xl font-extrabold text-slate-900 tracking-tight">
+                        {pagesList.length}
+                      </div>
+                      <div className="flex items-center gap-1 text-[11px] text-purple-600 font-bold font-mono">
+                        <span>Active Static Routes</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-semibold text-slate-500">Core Web Vitals Target</span>
+                        <div className="p-2 rounded-xl bg-amber-50 text-amber-600">
+                          <Globe className="w-4 h-4" />
+                        </div>
+                      </div>
+                      <div className="text-3xl font-extrabold text-slate-900 tracking-tight">98 / 100</div>
+                      <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-bold font-mono">
+                        <span>Sub-2s Load Speed</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Dynamic Pages Breakdown */}
+                  <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-5">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                      <h3 className="text-sm font-bold text-slate-900">Vercel Live Page Performance</h3>
+                      <span className="text-[10px] font-mono text-slate-400">Past 30 Days</span>
+                    </div>
+                    {analyticsData.data.pages.length === 0 ? (
+                      <p className="text-xs text-slate-400 py-4 font-mono">No page traffic recorded yet in this 30-day window.</p>
+                    ) : (
+                      <div className="space-y-4">
+                        {analyticsData.data.pages.map((pg, i) => (
+                          <div key={i} className="space-y-1.5">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="font-semibold text-slate-800 font-mono">{pg.path || pg.url || "/"}</span>
+                              <span className="font-bold text-slate-900 font-mono">{pg.views || pg.count || 0} views</span>
+                            </div>
+                            <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                              <div
+                                className="h-full bg-primary rounded-full"
+                                style={{ width: `${Math.min(100, ((pg.views || 1) / (analyticsData.data.pageviews || 1)) * 100)}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                /* Setup Instructions Banner when Vercel API keys are not in env */
+                <div className="bg-slate-900 rounded-3xl p-8 md:p-10 text-white space-y-6 shadow-2xl border border-slate-800">
+                  <div className="space-y-2">
+                    <span className="px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 font-mono text-[10px] font-bold uppercase tracking-wider">
+                      Vercel REST API Setup
+                    </span>
+                    <h3 className="text-xl font-bold text-white">Connect Your Vercel Project Live Analytics</h3>
+                    <p className="text-xs text-slate-400 font-light leading-relaxed max-w-2xl">
+                      To stream live real-time visitor counts, pageviews, and referral sources directly from Vercel into this dashboard, add your Vercel API credentials to your project environment.
+                    </p>
+                  </div>
+
+                  <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3 font-mono text-xs text-slate-200">
+                    <div className="text-amber-400 font-bold">Add to .env.local (or Vercel Environment Variables):</div>
+                    <div className="p-3 rounded-xl bg-slate-950 text-emerald-400 space-y-1 overflow-x-auto">
+                      <div>VERCEL_AUTH_TOKEN=your_vercel_user_access_token</div>
+                      <div>VERCEL_PROJECT_ID=your_vercel_project_id</div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 text-xs font-mono">
+                    <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 space-y-1">
+                      <div className="font-bold text-amber-400">Step 1: Access Tokens</div>
+                      <div className="text-slate-400 text-[11px]">Go to Vercel Account Settings &gt; Tokens and create a new token.</div>
+                    </div>
+                    <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 space-y-1">
+                      <div className="font-bold text-amber-400">Step 2: Project ID</div>
+                      <div className="text-slate-400 text-[11px]">Copy your Project ID from Vercel Dashboard &gt; Settings &gt; General.</div>
+                    </div>
+                    <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 space-y-1">
+                      <div className="font-bold text-amber-400">Step 3: Save &amp; Refresh</div>
+                      <div className="text-slate-400 text-[11px]">Add env vars, restart server, and click Refresh Data above!</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Geographic & Device Stats Banner */}
-              <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-900 to-[#1e293b] text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
-                <div className="space-y-1.5 text-center md:text-left">
-                  <span className="px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 font-mono text-[10px] font-bold uppercase tracking-wider">
-                    Global Distribution
-                  </span>
-                  <h4 className="text-lg font-bold text-white">United States &amp; International Enterprise Traffic</h4>
-                  <p className="text-xs text-slate-300 font-light max-w-xl">
-                    42% US &amp; Canada, 31% UK &amp; Europe, 18% Asia Pacific. 68% Desktop browsers, 32% Mobile web.
-                  </p>
-                </div>
-                <div className="px-5 py-3 rounded-xl bg-white/10 border border-white/15 text-center shrink-0 font-mono text-xs font-bold text-amber-400">
-                  ⚡ @vercel/analytics Live
-                </div>
-              </div>
+              )}
             </div>
           )}
 
