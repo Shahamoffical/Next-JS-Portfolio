@@ -437,9 +437,11 @@ export default function SingleBlogPostPage() {
           {/* Author Metadata Card (Light Theme) */}
           <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/80 flex flex-wrap items-center justify-between gap-4 shadow-sm">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-full bg-[#c00000] text-white font-bold text-sm flex items-center justify-center shadow-md shrink-0">
-                SA
-              </div>
+              <img
+                src="/profilecard.jpeg"
+                alt="Shaham Abbas"
+                className="w-11 h-11 rounded-full object-cover shadow-md border-2 border-[#c00000] shrink-0"
+              />
               <div>
                 <div className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
                   {post.author || "Shaham Abbas"}
@@ -685,9 +687,11 @@ export default function SingleBlogPostPage() {
 
             {/* FULL AUTHOR BIO CARD */}
             <div className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-md flex flex-col sm:flex-row items-center sm:items-start gap-6">
-              <div className="w-20 h-20 rounded-full bg-[#c00000] text-white font-extrabold text-2xl flex items-center justify-center shrink-0 shadow-lg">
-                SA
-              </div>
+              <img
+                src="/profilecard.jpeg"
+                alt="Shaham Abbas"
+                className="w-20 h-20 rounded-full object-cover shadow-lg border-2 border-[#c00000] shrink-0"
+              />
               <div className="space-y-3 text-center sm:text-left">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
@@ -739,9 +743,11 @@ export default function SingleBlogPostPage() {
 
             {/* AUTHOR CARD SIDEBAR */}
             <div className="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm space-y-4 text-center">
-              <div className="w-16 h-16 rounded-full bg-[#c00000] text-white font-extrabold text-xl flex items-center justify-center mx-auto shadow-md">
-                SA
-              </div>
+              <img
+                src="/profilecard.jpeg"
+                alt="Shaham Abbas"
+                className="w-16 h-16 rounded-full object-cover mx-auto shadow-md border-2 border-[#c00000]"
+              />
               <div>
                 <h4 className="text-base font-bold text-slate-900 m-0">Shaham Abbas</h4>
                 <p className="text-[11px] font-mono text-[#c00000] mt-0.5">E-Commerce Engineer</p>

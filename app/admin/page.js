@@ -843,9 +843,11 @@ export default function AdminDashboard() {
         {/* Footer Admin Profile */}
         <div className="p-4 border-t border-slate-800/80 bg-slate-900/60 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-primary/20 text-primary border border-primary/40 flex items-center justify-center font-bold font-mono text-sm">
-              SA
-            </div>
+            <img
+              src="/profilecard.jpeg"
+              alt="Shaham Abbas"
+              className="w-9 h-9 rounded-full object-cover border border-primary/40"
+            />
             <div>
               <div className="text-xs font-bold text-white leading-tight">Shaham Abbas</div>
               <div className="text-[10px] text-slate-400 font-mono">Agency SuperAdmin</div>

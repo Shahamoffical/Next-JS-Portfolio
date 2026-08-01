@@ -170,7 +170,7 @@ export default function Hero() {
 
           <div className="portrait-anim relative w-[280px] h-[340px] sm:w-[350px] sm:h-[420px] rounded-3xl overflow-hidden border border-border bg-gradient-to-b from-bg-alt to-white group shadow-elevated">
             <img
-              src="/profession-photo.png"
+              src="/Profile.jpeg"
               alt="Shaham Abbas"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
