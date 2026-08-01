@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase";
 import {
   LayoutDashboard,
   FolderKanban,
@@ -240,43 +242,101 @@ const initialPages = [
 ];
 
 export default function AdminDashboard() {
+  const supabase = createClient();
+  const router = useRouter();
+
   const [activeTab, setActiveTab] = useState("dashboard");
   const [seoExpanded, setSeoExpanded] = useState(false);
   const [activeSeoSubTab, setActiveSeoSubTab] = useState("seo-dashboard");
   const [searchQuery, setSearchQuery] = useState("");
-  const [projectsList, setProjectsList] = useState(initialProjects);
-  const [leadsList, setLeadsList] = useState(initialLeads);
-  const [articlesList, setArticlesList] = useState(initialArticles);
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  // Data State (loaded from Supabase)
+  const [projectsList, setProjectsList] = useState([]);
+  const [leadsList, setLeadsList] = useState([]);
+  const [articlesList, setArticlesList] = useState([]);
+  const [pagesList, setPagesList] = useState([]);
+
+  // Toast helper
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  // Fetch all data from Supabase on mount
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      const [projectsRes, leadsRes, articlesRes, pagesRes] = await Promise.all([
+        fetch("/api/projects"),
+        fetch("/api/leads"),
+        fetch("/api/blog"),
+        fetch("/api/pages"),
+      ]);
+
+      const [projects, leads, articles, pages] = await Promise.all([
+        projectsRes.json(),
+        leadsRes.json(),
+        articlesRes.json(),
+        pagesRes.json(),
+      ]);
+
+      setProjectsList(Array.isArray(projects) ? projects : []);
+      setLeadsList(Array.isArray(leads) ? leads : []);
+      setArticlesList(Array.isArray(articles) ? articles : []);
+      setPagesList(Array.isArray(pages) ? pages : []);
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
+
+  // Auth: Log Out handler
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/admin/login");
+    router.refresh();
+  };
 
   // Pages Management State
-  const [pagesList, setPagesList] = useState(initialPages);
-  const [pageSubView, setPageSubView] = useState("list"); // "list" | "editor"
-  const [activePage, setActivePage] = useState(initialPages[0]);
+  const [pageSubView, setPageSubView] = useState("list");
+  const [activePage, setActivePage] = useState(null);
 
   const handleOpenEditPage = (pg) => {
     setActivePage({ ...pg });
     setPageSubView("editor");
   };
 
-  const handleSavePage = () => {
-    const updatedIdx = pagesList.findIndex(p => p.id === activePage.id);
-    if (updatedIdx >= 0) {
-      const updated = [...pagesList];
-      updated[updatedIdx] = activePage;
-      setPagesList(updated);
-    } else {
-      setPagesList([activePage, ...pagesList]);
+  const handleSavePage = async () => {
+    setSaving(true);
+    try {
+      const res = await fetch("/api/pages", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(activePage),
+      });
+      const saved = await res.json();
+      if (res.ok) {
+        setPagesList(pagesList.map(p => p.id === saved.id ? saved : p));
+        setPageSubView("list");
+        showToast("Page saved successfully!");
+      } else {
+        showToast(saved.error || "Failed to save page", "error");
+      }
+    } catch (err) {
+      showToast("Network error saving page", "error");
     }
-    setPageSubView("list");
+    setSaving(false);
   };
 
   // Blog Management State
-  const [blogSubView, setBlogSubView] = useState("list"); // "list" | "editor"
+  const [blogSubView, setBlogSubView] = useState("list");
   const [blogSearch, setBlogSearch] = useState("");
   const [blogStatusFilter, setBlogStatusFilter] = useState("All statuses");
   const [blogCategoryFilter, setBlogCategoryFilter] = useState("All categories");
-  const [editorTab, setEditorTab] = useState("content"); // "content" | "faqs" | "seo"
+  const [editorTab, setEditorTab] = useState("content");
 
   const [activeArticle, setActiveArticle] = useState({
     id: null,
@@ -286,55 +346,58 @@ export default function AdminDashboard() {
     author: "Admin",
     views: "0",
     status: "Draft",
-    date: "8/1/2026",
     content: "",
     tags: "",
     excerpt: "",
     faqs: "",
-    seoTitle: "",
-    seoDesc: "",
-    focusKeyword: "",
-    canonicalUrl: "",
+    seo_title: "",
+    seo_desc: "",
+    focus_keyword: "",
+    canonical_url: "",
     noindex: false,
-    featuredImage: null
+    featured_image: null
   });
 
   const calculateSeoScore = (art) => {
     let score = 0;
-    if (art.seoTitle && art.seoTitle.length <= 60) score += 10;
-    if (art.seoDesc && art.seoDesc.length >= 50 && art.seoDesc.length <= 160) score += 10;
-    if (art.focusKeyword) score += 10;
-    if (art.focusKeyword && art.seoTitle?.toLowerCase().includes(art.focusKeyword.toLowerCase())) score += 10;
-    if (art.focusKeyword && art.seoDesc?.toLowerCase().includes(art.focusKeyword.toLowerCase())) score += 10;
+    const seoTitle = art.seo_title || art.seoTitle || "";
+    const seoDesc = art.seo_desc || art.seoDesc || "";
+    const focusKw = art.focus_keyword || art.focusKeyword || "";
+    const featImg = art.featured_image || art.featuredImage;
+    const canUrl = art.canonical_url || art.canonicalUrl || "";
+
+    if (seoTitle && seoTitle.length <= 60) score += 10;
+    if (seoDesc && seoDesc.length >= 50 && seoDesc.length <= 160) score += 10;
+    if (focusKw) score += 10;
+    if (focusKw && seoTitle.toLowerCase().includes(focusKw.toLowerCase())) score += 10;
+    if (focusKw && seoDesc.toLowerCase().includes(focusKw.toLowerCase())) score += 10;
     if ((art.content?.split(/\s+/).length || 0) >= 10) score += 10;
-    score += 10; // Schema markup enabled by default
-    if (art.featuredImage) score += 10;
-    if (art.canonicalUrl) score += 10;
+    score += 10;
+    if (featImg) score += 10;
+    if (canUrl) score += 10;
     if (art.content?.includes("http") || art.content?.includes("/")) score += 10;
     return score;
   };
 
-  // Blog Handlers
   const handleOpenNewPost = () => {
     setActiveArticle({
-      id: Date.now(),
+      id: null,
       title: "",
       slug: "",
       category: "Shopify Development",
       author: "Admin",
       views: "0",
       status: "Draft",
-      date: new Date().toLocaleDateString(),
       content: "",
       tags: "",
       excerpt: "",
       faqs: "",
-      seoTitle: "",
-      seoDesc: "",
-      focusKeyword: "",
-      canonicalUrl: "",
+      seo_title: "",
+      seo_desc: "",
+      focus_keyword: "",
+      canonical_url: "",
       noindex: false,
-      featuredImage: null
+      featured_image: null
     });
     setEditorTab("content");
     setBlogSubView("editor");
@@ -346,7 +409,8 @@ export default function AdminDashboard() {
     setBlogSubView("editor");
   };
 
-  const handleSaveArticle = (statusOverride) => {
+  const handleSaveArticle = async (statusOverride) => {
+    setSaving(true);
     const finalStatus = statusOverride || activeArticle.status || "Draft";
     const postToSave = {
       ...activeArticle,
@@ -355,26 +419,49 @@ export default function AdminDashboard() {
       slug: activeArticle.slug || (activeArticle.title ? activeArticle.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : "new-post")
     };
 
-    const existingIdx = articlesList.findIndex(a => a.id === postToSave.id);
-    if (existingIdx >= 0) {
-      const updated = [...articlesList];
-      updated[existingIdx] = postToSave;
-      setArticlesList(updated);
-    } else {
-      setArticlesList([postToSave, ...articlesList]);
+    try {
+      const isNew = !articlesList.find(a => a.id === postToSave.id);
+      const res = await fetch("/api/blog", {
+        method: isNew ? "POST" : "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postToSave),
+      });
+      const saved = await res.json();
+      if (res.ok) {
+        if (isNew) {
+          setArticlesList([saved, ...articlesList]);
+        } else {
+          setArticlesList(articlesList.map(a => a.id === saved.id ? saved : a));
+        }
+        setBlogSubView("list");
+        showToast("Blog post saved successfully!");
+      } else {
+        showToast(saved.error || "Failed to save post", "error");
+      }
+    } catch (err) {
+      showToast("Network error saving post", "error");
     }
-
-    setBlogSubView("list");
+    setSaving(false);
   };
 
-  const handleDeleteArticle = (id) => {
-    setArticlesList(articlesList.filter(a => a.id !== id));
+  const handleDeleteArticle = async (id) => {
+    try {
+      const res = await fetch(`/api/blog?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setArticlesList(articlesList.filter(a => a.id !== id));
+        showToast("Post deleted!");
+      } else {
+        showToast("Failed to delete post", "error");
+      }
+    } catch (err) {
+      showToast("Network error", "error");
+    }
   };
 
   const filteredArticles = articlesList.filter(art => {
-    const matchesSearch = art.title.toLowerCase().includes(blogSearch.toLowerCase()) || art.slug.toLowerCase().includes(blogSearch.toLowerCase());
-    const matchesStatus = blogStatusFilter === "All statuses" || art.status.toLowerCase() === blogStatusFilter.toLowerCase();
-    const matchesCategory = blogCategoryFilter === "All categories" || art.category.toLowerCase() === blogCategoryFilter.toLowerCase();
+    const matchesSearch = (art.title || "").toLowerCase().includes(blogSearch.toLowerCase()) || (art.slug || "").toLowerCase().includes(blogSearch.toLowerCase());
+    const matchesStatus = blogStatusFilter === "All statuses" || (art.status || "").toLowerCase() === blogStatusFilter.toLowerCase();
+    const matchesCategory = blogCategoryFilter === "All categories" || (art.category || "").toLowerCase() === blogCategoryFilter.toLowerCase();
     return matchesSearch && matchesStatus && matchesCategory;
   });
 
@@ -386,29 +473,73 @@ export default function AdminDashboard() {
     status: "Published"
   });
 
-  const handleAddProject = (e) => {
+  const handleAddProject = async (e) => {
     e.preventDefault();
     if (!newProject.title) return;
-    const added = {
-      id: Date.now(),
-      title: newProject.title,
-      url: newProject.url || "https://example.com",
-      category: newProject.category,
-      status: newProject.status,
-      leads: 0,
-      date: "Just Now"
-    };
-    setProjectsList([added, ...projectsList]);
-    setNewProject({ title: "", url: "", category: "Shopify Plus", status: "Published" });
-    setShowAddProjectModal(false);
+    setSaving(true);
+    try {
+      const res = await fetch("/api/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: newProject.title,
+          url: newProject.url || "https://example.com",
+          category: newProject.category,
+          status: newProject.status,
+          leads: 0,
+        }),
+      });
+      const saved = await res.json();
+      if (res.ok) {
+        setProjectsList([saved, ...projectsList]);
+        setNewProject({ title: "", url: "", category: "Shopify Plus", status: "Published" });
+        setShowAddProjectModal(false);
+        showToast("Project added successfully!");
+      } else {
+        showToast(saved.error || "Failed to add project", "error");
+      }
+    } catch (err) {
+      showToast("Network error", "error");
+    }
+    setSaving(false);
   };
 
-  const handleDeleteProject = (id) => {
-    setProjectsList(projectsList.filter((p) => p.id !== id));
+  const handleDeleteProject = async (id) => {
+    try {
+      const res = await fetch(`/api/projects?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setProjectsList(projectsList.filter((p) => p.id !== id));
+        showToast("Project deleted!");
+      } else {
+        showToast("Failed to delete project", "error");
+      }
+    } catch (err) {
+      showToast("Network error", "error");
+    }
   };
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-text-primary flex font-sans antialiased overflow-x-hidden">
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`fixed top-6 right-6 z-[100] px-5 py-3 rounded-xl text-xs font-bold shadow-2xl transition-all animate-in slide-in-from-right duration-300 ${
+          toast.type === "error"
+            ? "bg-rose-500 text-white"
+            : "bg-emerald-500 text-white"
+        }`}>
+          {toast.type === "error" ? "❌" : "✅"} {toast.message}
+        </div>
+      )}
+
+      {/* Loading Overlay */}
+      {loading && (
+        <div className="fixed inset-0 bg-[#0f172a] z-[90] flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center text-lg font-black mx-auto animate-pulse shadow-[0_0_24px_rgba(192,0,0,0.5)]">S</div>
+            <p className="text-sm text-slate-400 font-mono">Loading dashboard...</p>
+          </div>
+        </div>
+      )}
       {/* 1. LEFT SIDEBAR (Dark Navy Theme with Deep Crimson Accent) */}
       <aside className="w-64 bg-[#0f172a] text-slate-300 flex flex-col justify-between shrink-0 shadow-2xl z-20 border-r border-slate-800">
         <div>
@@ -550,13 +681,13 @@ export default function AdminDashboard() {
               <div className="text-[10px] text-slate-400 font-mono">Agency SuperAdmin</div>
             </div>
           </div>
-          <Link
-            href="/"
+          <button
+            onClick={handleLogout}
             className="text-slate-400 hover:text-rose-400 p-2 rounded-lg hover:bg-slate-800 transition-colors"
-            title="Log Out / Exit Admin"
+            title="Log Out"
           >
             <LogOut className="w-4 h-4" />
-          </Link>
+          </button>
         </div>
       </aside>
 
