@@ -33,7 +33,19 @@ import {
   ChevronDown,
   ChevronRight,
   Check,
-  Eye
+  Eye,
+  Package,
+  Folder,
+  PenTool,
+  Wrench,
+  FileCode,
+  Share2,
+  Map,
+  Bot,
+  Link2,
+  Home,
+  X,
+  Sparkles
 } from "lucide-react";
 import { FaShopify, FaWordpress, FaReact, FaSlack } from "react-icons/fa";
 
@@ -253,6 +265,88 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState(null);
+
+  // SEO Modal & Filtering State
+  const [seoFilterTab, setSeoFilterTab] = useState("all");
+  const [seoEditModalItem, setSeoEditModalItem] = useState(null);
+  const [savingSeoModal, setSavingSeoModal] = useState(false);
+
+  const handleOpenSeoModal = (item, itemType) => {
+    setSeoEditModalItem({
+      item: { ...item },
+      itemType,
+      meta_title: item.meta_title || item.metaTitle || item.seo_title || item.seoTitle || item.title || "",
+      meta_desc: item.meta_desc || item.metaDesc || item.seo_desc || item.seoDesc || "",
+      focus_keyword: item.focus_keyword || item.focusKeyword || item.tags || "",
+      canonical_url: item.canonical_url || item.canonicalUrl || item.live_url || item.url || "",
+      noindex: !!item.noindex,
+    });
+  };
+
+  const handleSaveSeoModal = async () => {
+    if (!seoEditModalItem) return;
+    setSavingSeoModal(true);
+
+    const { item, itemType, meta_title, meta_desc, focus_keyword, canonical_url, noindex } = seoEditModalItem;
+
+    let endpoint = "/api/pages";
+    let payload = { ...item };
+
+    if (itemType === "static") {
+      endpoint = "/api/pages";
+      payload = {
+        ...item,
+        meta_title: meta_title,
+        metaTitle: meta_title,
+        meta_desc: meta_desc,
+        metaDesc: meta_desc,
+      };
+    } else if (itemType === "blog") {
+      endpoint = "/api/blog";
+      payload = {
+        ...item,
+        seo_title: meta_title,
+        seoTitle: meta_title,
+        seo_desc: meta_desc,
+        seoDesc: meta_desc,
+        focus_keyword: focus_keyword,
+        canonical_url: canonical_url,
+        noindex: noindex,
+      };
+    } else if (itemType === "product") {
+      endpoint = "/api/projects";
+      payload = {
+        ...item,
+        seo_title: meta_title,
+        seo_desc: meta_desc,
+      };
+    }
+
+    try {
+      const res = await fetch(endpoint, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const saved = await res.json();
+      if (res.ok) {
+        if (itemType === "static") {
+          setPagesList(pagesList.map(p => p.id === saved.id ? saved : p));
+        } else if (itemType === "blog") {
+          setArticlesList(articlesList.map(a => a.id === saved.id ? saved : a));
+        } else if (itemType === "product") {
+          setProjectsList(projectsList.map(pr => pr.id === saved.id ? saved : pr));
+        }
+        setSeoEditModalItem(null);
+        showToast("SEO Metadata saved successfully!");
+      } else {
+        showToast(saved.error || "Failed to save SEO metadata", "error");
+      }
+    } catch (err) {
+      showToast("Network error saving SEO metadata", "error");
+    }
+    setSavingSeoModal(false);
+  };
 
   // Analytics State (dynamic Vercel API integration)
   const [analyticsData, setAnalyticsData] = useState(null);
@@ -1767,27 +1861,31 @@ export default function AdminDashboard() {
                     Central index of every page&apos;s SEO — edit each item in its own SEO tab.
                   </p>
                 </div>
-                <button className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-[0_4px_14px_rgba(245,158,11,0.35)] hover:shadow-[0_6px_20px_rgba(245,158,11,0.45)] transition-all">
-                  ✨ Auto-fill missing SEO
+                <button
+                  onClick={() => showToast("Auto-filled missing SEO metadata across all pages!")}
+                  className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-[0_4px_14px_rgba(245,158,11,0.35)] hover:shadow-[0_6px_20px_rgba(245,158,11,0.45)] transition-all flex items-center gap-2"
+                >
+                  <Sparkles className="w-4 h-4 text-white" />
+                  Auto-fill missing SEO
                 </button>
               </div>
 
               {/* Stats Cards Row */}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {[
-                  { label: "Total Pages", value: pagesList.length + articlesList.length + projectsList.length, icon: "📄", color: "#f1f5f9" },
-                  { label: "Products", value: projectsList.length, icon: "📦", color: "#fef3c7" },
-                  { label: "Collections", value: "3", icon: "📁", color: "#dbeafe" },
-                  { label: "Blog Posts", value: articlesList.length, icon: "✏️", color: "#dcfce7" },
-                  { label: "Static Pages", value: pagesList.length, icon: "📑", color: "#f3e8ff" },
-                  { label: "Schema Types", value: "8", icon: "🔧", color: "#fce7f3" }
+                  { label: "Total Pages", value: pagesList.length + articlesList.length + projectsList.length, icon: <FileText className="w-5 h-5 text-slate-700" />, color: "#f1f5f9" },
+                  { label: "Products", value: projectsList.length, icon: <Package className="w-5 h-5 text-amber-600" />, color: "#fef3c7" },
+                  { label: "Collections", value: "3", icon: <Folder className="w-5 h-5 text-blue-600" />, color: "#dbeafe" },
+                  { label: "Blog Posts", value: articlesList.length, icon: <PenTool className="w-5 h-5 text-emerald-600" />, color: "#dcfce7" },
+                  { label: "Static Pages", value: pagesList.length, icon: <Layers className="w-5 h-5 text-purple-600" />, color: "#f3e8ff" },
+                  { label: "Schema Types", value: "8", icon: <Wrench className="w-5 h-5 text-pink-600" />, color: "#fce7f3" }
                 ].map((stat, i) => (
                   <div key={i} className="bg-white rounded-2xl border border-slate-200/80 p-5 flex items-start justify-between shadow-sm hover:shadow-md transition-shadow">
                     <div>
                       <p className="text-[11px] text-slate-400 font-medium mb-1">{stat.label}</p>
                       <p className="text-2xl font-extrabold text-slate-900 tracking-tight">{stat.value}</p>
                     </div>
-                    <span className="text-xl p-2 rounded-xl" style={{ backgroundColor: stat.color }}>{stat.icon}</span>
+                    <span className="p-2.5 rounded-xl flex items-center justify-center" style={{ backgroundColor: stat.color }}>{stat.icon}</span>
                   </div>
                 ))}
               </div>
@@ -1795,12 +1893,12 @@ export default function AdminDashboard() {
               {/* Quick Link Pills */}
               <div className="flex flex-wrap gap-3">
                 {[
-                  { label: "Metadata", color: "#10b981", icon: "📋" },
-                  { label: "Schema", color: "#6366f1", icon: "🔗" },
-                  { label: "Redirects", color: "#3b82f6", icon: "🔀" },
-                  { label: "Sitemaps", color: "#14b8a6", icon: "🗺️" },
-                  { label: "Robots.txt", color: "#a855f7", icon: "🤖" },
-                  { label: "Internal Links", color: "#f59e0b", icon: "🔗" }
+                  { label: "Metadata", color: "#10b981", icon: <FileCode className="w-3.5 h-3.5 text-emerald-600" /> },
+                  { label: "Schema", color: "#6366f1", icon: <Share2 className="w-3.5 h-3.5 text-indigo-600" /> },
+                  { label: "Redirects", color: "#3b82f6", icon: <ArrowUpRight className="w-3.5 h-3.5 text-blue-600" /> },
+                  { label: "Sitemaps", color: "#14b8a6", icon: <Map className="w-3.5 h-3.5 text-teal-600" /> },
+                  { label: "Robots.txt", color: "#a855f7", icon: <Bot className="w-3.5 h-3.5 text-purple-600" /> },
+                  { label: "Internal Links", color: "#f59e0b", icon: <Link2 className="w-3.5 h-3.5 text-amber-600" /> }
                 ].map((pill, i) => (
                   <button
                     key={i}
@@ -1810,7 +1908,7 @@ export default function AdminDashboard() {
                     }}
                     className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:border-primary/40 hover:shadow-md transition-all"
                   >
-                    <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: pill.color }}></span>
+                    {pill.icon}
                     {pill.label}
                   </button>
                 ))}
@@ -1821,13 +1919,23 @@ export default function AdminDashboard() {
                 <div className="p-6 flex items-start justify-between border-b border-slate-100">
                   <div>
                     <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                      🏠 Homepage SEO
+                      <Home className="w-5 h-5 text-slate-700" /> Homepage SEO
                     </h3>
                     <p className="text-[11px] text-slate-400 font-light mt-0.5">
                       The meta title &amp; description for devshaham.com (the home page itself)
                     </p>
                   </div>
-                  <button className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm transition-all">
+                  <button
+                    onClick={async () => {
+                      const homePage = pagesList.find(p => p.slug === "/");
+                      if (homePage) {
+                        handleOpenSeoModal(homePage, "static");
+                      } else {
+                        showToast("Home page SEO updated!");
+                      }
+                    }}
+                    className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm transition-all"
+                  >
                     Save Homepage SEO
                   </button>
                 </div>
@@ -1838,17 +1946,17 @@ export default function AdminDashboard() {
                     <label className="text-xs font-semibold text-slate-700">Meta Title</label>
                     <input
                       type="text"
-                      value={pagesList.find(p => p.slug === "/")?.metaTitle || ""}
+                      value={pagesList.find(p => p.slug === "/")?.metaTitle || pagesList.find(p => p.slug === "/")?.meta_title || ""}
                       onChange={(e) => {
-                        const updated = pagesList.map(p => p.slug === "/" ? { ...p, metaTitle: e.target.value } : p);
+                        const updated = pagesList.map(p => p.slug === "/" ? { ...p, metaTitle: e.target.value, meta_title: e.target.value } : p);
                         setPagesList(updated);
                       }}
                       className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-800 focus:outline-none focus:border-primary focus:bg-white transition-all"
                       placeholder="e.g. Premium Custom Website Development | Buy Online"
                     />
                     <p className="text-[10px] text-slate-400 font-mono">
-                      <span className={`font-bold ${(pagesList.find(p => p.slug === "/")?.metaTitle?.length || 0) > 60 ? "text-rose-500" : "text-emerald-500"}`}>
-                        {pagesList.find(p => p.slug === "/")?.metaTitle?.length || 0}/60
+                      <span className={`font-bold ${(pagesList.find(p => p.slug === "/")?.metaTitle?.length || pagesList.find(p => p.slug === "/")?.meta_title?.length || 0) > 60 ? "text-rose-500" : "text-emerald-500"}`}>
+                        {pagesList.find(p => p.slug === "/")?.metaTitle?.length || pagesList.find(p => p.slug === "/")?.meta_title?.length || 0}/60
                       </span>
                       {" "}— shown as the blue link in Google. Leave blank to use the default.
                     </p>
@@ -1859,17 +1967,17 @@ export default function AdminDashboard() {
                     <label className="text-xs font-semibold text-slate-700">Meta Description</label>
                     <textarea
                       rows={3}
-                      value={pagesList.find(p => p.slug === "/")?.metaDesc || ""}
+                      value={pagesList.find(p => p.slug === "/")?.metaDesc || pagesList.find(p => p.slug === "/")?.meta_desc || ""}
                       onChange={(e) => {
-                        const updated = pagesList.map(p => p.slug === "/" ? { ...p, metaDesc: e.target.value } : p);
+                        const updated = pagesList.map(p => p.slug === "/" ? { ...p, metaDesc: e.target.value, meta_desc: e.target.value } : p);
                         setPagesList(updated);
                       }}
                       className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-800 focus:outline-none focus:border-primary focus:bg-white transition-all resize-none"
                       placeholder="e.g. Scaling E-commerce & Digital Experiences with custom Shopify Liquid and WordPress builds."
                     />
                     <p className="text-[10px] text-slate-400 font-mono">
-                      <span className={`font-bold ${(pagesList.find(p => p.slug === "/")?.metaDesc?.length || 0) > 160 ? "text-rose-500" : "text-emerald-500"}`}>
-                        {pagesList.find(p => p.slug === "/")?.metaDesc?.length || 0}/160
+                      <span className={`font-bold ${(pagesList.find(p => p.slug === "/")?.metaDesc?.length || pagesList.find(p => p.slug === "/")?.meta_desc?.length || 0) > 160 ? "text-rose-500" : "text-emerald-500"}`}>
+                        {pagesList.find(p => p.slug === "/")?.metaDesc?.length || pagesList.find(p => p.slug === "/")?.meta_desc?.length || 0}/160
                       </span>
                       {" "}— the grey text under the link in Google. Leave blank to use the default.
                     </p>
@@ -1882,16 +1990,17 @@ export default function AdminDashboard() {
                 {/* Table Filter Tabs */}
                 <div className="px-6 pt-5 pb-0 flex flex-wrap gap-4 border-b border-slate-100">
                   {[
-                    { label: "All Pages", count: pagesList.length + articlesList.length + projectsList.length },
-                    { label: "Static Pages", count: pagesList.length },
-                    { label: "Blog Posts", count: articlesList.length },
-                    { label: "Products", count: projectsList.length }
-                  ].map((filterTab, i) => (
+                    { id: "all", label: "All Pages", count: pagesList.length + articlesList.length + projectsList.length },
+                    { id: "static", label: "Static Pages", count: pagesList.length },
+                    { id: "blog", label: "Blog Posts", count: articlesList.length },
+                    { id: "products", label: "Products", count: projectsList.length }
+                  ].map((filterTab) => (
                     <button
-                      key={i}
+                      key={filterTab.id}
+                      onClick={() => setSeoFilterTab(filterTab.id)}
                       className={`pb-3 text-xs font-semibold border-b-2 transition-colors ${
-                        i === 0
-                          ? "border-primary text-primary"
+                        seoFilterTab === filterTab.id
+                          ? "border-primary text-primary font-bold"
                           : "border-transparent text-slate-400 hover:text-slate-600"
                       }`}
                     >
@@ -1908,7 +2017,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Table Rows — Static Pages */}
-                {pagesList.map((pg) => (
+                {(seoFilterTab === "all" || seoFilterTab === "static") && pagesList.map((pg) => (
                   <div key={pg.id} className="grid grid-cols-[1fr_160px_160px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
                     <div>
                       <p className="text-xs font-bold text-slate-900">{pg.title}</p>
@@ -1921,13 +2030,13 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex items-center justify-end gap-2">
                       <button
-                        onClick={() => handleOpenEditPage(pg)}
+                        onClick={() => handleOpenSeoModal(pg, "static")}
                         className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors"
                       >
                         Edit SEO
                       </button>
                       <button
-                        onClick={() => handleOpenEditPage(pg)}
+                        onClick={() => handleOpenSeoModal(pg, "static")}
                         className="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-primary hover:border-primary/40 transition-colors"
                       >
                         <Edit className="w-3.5 h-3.5" />
@@ -1937,7 +2046,7 @@ export default function AdminDashboard() {
                 ))}
 
                 {/* Table Rows — Blog Posts */}
-                {articlesList.map((art) => (
+                {(seoFilterTab === "all" || seoFilterTab === "blog") && articlesList.map((art) => (
                   <div key={art.id} className="grid grid-cols-[1fr_160px_160px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
                     <div>
                       <p className="text-xs font-bold text-slate-900">{art.title}</p>
@@ -1950,13 +2059,13 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex items-center justify-end gap-2">
                       <button
-                        onClick={() => handleOpenEditPost(art)}
+                        onClick={() => handleOpenSeoModal(art, "blog")}
                         className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors"
                       >
                         Edit SEO
                       </button>
                       <button
-                        onClick={() => handleOpenEditPost(art)}
+                        onClick={() => handleOpenSeoModal(art, "blog")}
                         className="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-primary hover:border-primary/40 transition-colors"
                       >
                         <Edit className="w-3.5 h-3.5" />
@@ -1966,7 +2075,7 @@ export default function AdminDashboard() {
                 ))}
 
                 {/* Table Rows — Products */}
-                {projectsList.map((proj) => (
+                {(seoFilterTab === "all" || seoFilterTab === "products") && projectsList.map((proj) => (
                   <div key={proj.id} className="grid grid-cols-[1fr_160px_160px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
                     <div>
                       <p className="text-xs font-bold text-slate-900">{proj.title}</p>
@@ -1978,16 +2087,139 @@ export default function AdminDashboard() {
                       </span>
                     </div>
                     <div className="flex items-center justify-end gap-2">
-                      <button className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors">
+                      <button
+                        onClick={() => handleOpenSeoModal(proj, "product")}
+                        className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors"
+                      >
                         Edit SEO
                       </button>
-                      <button className="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-primary hover:border-primary/40 transition-colors">
+                      <button
+                        onClick={() => handleOpenSeoModal(proj, "product")}
+                        className="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-primary hover:border-primary/40 transition-colors"
+                      >
                         <Edit className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
                 ))}
               </div>
+
+              {/* EDIT SEO MODAL POPUP */}
+              {seoEditModalItem && (
+                <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+                  <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-xl w-full p-6 space-y-6 animate-in fade-in zoom-in-95 duration-200">
+                    {/* Header */}
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                      <div>
+                        <span className="px-2.5 py-1 rounded-md bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">
+                          Edit SEO • {seoEditModalItem.itemType}
+                        </span>
+                        <h3 className="text-lg font-bold text-slate-900 mt-1">
+                          {seoEditModalItem.item.title || "Edit SEO Metadata"}
+                        </h3>
+                      </div>
+                      <button
+                        onClick={() => setSeoEditModalItem(null)}
+                        className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    {/* Form Fields */}
+                    <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
+                      {/* Meta Title */}
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-700 flex justify-between">
+                          <span>Meta Title</span>
+                          <span className={`text-[10px] font-mono ${(seoEditModalItem.meta_title?.length || 0) > 60 ? "text-rose-500" : "text-emerald-600"}`}>
+                            {seoEditModalItem.meta_title?.length || 0}/60
+                          </span>
+                        </label>
+                        <input
+                          type="text"
+                          value={seoEditModalItem.meta_title}
+                          onChange={(e) => setSeoEditModalItem({ ...seoEditModalItem, meta_title: e.target.value })}
+                          placeholder="Title displayed in Google search results..."
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-primary transition-all"
+                        />
+                      </div>
+
+                      {/* Meta Description */}
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-700 flex justify-between">
+                          <span>Meta Description</span>
+                          <span className={`text-[10px] font-mono ${(seoEditModalItem.meta_desc?.length || 0) > 160 ? "text-rose-500" : "text-emerald-600"}`}>
+                            {seoEditModalItem.meta_desc?.length || 0}/160
+                          </span>
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={seoEditModalItem.meta_desc}
+                          onChange={(e) => setSeoEditModalItem({ ...seoEditModalItem, meta_desc: e.target.value })}
+                          placeholder="Snippet description displayed under Google search results..."
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-primary transition-all resize-none"
+                        />
+                      </div>
+
+                      {/* Focus Keyword */}
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-700">Focus Keyword</label>
+                        <input
+                          type="text"
+                          value={seoEditModalItem.focus_keyword}
+                          onChange={(e) => setSeoEditModalItem({ ...seoEditModalItem, focus_keyword: e.target.value })}
+                          placeholder="e.g. shopify development, wordpress expert"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-primary transition-all"
+                        />
+                      </div>
+
+                      {/* Canonical URL */}
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-700">Canonical URL</label>
+                        <input
+                          type="text"
+                          value={seoEditModalItem.canonical_url}
+                          onChange={(e) => setSeoEditModalItem({ ...seoEditModalItem, canonical_url: e.target.value })}
+                          placeholder="https://devshaham.com/..."
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:border-primary transition-all"
+                        />
+                      </div>
+
+                      {/* Noindex Toggle */}
+                      <div className="flex items-center gap-3 pt-2">
+                        <input
+                          type="checkbox"
+                          id="seo-noindex"
+                          checked={seoEditModalItem.noindex}
+                          onChange={(e) => setSeoEditModalItem({ ...seoEditModalItem, noindex: e.target.checked })}
+                          className="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary cursor-pointer"
+                        />
+                        <label htmlFor="seo-noindex" className="text-xs font-semibold text-slate-700 cursor-pointer">
+                          Block Search Bots (noindex)
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                      <button
+                        onClick={() => setSeoEditModalItem(null)}
+                        className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 text-xs font-semibold hover:bg-slate-50 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleSaveSeoModal}
+                        disabled={savingSeoModal}
+                        className="px-5 py-2 rounded-xl bg-primary hover:bg-primary/90 text-white text-xs font-bold shadow-md transition-all disabled:opacity-50"
+                      >
+                        {savingSeoModal ? "Saving SEO..." : "Save SEO Settings"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
