@@ -1,6 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
+  metadataBase: new URL("https://devshaham.com"),
   title: "Premium Custom Website Development & Shopify Expert Solutions",
   description:
     "Specialized Digital Solutions Agency offering custom Shopify development, Shopify Plus, WordPress & WooCommerce, MERN stack web applications, and Technical SEO optimization.",
@@ -22,7 +23,7 @@ import { Analytics } from "@vercel/analytics/react";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -36,7 +37,7 @@ export default function RootLayout({ children }) {
         />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
-      <body className="bg-bg text-text-primary overflow-x-hidden antialiased">
+      <body className="bg-bg text-text-primary overflow-x-hidden antialiased" suppressHydrationWarning>
         <Header />
         <main>{children}</main>
         <Footer />
