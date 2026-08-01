@@ -570,14 +570,27 @@ export default function AdminDashboard() {
     setSaving(true);
     const finalStatus = statusOverride || activeArticle.status || "Draft";
     const postToSave = {
-      ...activeArticle,
-      status: finalStatus,
+      id: activeArticle.id || undefined,
       title: activeArticle.title || "Untitled Blog Post",
-      slug: activeArticle.slug || (activeArticle.title ? activeArticle.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : "new-post")
+      slug: activeArticle.slug || (activeArticle.title ? activeArticle.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : "new-post"),
+      category: activeArticle.category || "Shopify Development",
+      author: activeArticle.author || "Admin",
+      views: activeArticle.views || "0",
+      status: finalStatus,
+      content: activeArticle.content || "",
+      tags: activeArticle.tags || "",
+      excerpt: activeArticle.excerpt || "",
+      faqs: activeArticle.faqs || "",
+      noindex: !!activeArticle.noindex,
+      seo_title: activeArticle.seo_title || activeArticle.seoTitle || "",
+      seo_desc: activeArticle.seo_desc || activeArticle.seoDesc || "",
+      focus_keyword: activeArticle.focus_keyword || activeArticle.focusKeyword || "",
+      canonical_url: activeArticle.canonical_url || activeArticle.canonicalUrl || "",
+      featured_image: activeArticle.featured_image || activeArticle.featuredImage || null
     };
 
     try {
-      const isNew = !articlesList.find(a => a.id === postToSave.id);
+      const isNew = !postToSave.id || !articlesList.find(a => a.id === postToSave.id);
       const res = await fetch("/api/blog", {
         method: isNew ? "POST" : "PUT",
         headers: { "Content-Type": "application/json" },
