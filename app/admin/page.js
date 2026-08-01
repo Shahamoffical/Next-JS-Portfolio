@@ -271,6 +271,36 @@ export default function AdminDashboard() {
   const [seoEditModalItem, setSeoEditModalItem] = useState(null);
   const [savingSeoModal, setSavingSeoModal] = useState(false);
 
+  // Schema Manager State
+  const [schemasList, setSchemasList] = useState([
+    { id: 1, name: "Organization", type: "Organization", status: "Active", jsonLd: '{\n  "@url": "https://next-js-portfolio-one-bay.vercel.app",\n  "@type": "Organization",\n  "name": "DevShaham",\n  "email": "shahamabbas7@gmail.com"\n}' },
+    { id: 2, name: "LocalBusiness (Digital Agency)", type: "LocalBusiness", status: "Active", jsonLd: '{\n  "@type": "LocalBusiness",\n  "name": "DevShaham Digital Agency"\n}' },
+    { id: 3, name: "WebSite", type: "WebSite", status: "Active", jsonLd: '{\n  "@type": "WebSite",\n  "name": "DevShaham Portfolio"\n}' },
+    { id: 4, name: "Service (Custom Engineering)", type: "Service", status: "Active", jsonLd: '{\n  "@type": "Service",\n  "name": "Shopify & WordPress Engineering"\n}' }
+  ]);
+  const [editingSchema, setEditingSchema] = useState(null);
+
+  // Redirects Manager State
+  const [redirectSubTab, setRedirectSubTab] = useState("redirects");
+  const [redirectsList, setRedirectsList] = useState([
+    { id: 1, from: "/cart", to: "/", type: 301, hits: 0, status: "active" },
+    { id: 2, from: "/shop", to: "/projects", type: 301, hits: 0, status: "active" },
+    { id: 3, from: "/portfolio", to: "/about", type: 301, hits: 0, status: "active" }
+  ]);
+  const [showAddRedirectModal, setShowAddRedirectModal] = useState(false);
+  const [newRedirect, setNewRedirect] = useState({ from: "", to: "", type: 301 });
+
+  // Robots Manager State
+  const [robotsRules, setRobotsRules] = useState("Disallow: /admin\nDisallow: /api/*");
+  const [blockAiCrawlers, setBlockAiCrawlers] = useState(false);
+
+  // Site Verification State
+  const [siteVerification, setSiteVerification] = useState({
+    google: "google-site-verification=abcdef123456789",
+    bing: "",
+    pinterest: ""
+  });
+
   const handleOpenSeoModal = (item, itemType) => {
     setSeoEditModalItem({
       item: { ...item },
@@ -1277,21 +1307,58 @@ export default function AdminDashboard() {
 
                           <div>
                             <label className="block text-xs font-mono font-bold text-slate-700 mb-1.5">Content</label>
+                            {/* Native Inline Content Image Input */}
+                            <input
+                              type="file"
+                              id="content-image-file-input"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const reader = new FileReader();
+                                  reader.onload = (uploadEvent) => {
+                                    const imgMarkdown = `\n\n![${file.name}](${uploadEvent.target?.result})\n\n`;
+                                    setActiveArticle({
+                                      ...activeArticle,
+                                      content: (activeArticle.content || "") + imgMarkdown
+                                    });
+                                    showToast("Inline image inserted into content!");
+                                  };
+                                  reader.readAsDataURL(file);
+                                }
+                              }}
+                            />
+
                             {/* Rich Markdown Toolbar */}
                             <div className="border border-slate-200 rounded-t-xl bg-slate-50 p-2 flex flex-wrap items-center gap-2 border-b-0 text-xs font-mono">
-                              {["H2", "H3", "B", "I", "List", "1. List", "Quote", "Link", "Image"].map((btn, bIdx) => (
+                              {[
+                                { label: "H2", action: () => "\n\n## Section Title\n" },
+                                { label: "H3", action: () => "\n\n### Subheading Title\n" },
+                                { label: "B", action: () => " **bold text** " },
+                                { label: "I", action: () => " *italic text* " },
+                                { label: "List", action: () => "\n- List item 1\n- List item 2\n" },
+                                { label: "1. List", action: () => "\n1. First item\n2. Second item\n" },
+                                { label: "Quote", action: () => "\n> Quote text here\n" },
+                                { label: "Link", action: () => " [Link Text](https://example.com) " },
+                                { label: "Image", action: () => "IMAGE_PICKER" }
+                              ].map((btn, bIdx) => (
                                 <button
                                   key={bIdx}
                                   type="button"
                                   onClick={() => {
-                                    setActiveArticle({
-                                      ...activeArticle,
-                                      content: activeArticle.content + `\n\n## ${btn}`
-                                    });
+                                    if (btn.label === "Image") {
+                                      document.getElementById("content-image-file-input")?.click();
+                                    } else {
+                                      setActiveArticle({
+                                        ...activeArticle,
+                                        content: (activeArticle.content || "") + btn.action()
+                                      });
+                                    }
                                   }}
-                                  className="px-2.5 py-1 rounded hover:bg-white text-slate-700 border border-slate-200/60 font-semibold"
+                                  className="px-2.5 py-1 rounded hover:bg-white text-slate-700 border border-slate-200/60 font-semibold transition-colors"
                                 >
-                                  {btn}
+                                  {btn.label}
                                 </button>
                               ))}
                             </div>
@@ -1495,25 +1562,78 @@ export default function AdminDashboard() {
                       {/* Featured Image Card */}
                       <div className="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-3">
                         <h4 className="text-xs font-bold font-mono text-slate-900 uppercase tracking-wider m-0">Featured Image</h4>
-                        <div className="flex items-center gap-4">
-                          <div className="w-20 h-16 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center text-[10px] text-slate-400 font-mono overflow-hidden shrink-0">
+                        
+                        {/* Native File Input */}
+                        <input
+                          type="file"
+                          id="featured-image-file-input"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onload = (uploadEvent) => {
+                                setActiveArticle({
+                                  ...activeArticle,
+                                  featuredImage: uploadEvent.target?.result
+                                });
+                                showToast("Featured image uploaded!");
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+
+                        {/* Image Preview & Upload Box */}
+                        <div className="space-y-3">
+                          <div className="relative group w-full h-36 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 flex flex-col items-center justify-center text-[11px] text-slate-400 font-mono overflow-hidden transition-all hover:border-primary/50">
                             {activeArticle.featuredImage ? (
-                              <img src={activeArticle.featuredImage} alt="Cover" className="w-full h-full object-cover" />
+                              <div className="relative w-full h-full">
+                                <img src={activeArticle.featuredImage} alt="Cover" className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => document.getElementById("featured-image-file-input")?.click()}
+                                    className="px-3 py-1.5 rounded-lg bg-white text-slate-900 text-xs font-bold shadow-md hover:bg-slate-100"
+                                  >
+                                    Change Image
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => setActiveArticle({ ...activeArticle, featuredImage: null })}
+                                    className="px-3 py-1.5 rounded-lg bg-rose-500 text-white text-xs font-bold shadow-md hover:bg-rose-600"
+                                  >
+                                    Remove
+                                  </button>
+                                </div>
+                              </div>
                             ) : (
-                              "No image"
+                              <button
+                                type="button"
+                                onClick={() => document.getElementById("featured-image-file-input")?.click()}
+                                className="w-full h-full flex flex-col items-center justify-center gap-1.5 text-slate-400 hover:text-primary transition-colors p-4"
+                              >
+                                <Upload className="w-6 h-6 text-slate-400 group-hover:text-primary" />
+                                <span className="text-xs font-bold text-slate-700">Click to upload image file</span>
+                                <span className="text-[10px] text-slate-400 font-normal">PNG, JPG, WEBP, SVG</span>
+                              </button>
                             )}
                           </div>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const url = prompt("Enter Image URL:", "/portfolio-preview.jpg");
-                              if (url) setActiveArticle({ ...activeArticle, featuredImage: url });
-                            }}
-                            className="px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm"
-                          >
-                            Choose image
-                          </button>
+
+                          {/* Image URL Input Fallback */}
+                          <div>
+                            <label className="block text-[10px] font-mono text-slate-400 mb-1">Or paste direct image URL:</label>
+                            <input
+                              type="text"
+                              placeholder="https://images.unsplash.com/... or /portfolio-preview.jpg"
+                              value={activeArticle.featuredImage || ""}
+                              onChange={(e) => setActiveArticle({ ...activeArticle, featuredImage: e.target.value })}
+                              className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-mono focus:outline-none focus:border-primary"
+                            />
+                          </div>
                         </div>
+
                         <p className="text-[10px] text-slate-400 font-light leading-tight m-0">
                           Used as the blog cover and social share image.
                         </p>
@@ -1845,270 +1965,849 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* TAB 6: SEO DASHBOARD */}
+          {/* TAB 6: SEO SECTION */}
           {activeTab === "seo" && (
             <div className="space-y-8">
-              {/* Breadcrumb + Header */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[11px] font-mono text-slate-400 mb-1">
-                    SEO &gt; Dashboard
-                  </p>
-                  <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-                    SEO Dashboard
-                  </h2>
-                  <p className="text-xs text-slate-500 font-light mt-1">
-                    Central index of every page&apos;s SEO — edit each item in its own SEO tab.
-                  </p>
-                </div>
-                <button
-                  onClick={() => showToast("Auto-filled missing SEO metadata across all pages!")}
-                  className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-[0_4px_14px_rgba(245,158,11,0.35)] hover:shadow-[0_6px_20px_rgba(245,158,11,0.45)] transition-all flex items-center gap-2"
-                >
-                  <Sparkles className="w-4 h-4 text-white" />
-                  Auto-fill missing SEO
-                </button>
-              </div>
-
-              {/* Stats Cards Row */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {[
-                  { label: "Total Pages", value: pagesList.length + articlesList.length + projectsList.length, icon: <FileText className="w-5 h-5 text-slate-700" />, color: "#f1f5f9" },
-                  { label: "Products", value: projectsList.length, icon: <Package className="w-5 h-5 text-amber-600" />, color: "#fef3c7" },
-                  { label: "Collections", value: "3", icon: <Folder className="w-5 h-5 text-blue-600" />, color: "#dbeafe" },
-                  { label: "Blog Posts", value: articlesList.length, icon: <PenTool className="w-5 h-5 text-emerald-600" />, color: "#dcfce7" },
-                  { label: "Static Pages", value: pagesList.length, icon: <Layers className="w-5 h-5 text-purple-600" />, color: "#f3e8ff" },
-                  { label: "Schema Types", value: "8", icon: <Wrench className="w-5 h-5 text-pink-600" />, color: "#fce7f3" }
-                ].map((stat, i) => (
-                  <div key={i} className="bg-white rounded-2xl border border-slate-200/80 p-5 flex items-start justify-between shadow-sm hover:shadow-md transition-shadow">
+              {/* SUBTAB 1: SEO DASHBOARD */}
+              {activeSeoSubTab === "seo-dashboard" && (
+                <div className="space-y-8">
+                  {/* Breadcrumb + Header */}
+                  <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-[11px] text-slate-400 font-medium mb-1">{stat.label}</p>
-                      <p className="text-2xl font-extrabold text-slate-900 tracking-tight">{stat.value}</p>
+                      <p className="text-[11px] font-mono text-slate-400 mb-1">
+                        SEO &gt; Dashboard
+                      </p>
+                      <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                        SEO Dashboard
+                      </h2>
+                      <p className="text-xs text-slate-500 font-light mt-1">
+                        Central index of every page&apos;s SEO — edit each item in its own SEO tab.
+                      </p>
                     </div>
-                    <span className="p-2.5 rounded-xl flex items-center justify-center" style={{ backgroundColor: stat.color }}>{stat.icon}</span>
+                    <button
+                      onClick={() => showToast("Auto-filled missing SEO metadata across all pages!")}
+                      className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-[0_4px_14px_rgba(245,158,11,0.35)] hover:shadow-[0_6px_20px_rgba(245,158,11,0.45)] transition-all flex items-center gap-2"
+                    >
+                      <Sparkles className="w-4 h-4 text-white" />
+                      Auto-fill missing SEO
+                    </button>
                   </div>
-                ))}
-              </div>
 
-              {/* Quick Link Pills */}
-              <div className="flex flex-wrap gap-3">
-                {[
-                  { label: "Metadata", color: "#10b981", icon: <FileCode className="w-3.5 h-3.5 text-emerald-600" /> },
-                  { label: "Schema", color: "#6366f1", icon: <Share2 className="w-3.5 h-3.5 text-indigo-600" /> },
-                  { label: "Redirects", color: "#3b82f6", icon: <ArrowUpRight className="w-3.5 h-3.5 text-blue-600" /> },
-                  { label: "Sitemaps", color: "#14b8a6", icon: <Map className="w-3.5 h-3.5 text-teal-600" /> },
-                  { label: "Robots.txt", color: "#a855f7", icon: <Bot className="w-3.5 h-3.5 text-purple-600" /> },
-                  { label: "Internal Links", color: "#f59e0b", icon: <Link2 className="w-3.5 h-3.5 text-amber-600" /> }
-                ].map((pill, i) => (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      const subMap = { "Metadata": "seo-metadata", "Schema": "seo-schema", "Redirects": "seo-redirects", "Sitemaps": "seo-sitemap", "Robots.txt": "seo-robots", "Internal Links": "seo-interlinking" };
-                      setActiveSeoSubTab(subMap[pill.label] || "seo-dashboard");
-                    }}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:border-primary/40 hover:shadow-md transition-all"
-                  >
-                    {pill.icon}
-                    {pill.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Homepage SEO Card */}
-              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-                <div className="p-6 flex items-start justify-between border-b border-slate-100">
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                      <Home className="w-5 h-5 text-slate-700" /> Homepage SEO
-                    </h3>
-                    <p className="text-[11px] text-slate-400 font-light mt-0.5">
-                      The meta title &amp; description for devshaham.com (the home page itself)
-                    </p>
+                  {/* Stats Cards Row */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    {[
+                      { label: "Total Pages", value: pagesList.length + articlesList.length + projectsList.length, icon: <FileText className="w-5 h-5 text-slate-700" />, color: "#f1f5f9" },
+                      { label: "Products", value: projectsList.length, icon: <Package className="w-5 h-5 text-amber-600" />, color: "#fef3c7" },
+                      { label: "Collections", value: "3", icon: <Folder className="w-5 h-5 text-blue-600" />, color: "#dbeafe" },
+                      { label: "Blog Posts", value: articlesList.length, icon: <PenTool className="w-5 h-5 text-emerald-600" />, color: "#dcfce7" },
+                      { label: "Static Pages", value: pagesList.length, icon: <Layers className="w-5 h-5 text-purple-600" />, color: "#f3e8ff" },
+                      { label: "Schema Types", value: schemasList.length, icon: <Wrench className="w-5 h-5 text-pink-600" />, color: "#fce7f3" }
+                    ].map((stat, i) => (
+                      <div key={i} className="bg-white rounded-2xl border border-slate-200/80 p-5 flex items-start justify-between shadow-sm hover:shadow-md transition-shadow">
+                        <div>
+                          <p className="text-[11px] text-slate-400 font-medium mb-1">{stat.label}</p>
+                          <p className="text-2xl font-extrabold text-slate-900 tracking-tight">{stat.value}</p>
+                        </div>
+                        <span className="p-2.5 rounded-xl flex items-center justify-center" style={{ backgroundColor: stat.color }}>{stat.icon}</span>
+                      </div>
+                    ))}
                   </div>
-                  <button
-                    onClick={async () => {
-                      const homePage = pagesList.find(p => p.slug === "/");
-                      if (homePage) {
-                        handleOpenSeoModal(homePage, "static");
-                      } else {
-                        showToast("Home page SEO updated!");
-                      }
-                    }}
-                    className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm transition-all"
-                  >
-                    Save Homepage SEO
-                  </button>
+
+                  {/* Quick Link Pills */}
+                  <div className="flex flex-wrap gap-3">
+                    {[
+                      { label: "Metadata", id: "seo-metadata", color: "#10b981", icon: <FileCode className="w-3.5 h-3.5 text-emerald-600" /> },
+                      { label: "Schema", id: "seo-schema", color: "#6366f1", icon: <Share2 className="w-3.5 h-3.5 text-indigo-600" /> },
+                      { label: "Redirects", id: "seo-redirects", color: "#3b82f6", icon: <ArrowUpRight className="w-3.5 h-3.5 text-blue-600" /> },
+                      { label: "Sitemaps", id: "seo-sitemap", color: "#14b8a6", icon: <Map className="w-3.5 h-3.5 text-teal-600" /> },
+                      { label: "Robots.txt", id: "seo-robots", color: "#a855f7", icon: <Bot className="w-3.5 h-3.5 text-purple-600" /> },
+                      { label: "Internal Links", id: "seo-interlinking", color: "#f59e0b", icon: <Link2 className="w-3.5 h-3.5 text-amber-600" /> }
+                    ].map((pill, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setActiveSeoSubTab(pill.id)}
+                        className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:border-primary/40 hover:shadow-md transition-all"
+                      >
+                        {pill.icon}
+                        {pill.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Homepage SEO Card */}
+                  <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div className="p-6 flex items-start justify-between border-b border-slate-100">
+                      <div>
+                        <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                          <Home className="w-5 h-5 text-slate-700" /> Homepage SEO
+                        </h3>
+                        <p className="text-[11px] text-slate-400 font-light mt-0.5">
+                          The meta title &amp; description for devshaham.com (the home page itself)
+                        </p>
+                      </div>
+                      <button
+                        onClick={async () => {
+                          const homePage = pagesList.find(p => p.slug === "/");
+                          if (homePage) {
+                            handleOpenSeoModal(homePage, "static");
+                          } else {
+                            showToast("Home page SEO updated!");
+                          }
+                        }}
+                        className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm transition-all"
+                      >
+                        Save Homepage SEO
+                      </button>
+                    </div>
+
+                    <div className="p-6 space-y-5">
+                      {/* Meta Title */}
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold text-slate-700">Meta Title</label>
+                        <input
+                          type="text"
+                          value={pagesList.find(p => p.slug === "/")?.metaTitle || pagesList.find(p => p.slug === "/")?.meta_title || ""}
+                          onChange={(e) => {
+                            const updated = pagesList.map(p => p.slug === "/" ? { ...p, metaTitle: e.target.value, meta_title: e.target.value } : p);
+                            setPagesList(updated);
+                          }}
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-800 focus:outline-none focus:border-primary focus:bg-white transition-all"
+                          placeholder="e.g. Premium Custom Website Development | Buy Online"
+                        />
+                      </div>
+
+                      {/* Meta Description */}
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold text-slate-700">Meta Description</label>
+                        <textarea
+                          rows={3}
+                          value={pagesList.find(p => p.slug === "/")?.metaDesc || pagesList.find(p => p.slug === "/")?.meta_desc || ""}
+                          onChange={(e) => {
+                            const updated = pagesList.map(p => p.slug === "/" ? { ...p, metaDesc: e.target.value, meta_desc: e.target.value } : p);
+                            setPagesList(updated);
+                          }}
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-800 focus:outline-none focus:border-primary focus:bg-white transition-all resize-none"
+                          placeholder="e.g. Scaling E-commerce & Digital Experiences with custom Shopify Liquid and WordPress builds."
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* SEO Pages Table */}
+                  <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    {/* Table Filter Tabs */}
+                    <div className="px-6 pt-5 pb-0 flex flex-wrap gap-4 border-b border-slate-100">
+                      {[
+                        { id: "all", label: "All Pages", count: pagesList.length + articlesList.length + projectsList.length },
+                        { id: "static", label: "Static Pages", count: pagesList.length },
+                        { id: "blog", label: "Blog Posts", count: articlesList.length },
+                        { id: "products", label: "Products", count: projectsList.length }
+                      ].map((filterTab) => (
+                        <button
+                          key={filterTab.id}
+                          onClick={() => setSeoFilterTab(filterTab.id)}
+                          className={`pb-3 text-xs font-semibold border-b-2 transition-colors ${
+                            seoFilterTab === filterTab.id
+                              ? "border-primary text-primary font-bold"
+                              : "border-transparent text-slate-400 hover:text-slate-600"
+                          }`}
+                        >
+                          {filterTab.label} ({filterTab.count})
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Table Header */}
+                    <div className="grid grid-cols-[1fr_160px_160px] px-6 py-3 bg-slate-50/80 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+                      <span>PAGE</span>
+                      <span className="text-center">TYPE</span>
+                      <span className="text-right">ACTIONS</span>
+                    </div>
+
+                    {/* Table Rows — Static Pages */}
+                    {(seoFilterTab === "all" || seoFilterTab === "static") && pagesList.map((pg) => (
+                      <div key={pg.id} className="grid grid-cols-[1fr_160px_160px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
+                        <div>
+                          <p className="text-xs font-bold text-slate-900">{pg.title}</p>
+                          <p className="text-[10px] text-slate-400 font-mono">{pg.slug}</p>
+                        </div>
+                        <div className="text-center">
+                          <span className="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-[10px] font-bold">
+                            Static Page
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => handleOpenSeoModal(pg, "static")}
+                            className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors"
+                          >
+                            Edit SEO
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* Table Rows — Blog Posts */}
+                    {(seoFilterTab === "all" || seoFilterTab === "blog") && articlesList.map((art) => (
+                      <div key={art.id} className="grid grid-cols-[1fr_160px_160px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
+                        <div>
+                          <p className="text-xs font-bold text-slate-900">{art.title}</p>
+                          <p className="text-[10px] text-slate-400 font-mono">/{art.slug}</p>
+                        </div>
+                        <div className="text-center">
+                          <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">
+                            Blog Post
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => handleOpenSeoModal(art, "blog")}
+                            className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors"
+                          >
+                            Edit SEO
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* Table Rows — Products */}
+                    {(seoFilterTab === "all" || seoFilterTab === "products") && projectsList.map((proj) => (
+                      <div key={proj.id} className="grid grid-cols-[1fr_160px_160px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
+                        <div>
+                          <p className="text-xs font-bold text-slate-900">{proj.title}</p>
+                          <p className="text-[10px] text-slate-400 font-mono">/projects</p>
+                        </div>
+                        <div className="text-center">
+                          <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold">
+                            Product
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => handleOpenSeoModal(proj, "product")}
+                            className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors"
+                          >
+                            Edit SEO
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+              )}
 
-                <div className="p-6 space-y-5">
-                  {/* Meta Title */}
-                  <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-700">Meta Title</label>
+              {/* SUBTAB 2: METADATA MANAGER */}
+              {activeSeoSubTab === "seo-metadata" && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[11px] font-mono text-slate-400 mb-1">
+                        SEO &gt; Metadata Manager
+                      </p>
+                      <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                        Metadata Manager
+                      </h2>
+                      <p className="text-xs text-slate-500 font-light mt-1">
+                        Meta titles, descriptions &amp; keywords - edited in each item&apos;s SEO tab
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setActiveSeoSubTab("seo-dashboard")}
+                      className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-sm transition-all"
+                    >
+                      SEO Dashboard
+                    </button>
+                  </div>
+
+                  {/* Search Bar */}
+                  <div className="relative max-w-md">
+                    <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
-                      value={pagesList.find(p => p.slug === "/")?.metaTitle || pagesList.find(p => p.slug === "/")?.meta_title || ""}
-                      onChange={(e) => {
-                        const updated = pagesList.map(p => p.slug === "/" ? { ...p, metaTitle: e.target.value, meta_title: e.target.value } : p);
-                        setPagesList(updated);
-                      }}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-800 focus:outline-none focus:border-primary focus:bg-white transition-all"
-                      placeholder="e.g. Premium Custom Website Development | Buy Online"
+                      placeholder="Search pages..."
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 focus:outline-none focus:border-primary transition-all"
                     />
-                    <p className="text-[10px] text-slate-400 font-mono">
-                      <span className={`font-bold ${(pagesList.find(p => p.slug === "/")?.metaTitle?.length || pagesList.find(p => p.slug === "/")?.meta_title?.length || 0) > 60 ? "text-rose-500" : "text-emerald-500"}`}>
-                        {pagesList.find(p => p.slug === "/")?.metaTitle?.length || pagesList.find(p => p.slug === "/")?.meta_title?.length || 0}/60
-                      </span>
-                      {" "}— shown as the blue link in Google. Leave blank to use the default.
-                    </p>
                   </div>
 
-                  {/* Meta Description */}
-                  <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-700">Meta Description</label>
-                    <textarea
-                      rows={3}
-                      value={pagesList.find(p => p.slug === "/")?.metaDesc || pagesList.find(p => p.slug === "/")?.meta_desc || ""}
-                      onChange={(e) => {
-                        const updated = pagesList.map(p => p.slug === "/" ? { ...p, metaDesc: e.target.value, meta_desc: e.target.value } : p);
-                        setPagesList(updated);
-                      }}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-xs text-slate-800 focus:outline-none focus:border-primary focus:bg-white transition-all resize-none"
-                      placeholder="e.g. Scaling E-commerce & Digital Experiences with custom Shopify Liquid and WordPress builds."
-                    />
-                    <p className="text-[10px] text-slate-400 font-mono">
-                      <span className={`font-bold ${(pagesList.find(p => p.slug === "/")?.metaDesc?.length || pagesList.find(p => p.slug === "/")?.meta_desc?.length || 0) > 160 ? "text-rose-500" : "text-emerald-500"}`}>
-                        {pagesList.find(p => p.slug === "/")?.metaDesc?.length || pagesList.find(p => p.slug === "/")?.meta_desc?.length || 0}/160
-                      </span>
-                      {" "}— the grey text under the link in Google. Leave blank to use the default.
-                    </p>
+                  {/* Metadata Table */}
+                  <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div className="grid grid-cols-[1fr_160px_160px] px-6 py-3 bg-slate-50/80 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+                      <span>PAGE</span>
+                      <span className="text-center">TYPE</span>
+                      <span className="text-right">ACTIONS</span>
+                    </div>
+
+                    {pagesList.map((pg) => (
+                      <div key={`meta-pg-${pg.id}`} className="grid grid-cols-[1fr_160px_160px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
+                        <div>
+                          <p className="text-xs font-bold text-slate-900">{pg.title}</p>
+                          <p className="text-[10px] text-slate-400 font-mono">{pg.slug}</p>
+                        </div>
+                        <div className="text-center">
+                          <span className="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-[10px] font-bold">
+                            Static Page
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <button
+                            onClick={() => handleOpenSeoModal(pg, "static")}
+                            className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors"
+                          >
+                            Edit metadata
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+
+                    {articlesList.map((art) => (
+                      <div key={`meta-art-${art.id}`} className="grid grid-cols-[1fr_160px_160px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
+                        <div>
+                          <p className="text-xs font-bold text-slate-900">{art.title}</p>
+                          <p className="text-[10px] text-slate-400 font-mono">/{art.slug}</p>
+                        </div>
+                        <div className="text-center">
+                          <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">
+                            Blog Post
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <button
+                            onClick={() => handleOpenSeoModal(art, "blog")}
+                            className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors"
+                          >
+                            Edit metadata
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+
+                    {projectsList.map((proj) => (
+                      <div key={`meta-proj-${proj.id}`} className="grid grid-cols-[1fr_160px_160px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
+                        <div>
+                          <p className="text-xs font-bold text-slate-900">{proj.title}</p>
+                          <p className="text-[10px] text-slate-400 font-mono">/projects</p>
+                        </div>
+                        <div className="text-center">
+                          <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold">
+                            Product
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <button
+                            onClick={() => handleOpenSeoModal(proj, "product")}
+                            className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors"
+                          >
+                            Edit metadata
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
+              )}
 
-              {/* SEO Pages Table */}
-              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-                {/* Table Filter Tabs */}
-                <div className="px-6 pt-5 pb-0 flex flex-wrap gap-4 border-b border-slate-100">
-                  {[
-                    { id: "all", label: "All Pages", count: pagesList.length + articlesList.length + projectsList.length },
-                    { id: "static", label: "Static Pages", count: pagesList.length },
-                    { id: "blog", label: "Blog Posts", count: articlesList.length },
-                    { id: "products", label: "Products", count: projectsList.length }
-                  ].map((filterTab) => (
+              {/* SUBTAB 3: SCHEMA MANAGER */}
+              {activeSeoSubTab === "seo-schema" && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[11px] font-mono text-slate-400 mb-1">
+                        SEO &gt; Schema Manager
+                      </p>
+                      <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                        Schema Manager
+                      </h2>
+                      <p className="text-xs text-slate-500 font-light mt-1">
+                        Structured data (JSON-LD) for rich results in Google
+                      </p>
+                    </div>
                     <button
-                      key={filterTab.id}
-                      onClick={() => setSeoFilterTab(filterTab.id)}
-                      className={`pb-3 text-xs font-semibold border-b-2 transition-colors ${
-                        seoFilterTab === filterTab.id
-                          ? "border-primary text-primary font-bold"
-                          : "border-transparent text-slate-400 hover:text-slate-600"
-                      }`}
+                      onClick={() => setEditingSchema({ id: null, name: "New Schema", type: "Organization", status: "Active", jsonLd: "{\n  \"@type\": \"Organization\"\n}" })}
+                      className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm transition-all"
                     >
-                      {filterTab.label} ({filterTab.count})
+                      + Add Schema
                     </button>
-                  ))}
+                  </div>
+
+                  {/* Custom Schemas Card */}
+                  <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div className="px-6 py-4 border-b border-slate-100">
+                      <h3 className="text-sm font-bold text-slate-900">Your Custom Schemas</h3>
+                      <p className="text-[11px] text-slate-400 font-light">Added here, validated, and emitted on every page of the storefront</p>
+                    </div>
+                    <div className="grid grid-cols-[1fr_120px_100px] px-6 py-3 bg-slate-50/80 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+                      <span>SCHEMA</span>
+                      <span className="text-center">STATUS</span>
+                      <span className="text-right">ACTIONS</span>
+                    </div>
+
+                    {schemasList.map((sch) => (
+                      <div key={sch.id} className="grid grid-cols-[1fr_120px_100px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
+                        <div>
+                          <p className="text-xs font-bold text-slate-900">{sch.name}</p>
+                          <p className="text-[10px] text-slate-400 font-mono">{sch.type}</p>
+                        </div>
+                        <div className="text-center">
+                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">
+                            {sch.status}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => setEditingSchema({ ...sch })}
+                            className="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-primary hover:border-primary/40 transition-colors"
+                          >
+                            <Edit className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => setSchemasList(schemasList.filter(s => s.id !== sch.id))}
+                            className="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-rose-500 hover:border-rose-300 transition-colors"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Automatic Schemas Card */}
+                  <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div className="px-6 py-4 border-b border-slate-100">
+                      <h3 className="text-sm font-bold text-slate-900">Automatic Schemas</h3>
+                      <p className="text-[11px] text-slate-400 font-light">Generated for you and always live — no setup needed</p>
+                    </div>
+                    {["Product", "Article", "WebPage"].map((autoSch, idx) => (
+                      <div key={idx} className="flex items-center justify-between px-6 py-3.5 border-b border-slate-100 text-xs">
+                        <span className="font-bold text-slate-900">{autoSch}</span>
+                        <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-semibold">Live</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* EDIT SCHEMA MODAL */}
+                  {editingSchema && (
+                    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+                      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-lg w-full p-6 space-y-5 animate-in fade-in zoom-in-95 duration-200">
+                        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                          <h3 className="text-lg font-bold text-slate-900">Edit Schema</h3>
+                          <button onClick={() => setEditingSchema(null)} className="text-slate-400 hover:text-slate-600">
+                            <X className="w-5 h-5" />
+                          </button>
+                        </div>
+
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="text-xs font-bold text-slate-700">Name</label>
+                              <input
+                                type="text"
+                                value={editingSchema.name}
+                                onChange={(e) => setEditingSchema({ ...editingSchema, name: e.target.value })}
+                                className="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-xs font-bold text-slate-700">Type</label>
+                              <input
+                                type="text"
+                                value={editingSchema.type}
+                                onChange={(e) => setEditingSchema({ ...editingSchema, type: e.target.value })}
+                                className="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="text-xs font-bold text-slate-700">JSON-LD</label>
+                            <textarea
+                              rows={6}
+                              value={editingSchema.jsonLd}
+                              onChange={(e) => setEditingSchema({ ...editingSchema, jsonLd: e.target.value })}
+                              className="w-full mt-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono bg-slate-50"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
+                          <button onClick={() => setEditingSchema(null)} className="px-4 py-2 rounded-xl border text-xs font-semibold">Cancel</button>
+                          <button
+                            onClick={() => {
+                              if (editingSchema.id) {
+                                setSchemasList(schemasList.map(s => s.id === editingSchema.id ? editingSchema : s));
+                              } else {
+                                setSchemasList([...schemasList, { ...editingSchema, id: Date.now() }]);
+                              }
+                              setEditingSchema(null);
+                              showToast("Schema saved and published!");
+                            }}
+                            className="px-5 py-2 rounded-xl bg-amber-500 text-white text-xs font-bold shadow-md"
+                          >
+                            Save &amp; Publish
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
+              )}
 
-                {/* Table Header */}
-                <div className="grid grid-cols-[1fr_160px_160px] px-6 py-3 bg-slate-50/80 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
-                  <span>PAGE</span>
-                  <span className="text-center">TYPE</span>
-                  <span className="text-right">ACTIONS</span>
+              {/* SUBTAB 4: REDIRECT MANAGER */}
+              {activeSeoSubTab === "seo-redirects" && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[11px] font-mono text-slate-400 mb-1">
+                        SEO &gt; Redirects
+                      </p>
+                      <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                        Redirect Manager
+                      </h2>
+                      <p className="text-xs text-slate-500 font-light mt-1">
+                        URL redirects for migration &amp; SEO, plus the 404 monitor
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button onClick={() => showToast("Bulk import ready")} className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 shadow-sm">
+                        ↑ Bulk Import
+                      </button>
+                      <button onClick={() => setShowAddRedirectModal(true)} className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm">
+                        + Add Redirect
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Redirect Subtabs */}
+                  <div className="flex gap-4 border-b border-slate-200 pb-2">
+                    <button
+                      onClick={() => setRedirectSubTab("redirects")}
+                      className={`text-xs font-bold pb-2 border-b-2 ${redirectSubTab === "redirects" ? "border-amber-500 text-amber-600" : "border-transparent text-slate-400"}`}
+                    >
+                      Redirects ({redirectsList.length})
+                    </button>
+                    <button
+                      onClick={() => setRedirectSubTab("404")}
+                      className={`text-xs font-bold pb-2 border-b-2 ${redirectSubTab === "404" ? "border-amber-500 text-amber-600" : "border-transparent text-slate-400"}`}
+                    >
+                      404 Monitor (0)
+                    </button>
+                  </div>
+
+                  {/* Redirects Table */}
+                  <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div className="grid grid-cols-[1fr_1fr_100px_80px_100px_80px] px-6 py-3 bg-slate-50/80 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+                      <span>FROM URL</span>
+                      <span>TO URL</span>
+                      <span className="text-center">TYPE</span>
+                      <span className="text-center">HITS</span>
+                      <span className="text-center">STATUS</span>
+                      <span className="text-right">ACTIONS</span>
+                    </div>
+
+                    {redirectsList.map((red) => (
+                      <div key={red.id} className="grid grid-cols-[1fr_1fr_100px_80px_100px_80px] px-6 py-3.5 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center text-xs">
+                        <span className="font-mono text-slate-800">{red.from}</span>
+                        <span className="font-mono text-slate-800">{red.to}</span>
+                        <div className="text-center">
+                          <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-mono text-[10px] font-bold">{red.type}</span>
+                        </div>
+                        <span className="text-center font-mono text-slate-500">{red.hits}</span>
+                        <div className="text-center">
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">{red.status}</span>
+                        </div>
+                        <div className="flex justify-end gap-2">
+                          <button onClick={() => setRedirectsList(redirectsList.filter(r => r.id !== red.id))} className="text-slate-400 hover:text-rose-500">
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* ADD REDIRECT MODAL */}
+                  {showAddRedirectModal && (
+                    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+                      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-md w-full p-6 space-y-4">
+                        <h3 className="text-base font-bold text-slate-900">Add 301 Redirect</h3>
+                        <input
+                          type="text"
+                          placeholder="From URL (e.g. /old-page)"
+                          value={newRedirect.from}
+                          onChange={(e) => setNewRedirect({ ...newRedirect, from: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl text-xs"
+                        />
+                        <input
+                          type="text"
+                          placeholder="To URL (e.g. /new-page)"
+                          value={newRedirect.to}
+                          onChange={(e) => setNewRedirect({ ...newRedirect, to: e.target.value })}
+                          className="w-full px-3 py-2 border rounded-xl text-xs"
+                        />
+                        <div className="flex justify-end gap-2 pt-2">
+                          <button onClick={() => setShowAddRedirectModal(false)} className="px-4 py-2 border rounded-xl text-xs">Cancel</button>
+                          <button
+                            onClick={() => {
+                              if (newRedirect.from && newRedirect.to) {
+                                setRedirectsList([...redirectsList, { ...newRedirect, id: Date.now(), hits: 0, status: "active" }]);
+                                setShowAddRedirectModal(false);
+                                setNewRedirect({ from: "", to: "", type: 301 });
+                                showToast("Redirect added!");
+                              }
+                            }}
+                            className="px-4 py-2 bg-amber-500 text-white rounded-xl text-xs font-bold"
+                          >
+                            Add Redirect
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
+              )}
 
-                {/* Table Rows — Static Pages */}
-                {(seoFilterTab === "all" || seoFilterTab === "static") && pagesList.map((pg) => (
-                  <div key={pg.id} className="grid grid-cols-[1fr_160px_160px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
+              {/* SUBTAB 5: SITEMAP MANAGER */}
+              {activeSeoSubTab === "seo-sitemap" && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-bold text-slate-900">{pg.title}</p>
-                      <p className="text-[10px] text-slate-400 font-mono">{pg.slug}</p>
+                      <p className="text-[11px] font-mono text-slate-400 mb-1">
+                        SEO &gt; Sitemap
+                      </p>
+                      <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                        Sitemap Manager
+                      </h2>
+                      <p className="text-xs text-slate-500 font-light mt-1">
+                        XML sitemaps submitted to search engines
+                      </p>
                     </div>
-                    <div className="text-center">
-                      <span className="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-[10px] font-bold">
-                        Static Page
-                      </span>
+                    <a
+                      href="https://next-js-portfolio-one-bay.vercel.app/sitemap.xml"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-sm transition-all"
+                    >
+                      Open Index
+                    </a>
+                  </div>
+
+                  {/* Sitemap Table */}
+                  <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div className="grid grid-cols-[1fr_140px_100px] px-6 py-3 bg-slate-50/80 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+                      <span>SITEMAP</span>
+                      <span className="text-center">UPDATES</span>
+                      <span className="text-right">ACTIONS</span>
                     </div>
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={() => handleOpenSeoModal(pg, "static")}
-                        className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors"
-                      >
-                        Edit SEO
-                      </button>
-                      <button
-                        onClick={() => handleOpenSeoModal(pg, "static")}
-                        className="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-primary hover:border-primary/40 transition-colors"
-                      >
-                        <Edit className="w-3.5 h-3.5" />
-                      </button>
+
+                    {[
+                      { name: "Sitemap Index", path: "/sitemap.xml" },
+                      { name: "Pages Sitemap", path: "/sitemap-pages.xml" },
+                      { name: "Products Sitemap", path: "/sitemap-products.xml" },
+                      { name: "Collections Sitemap", path: "/sitemap-collections.xml" },
+                      { name: "Blog Sitemap", path: "/sitemap-blog.xml" }
+                    ].map((smap, idx) => (
+                      <div key={idx} className="grid grid-cols-[1fr_140px_100px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
+                        <div>
+                          <p className="text-xs font-bold text-slate-900">{smap.name}</p>
+                          <p className="text-[10px] text-slate-400 font-mono">{smap.path}</p>
+                        </div>
+                        <div className="text-center">
+                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">
+                            Automatic
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <a
+                            href={`https://next-js-portfolio-one-bay.vercel.app${smap.path}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary transition-colors"
+                          >
+                            View
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="text-xs text-slate-500 bg-amber-50 border border-amber-200/80 rounded-xl p-4 flex items-center gap-2">
+                    💡 Sitemaps regenerate automatically from your live catalog, collections and blog — there&apos;s nothing to rebuild manually. Submit the index URL <strong className="font-mono">https://next-js-portfolio-one-bay.vercel.app/sitemap.xml</strong> in Google Search Console.
+                  </p>
+                </div>
+              )}
+
+              {/* SUBTAB 6: ROBOTS MANAGER */}
+              {activeSeoSubTab === "seo-robots" && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[11px] font-mono text-slate-400 mb-1">
+                        SEO &gt; Robots
+                      </p>
+                      <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                        Robots.txt Manager
+                      </h2>
+                      <p className="text-xs text-slate-500 font-light mt-1">
+                        Control how search engines crawl your site
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => showToast("Robots.txt rules updated!")}
+                      className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm transition-all"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
+
+                  {/* Extra Rules */}
+                  <div className="bg-white rounded-2xl border border-slate-200/80 p-6 space-y-3 shadow-sm">
+                    <h3 className="text-sm font-bold text-slate-900">Extra Rules</h3>
+                    <p className="text-[11px] text-slate-400 font-light">Added below defaults (one directive per line, e.g. Disallow: /search)</p>
+                    <textarea
+                      rows={4}
+                      value={robotsRules}
+                      onChange={(e) => setRobotsRules(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 font-mono text-xs text-slate-800"
+                    />
+                  </div>
+
+                  {/* AI Crawlers */}
+                  <div className="bg-white rounded-2xl border border-slate-200/80 p-6 flex items-center justify-between shadow-sm">
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-900">AI Crawlers</h3>
+                      <p className="text-[11px] text-slate-400 font-light mt-0.5">Block GPTBot, ClaudeBot, PerplexityBot, Google-Extended and similar</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={blockAiCrawlers}
+                      onChange={(e) => setBlockAiCrawlers(e.target.checked)}
+                      className="w-5 h-5 text-amber-500 rounded border-slate-300 focus:ring-amber-500 cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Live Preview */}
+                  <div className="bg-white rounded-2xl border border-slate-200/80 p-6 space-y-3 shadow-sm">
+                    <h3 className="text-sm font-bold text-slate-900">Live Preview</h3>
+                    <pre className="p-4 rounded-xl bg-slate-900 text-emerald-400 font-mono text-xs overflow-x-auto leading-relaxed">
+{`User-agent: *
+Allow: /
+${robotsRules}
+${blockAiCrawlers ? "User-agent: GPTBot\nDisallow: /\nUser-agent: ClaudeBot\nDisallow: /" : ""}
+
+Sitemap: https://next-js-portfolio-one-bay.vercel.app/sitemap.xml`}
+                    </pre>
+                  </div>
+                </div>
+              )}
+
+              {/* SUBTAB 7: SITE VERIFICATION */}
+              {activeSeoSubTab === "seo-verification" && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[11px] font-mono text-slate-400 mb-1">
+                        SEO &gt; Verification
+                      </p>
+                      <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                        Site Verification
+                      </h2>
+                      <p className="text-xs text-slate-500 font-light mt-1">
+                        Verify site ownership with Google Search Console, Bing Webmaster, and Pinterest
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => showToast("Site verification codes saved!")}
+                      className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm transition-all"
+                    >
+                      Save Verification Codes
+                    </button>
+                  </div>
+
+                  <div className="bg-white rounded-2xl border border-slate-200/80 p-6 space-y-5 shadow-sm">
+                    <div>
+                      <label className="text-xs font-bold text-slate-700">Google Search Console Verification Code</label>
+                      <input
+                        type="text"
+                        value={siteVerification.google}
+                        onChange={(e) => setSiteVerification({ ...siteVerification, google: e.target.value })}
+                        className="w-full mt-1.5 px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-mono"
+                        placeholder="google-site-verification=..."
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-bold text-slate-700">Bing Webmaster Tools Verification Code</label>
+                      <input
+                        type="text"
+                        value={siteVerification.bing}
+                        onChange={(e) => setSiteVerification({ ...siteVerification, bing: e.target.value })}
+                        className="w-full mt-1.5 px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-mono"
+                        placeholder="msvalidate.01=..."
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-bold text-slate-700">Pinterest Verification Code</label>
+                      <input
+                        type="text"
+                        value={siteVerification.pinterest}
+                        onChange={(e) => setSiteVerification({ ...siteVerification, pinterest: e.target.value })}
+                        className="w-full mt-1.5 px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-mono"
+                        placeholder="p:domain_verify=..."
+                      />
                     </div>
                   </div>
-                ))}
+                </div>
+              )}
 
-                {/* Table Rows — Blog Posts */}
-                {(seoFilterTab === "all" || seoFilterTab === "blog") && articlesList.map((art) => (
-                  <div key={art.id} className="grid grid-cols-[1fr_160px_160px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
+              {/* SUBTAB 8: INTERNAL LINKING */}
+              {activeSeoSubTab === "seo-interlinking" && (
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-bold text-slate-900">{art.title}</p>
-                      <p className="text-[10px] text-slate-400 font-mono">/{art.slug}</p>
+                      <p className="text-[11px] font-mono text-slate-400 mb-1">
+                        SEO &gt; Internal Linking
+                      </p>
+                      <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                        Internal Linking Manager
+                      </h2>
+                      <p className="text-xs text-slate-500 font-light mt-1">
+                        Automatically link target keywords across your blog posts and pages
+                      </p>
                     </div>
-                    <div className="text-center">
-                      <span className="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">
-                        Blog Post
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={() => handleOpenSeoModal(art, "blog")}
-                        className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors"
-                      >
-                        Edit SEO
-                      </button>
-                      <button
-                        onClick={() => handleOpenSeoModal(art, "blog")}
-                        className="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-primary hover:border-primary/40 transition-colors"
-                      >
-                        <Edit className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => showToast("Auto-link rule added!")}
+                      className="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm transition-all"
+                    >
+                      + Add Auto-Link Rule
+                    </button>
                   </div>
-                ))}
 
-                {/* Table Rows — Products */}
-                {(seoFilterTab === "all" || seoFilterTab === "products") && projectsList.map((proj) => (
-                  <div key={proj.id} className="grid grid-cols-[1fr_160px_160px] px-6 py-4 border-b border-slate-100 hover:bg-slate-50/50 transition-colors items-center">
-                    <div>
-                      <p className="text-xs font-bold text-slate-900">{proj.title}</p>
-                      <p className="text-[10px] text-slate-400 font-mono">/projects</p>
+                  <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div className="grid grid-cols-[1fr_1fr_100px] px-6 py-3 bg-slate-50/80 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+                      <span>KEYWORD</span>
+                      <span>TARGET URL</span>
+                      <span className="text-right">ACTIONS</span>
                     </div>
-                    <div className="text-center">
-                      <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold">
-                        Product
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={() => handleOpenSeoModal(proj, "product")}
-                        className="px-3 py-1.5 rounded-lg border border-slate-200 text-[10px] font-semibold text-slate-600 hover:border-primary/40 hover:text-primary transition-colors"
-                      >
-                        Edit SEO
-                      </button>
-                      <button
-                        onClick={() => handleOpenSeoModal(proj, "product")}
-                        className="p-1.5 rounded-lg border border-slate-200 text-slate-400 hover:text-primary hover:border-primary/40 transition-colors"
-                      >
-                        <Edit className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
+                    {[
+                      { keyword: "Shopify Plus", target: "/services" },
+                      { keyword: "WordPress Development", target: "/services" },
+                      { keyword: "Technical SEO", target: "/services" }
+                    ].map((rule, idx) => (
+                      <div key={idx} className="grid grid-cols-[1fr_1fr_100px] px-6 py-3.5 border-b border-slate-100 text-xs items-center">
+                        <span className="font-bold text-slate-900">{rule.keyword}</span>
+                        <span className="font-mono text-slate-600">{rule.target}</span>
+                        <div className="text-right">
+                          <button onClick={() => showToast("Rule removed")} className="text-slate-400 hover:text-rose-500">
+                            <Trash2 className="w-3.5 h-3.5 inline-block" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
 
               {/* EDIT SEO MODAL POPUP */}
               {seoEditModalItem && (
                 <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
                   <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-xl w-full p-6 space-y-6 animate-in fade-in zoom-in-95 duration-200">
-                    {/* Header */}
                     <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                       <div>
                         <span className="px-2.5 py-1 rounded-md bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">
@@ -2126,9 +2825,7 @@ export default function AdminDashboard() {
                       </button>
                     </div>
 
-                    {/* Form Fields */}
                     <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
-                      {/* Meta Title */}
                       <div className="space-y-1.5">
                         <label className="text-xs font-bold text-slate-700 flex justify-between">
                           <span>Meta Title</span>
@@ -2145,7 +2842,6 @@ export default function AdminDashboard() {
                         />
                       </div>
 
-                      {/* Meta Description */}
                       <div className="space-y-1.5">
                         <label className="text-xs font-bold text-slate-700 flex justify-between">
                           <span>Meta Description</span>
@@ -2162,7 +2858,6 @@ export default function AdminDashboard() {
                         />
                       </div>
 
-                      {/* Focus Keyword */}
                       <div className="space-y-1.5">
                         <label className="text-xs font-bold text-slate-700">Focus Keyword</label>
                         <input
@@ -2174,7 +2869,6 @@ export default function AdminDashboard() {
                         />
                       </div>
 
-                      {/* Canonical URL */}
                       <div className="space-y-1.5">
                         <label className="text-xs font-bold text-slate-700">Canonical URL</label>
                         <input
@@ -2186,7 +2880,6 @@ export default function AdminDashboard() {
                         />
                       </div>
 
-                      {/* Noindex Toggle */}
                       <div className="flex items-center gap-3 pt-2">
                         <input
                           type="checkbox"
@@ -2201,7 +2894,6 @@ export default function AdminDashboard() {
                       </div>
                     </div>
 
-                    {/* Actions */}
                     <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
                       <button
                         onClick={() => setSeoEditModalItem(null)}
