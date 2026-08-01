@@ -36,6 +36,8 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="preload" as="image" href="/Profile.jpeg" fetchPriority="high" />
+        <link rel="preload" as="image" href="/profilecard.jpeg" />
       </head>
       <body className="bg-bg text-text-primary overflow-x-hidden antialiased" suppressHydrationWarning>
         <Header />

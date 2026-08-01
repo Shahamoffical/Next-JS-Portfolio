@@ -45,8 +45,7 @@ import {
   Link2,
   Home,
   X,
-  Sparkles,
-  Upload
+  Sparkles
 } from "lucide-react";
 import { FaShopify, FaWordpress, FaReact, FaSlack } from "react-icons/fa";
 
@@ -1642,7 +1641,9 @@ export default function AdminDashboard() {
                                 onClick={() => document.getElementById("featured-image-file-input")?.click()}
                                 className="w-full h-full flex flex-col items-center justify-center gap-1.5 text-slate-400 hover:text-primary transition-colors p-4"
                               >
-                                <Upload className="w-6 h-6 text-slate-400 group-hover:text-primary" />
+                                <svg className="w-6 h-6 text-slate-400 group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                                </svg>
                                 <span className="text-xs font-bold text-slate-700">Click to upload image file</span>
                                 <span className="text-[10px] text-slate-400 font-normal">PNG, JPG, WEBP, SVG</span>
                               </button>
