@@ -45,7 +45,8 @@ import {
   Link2,
   Home,
   X,
-  Sparkles
+  Sparkles,
+  Upload
 } from "lucide-react";
 import { FaShopify, FaWordpress, FaReact, FaSlack } from "react-icons/fa";
 
