@@ -476,6 +476,15 @@ export default function AdminDashboard() {
   };
 
   // Blog Management State
+  const blogCategoriesList = [
+    "Shopify Development",
+    "Shopify Plus",
+    "WordPress & WooCommerce",
+    "Technical SEO",
+    "Speed Optimization",
+    "Custom Liquid",
+    "Next.js & React"
+  ];
   const [blogSubView, setBlogSubView] = useState("list");
   const [blogSearch, setBlogSearch] = useState("");
   const [blogStatusFilter, setBlogStatusFilter] = useState("All statuses");
