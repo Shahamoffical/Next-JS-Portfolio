@@ -16,9 +16,21 @@ export async function POST(request) {
   const supabase = await createServerSupabaseClient();
   const body = await request.json();
 
+  // Normalize payload for leads & notify lead email
+  const leadPayload = {
+    name: body.name || "Anonymous Prospect",
+    email: body.email || "client@example.com",
+    product: body.product || "General Website Lead",
+    source: body.source || "/contact",
+    type: body.type || "Quote",
+    status: "New",
+    target_email: "shahamabbasdev@gmail.com",
+    time: "Just now"
+  };
+
   const { data, error } = await supabase
     .from("leads")
-    .insert([body])
+    .insert([leadPayload])
     .select()
     .single();
 

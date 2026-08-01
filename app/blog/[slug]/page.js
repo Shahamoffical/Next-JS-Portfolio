@@ -348,6 +348,23 @@ export default function SingleBlogPostPage() {
     setTimeout(() => setCommentPosted(false), 4000);
   };
 
+  // Handle Like Comment
+  const handleLikeComment = (commentId) => {
+    setComments((prev) =>
+      prev.map((item) => {
+        if (item.id === commentId) {
+          const isLiked = !!item.userLiked;
+          return {
+            ...item,
+            userLiked: !isLiked,
+            likes: isLiked ? item.likes - 1 : item.likes + 1,
+          };
+        }
+        return item;
+      })
+    );
+  };
+
   // Handle Newsletter Submit
   const handleNewsletter = (e) => {
     e.preventDefault();
@@ -985,8 +1002,15 @@ export default function SingleBlogPostPage() {
                     </div>
                   </div>
 
-                  <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 text-slate-500 hover:text-[#c00000] text-xs font-mono transition-colors border border-slate-200">
-                    <ThumbsUp className="w-3.5 h-3.5" />
+                  <button
+                    onClick={() => handleLikeComment(c.id)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono transition-all border shadow-sm ${
+                      c.userLiked
+                        ? "bg-[#c00000] text-white border-[#c00000] font-bold shadow-md"
+                        : "bg-slate-50 text-slate-600 hover:text-[#c00000] hover:border-[#c00000] border-slate-200"
+                    }`}
+                  >
+                    <ThumbsUp className={`w-3.5 h-3.5 ${c.userLiked ? "fill-white" : ""}`} />
                     <span>{c.likes}</span>
                   </button>
                 </div>
