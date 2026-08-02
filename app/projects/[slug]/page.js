@@ -7,6 +7,69 @@ import { ArrowLeft, ArrowUpRight, CheckCircle2, ChevronRight, Sparkles, Shield, 
 import { FaGithub as Github, FaShopify, FaWordpress, FaReact } from "react-icons/fa";
 
 const projectDetails = {
+  "shaham-ai-bot": {
+    title: "Shaham AI Chatbot",
+    category: "AI Agents & Automations",
+    subtitle: "Autonomous AI Assistant & Conversational Bot",
+    client: "AI Innovations / Enterprise Solutions",
+    year: "2026",
+    role: "AI Automations Engineer",
+    liveDemo: "https://shaham-ai.vercel.app/",
+    github: "https://github.com/agency-portfolio/shaham-ai-bot",
+    featuredImage: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80",
+    overview: "Shaham AI Chatbot is an autonomous conversational AI web application engineered to handle 24/7 customer support inquiries, qualify leads, and provide instant real-time streaming answers.",
+    challenge: "Delivering sub-100ms response streaming latency while retaining accurate conversational context and business knowledge.",
+    solution: "Integrated OpenAI GPT-4 Turbo API with Next.js Server-Sent Events (SSE) streaming, vector memory retrieval, and responsive UI controls.",
+    results: [
+      "<100ms real-time token streaming response",
+      "24/7 autonomous customer lead qualification",
+      "100% automated CRM lead logging"
+    ],
+    techStack: ["OpenAI GPT-4", "React.js", "Next.js", "AI Agent", "Tailwind CSS"]
+  },
+
+  "halal-animal-care": {
+    title: "HASC - Halal Animal Selling & Care",
+    category: "Custom Development",
+    subtitle: "Full-Stack E-Commerce & Monthly Care Subscription",
+    client: "HASC Livestock Co.",
+    year: "2026",
+    role: "Full Stack MERN Developer",
+    liveDemo: "https://halal-animal-selling-website.vercel.app/",
+    github: "https://github.com/Shahamoffical/HalalAnimalSellingWebsite",
+    featuredImage: "https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=1200&auto=format&fit=crop&q=80",
+    overview: "HASC is a comprehensive full-stack e-commerce platform designed for citizens to purchase livestock for Eid-ul-Adha and subscribe to monthly animal care and feeding services.",
+    challenge: "Handling complex seasonal Eid booking workflows alongside recurring monthly care subscription billing and live livestock tracking.",
+    solution: "Engineered a custom Node.js and MongoDB backend with Express REST endpoints, dynamic booking scheduling, and recurring payment handlers.",
+    results: [
+      "100% automated monthly animal care subscription processing",
+      "Seamless Eid-ul-Adha livestock reservation workflow",
+      "Sub-200ms API query performance"
+    ],
+    techStack: ["Node.js", "Express", "MongoDB", "React.js", "Subscriptions", "MERN Stack"]
+  },
+
+  "trading-app-pro": {
+    title: "TradingApp Pro",
+    category: "Custom Development",
+    subtitle: "Full-Stack Financial Trading & Analytics Application",
+    client: "FinTech Trading Solutions",
+    year: "2026",
+    role: "Lead Full Stack Engineer",
+    liveDemo: "https://trading-app-inky-gamma.vercel.app/",
+    github: "https://github.com/agency-portfolio/trading-app",
+    featuredImage: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&auto=format&fit=crop&q=80",
+    overview: "TradingApp Pro is an enterprise full-stack web trading platform engineered for real-time stock & crypto market analytics, interactive technical charting, and portfolio order execution.",
+    challenge: "Managing high-frequency live price streams and WebSocket telemetry without triggering UI re-render bottlenecks.",
+    solution: "Architected a decoupled React.js frontend with WebSocket price subscriptions, custom charting indicators, and Node.js backend microservices.",
+    results: [
+      "Real-time WebSocket price updates with zero UI lag",
+      "Sub-50ms trading chart data streaming",
+      "Secure JWT authentication and portfolio tracking"
+    ],
+    techStack: ["React.js", "Node.js", "Express", "Financial Trading", "Tailwind CSS", "WebSocket"]
+  },
+
   "peakloom": {
     title: "Peakloom UK",
     category: "Shopify Development",
@@ -186,7 +249,7 @@ export default function SingleProjectPage() {
     window.scrollTo(0, 0);
   }, []);
 
-  const project = projectDetails[slug] || projectDetails["peakloom"];
+  const project = projectDetails[slug] || projectDetails["shaham-ai-bot"];
 
   return (
     <div className="pt-28 pb-24 min-h-screen bg-slate-50 text-slate-900">

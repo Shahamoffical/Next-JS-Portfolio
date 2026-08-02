@@ -10,6 +10,39 @@ gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
+    title: "Shaham AI Chatbot",
+    url: "https://shaham-ai.vercel.app/",
+    subtitle: "Autonomous AI Assistant & Conversational Bot",
+    desc: "An intelligent AI chatbot application powered by OpenAI GPT-4 API and real-time conversational streaming for instant automated customer support and lead qualification.",
+    img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80",
+    stack: ["OpenAI GPT-4", "React.js", "Next.js", "AI Agent", "Tailwind CSS"],
+    github: "https://github.com/agency-portfolio/shaham-ai-bot",
+    liveDemo: "https://shaham-ai.vercel.app/",
+    gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
+  },
+  {
+    title: "HASC - Halal Animal Selling & Care",
+    url: "https://halal-animal-selling-website.vercel.app/",
+    subtitle: "Full-Stack E-Commerce & Monthly Care Subscription",
+    desc: "A full-stack web application designed for selling and managing animal care during Eid-ul-Adha and special events. Features live animal browsing, instant purchase, monthly care subscription plans, and booking workflows.",
+    img: "https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=1200&auto=format&fit=crop&q=80",
+    stack: ["Node.js", "Express", "MongoDB", "React.js", "Subscriptions", "MERN Stack"],
+    github: "https://github.com/Shahamoffical/HalalAnimalSellingWebsite",
+    liveDemo: "https://halal-animal-selling-website.vercel.app/",
+    gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
+  },
+  {
+    title: "TradingApp Pro",
+    url: "https://trading-app-inky-gamma.vercel.app/",
+    subtitle: "Full-Stack Financial Trading & Analytics Application",
+    desc: "A modern full-stack web trading platform featuring live stock & crypto price tracking, interactive charts, portfolio analytics, and secure order execution.",
+    img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&auto=format&fit=crop&q=80",
+    stack: ["React.js", "Node.js", "Express", "Financial Trading", "Tailwind CSS", "WebSocket"],
+    github: "https://github.com/agency-portfolio/trading-app",
+    liveDemo: "https://trading-app-inky-gamma.vercel.app/",
+    gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
+  },
+  {
     title: "Peakloom UK",
     url: "https://peakloom.co.uk",
     subtitle: "Gym Creatine & Fitness Supplement Store",
@@ -40,39 +73,6 @@ const projects = [
     stack: ["Shopify Plus", "Liquid OS 2.0", "Luxury Perfume", "UAE Multi-Currency", "Fragrance Quiz"],
     github: "https://github.com/agency-portfolio/regent-scent-shopify",
     liveDemo: "https://regentscents.com",
-    gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
-  },
-  {
-    title: "MobileCart Canada",
-    url: "https://mobilecart.ca",
-    subtitle: "Shopify Plus & Mobile Commerce Engine",
-    desc: "A high-performance custom Shopify Liquid theme with dynamic product filtering loops, instant checkout extensions, and automated Make.com CRM synchronization.",
-    img: "/project_woo.png",
-    stack: ["Shopify Plus", "Liquid", "Make.com", "Tailwind CSS", "Technical SEO"],
-    github: "https://github.com/agency-portfolio/mobilecart-shopify",
-    liveDemo: "https://mobilecart.ca",
-    gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
-  },
-  {
-    title: "Chateau Salon & Spa",
-    url: "https://chateausalon.com",
-    subtitle: "Custom WordPress & Booking Architecture",
-    desc: "An elegant custom WordPress theme integrated with online appointment scheduling engines, dynamic service galleries, and Google Maps local SEO targeting.",
-    img: "/project_wp.png",
-    stack: ["WordPress Core", "PHP Laravel", "Vagaro API", "Elementor Pro", "Technical SEO"],
-    github: "https://github.com/agency-portfolio/chateausalon-wp",
-    liveDemo: "https://chateausalon.com",
-    gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
-  },
-  {
-    title: "Eatarra Fresh E-Commerce",
-    url: "https://eatarra.com",
-    subtitle: "WooCommerce & WhatsApp Order Redirection",
-    desc: "A scalable WooCommerce storefront featuring custom dynamic product loops, instant WhatsApp order redirection, sub-2 second page speeds, and subscription payments.",
-    img: "/project_dash.png",
-    stack: ["WooCommerce", "WordPress", "WhatsApp API", "PHP", "Speed 98+"],
-    github: "https://github.com/agency-portfolio/eatarra-woocommerce",
-    liveDemo: "https://eatarra.com",
     gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
   }
 ];
@@ -120,10 +120,10 @@ export default function Projects() {
           Live Project Demos &amp; Web Configurations
         </h2>
         <h3 className="text-xl sm:text-2xl font-semibold text-primary font-sans m-0">
-          E-commerce &amp; Corporate Web Builds
+          E-commerce, Custom Web &amp; AI Chatbot Builds
         </h3>
         <p className="text-text-secondary font-light text-base max-w-xl mx-auto">
-          Explore production builds engineered for client success across Shopify Plus, WordPress, WooCommerce, and custom MERN architectures.
+          Explore production builds engineered for client success across Shopify Plus, MERN stack full-stack applications, and autonomous AI Chatbots.
         </p>
       </div>
 
