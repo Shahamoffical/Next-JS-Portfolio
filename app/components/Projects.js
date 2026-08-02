@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "lucide-react";
@@ -8,7 +8,7 @@ import { FaGithub as Github } from "react-icons/fa";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const projects = [
+const allProjectsData = [
   {
     title: "MobileCart Canada",
     url: "https://mobilecart.ca/",
@@ -79,6 +79,26 @@ const projects = [
 
 export default function Projects() {
   const sectionRef = useRef();
+  const [hiddenUrls, setHiddenUrls] = useState([]);
+
+  useEffect(() => {
+    // Fetch hidden project URLs from Supabase
+    fetch("/api/projects")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          const hidden = data
+            .filter((p) => p.status === "hidden")
+            .map((p) => (p.url || "").replace(/\/+$/, "").toLowerCase());
+          setHiddenUrls(hidden);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const projects = allProjectsData.filter(
+    (p) => !hiddenUrls.includes((p.liveDemo || "").replace(/\/+$/, "").toLowerCase())
+  );
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -102,7 +122,7 @@ export default function Projects() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [hiddenUrls]);
 
   return (
     <section

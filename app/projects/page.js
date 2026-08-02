@@ -200,14 +200,31 @@ const categoryTabs = [
 
 export default function ProjectsPage() {
   const [activeTab, setActiveTab] = useState("all");
+  const [hiddenUrls, setHiddenUrls] = useState([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Fetch hidden project URLs from Supabase
+    fetch("/api/projects")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          const hidden = data
+            .filter((p) => p.status === "hidden")
+            .map((p) => (p.url || "").replace(/\/+$/, "").toLowerCase());
+          setHiddenUrls(hidden);
+        }
+      })
+      .catch(() => {});
   }, []);
 
+  const visibleProjects = projectsData.filter(
+    (p) => !hiddenUrls.includes((p.liveDemo || "").replace(/\/+$/, "").toLowerCase())
+  );
+
   const filteredProjects = activeTab === "all"
-    ? projectsData
-    : projectsData.filter((p) => p.category === activeTab);
+    ? visibleProjects
+    : visibleProjects.filter((p) => p.category === activeTab);
 
   return (
     <div className="pt-28 pb-24 min-h-screen max-w-7xl mx-auto px-6 md:px-12 space-y-12">

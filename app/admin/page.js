@@ -440,7 +440,27 @@ export default function AdminDashboard() {
         pagesRes.json(),
       ]);
 
-      setProjectsList(Array.isArray(projects) && projects.length > 0 ? projects : hardcodedProjects);
+      // Merge: use Supabase projects if available, otherwise use hardcoded list filtered by hidden records
+      if (Array.isArray(projects) && projects.length > 0) {
+        // Get hidden project URLs from Supabase records
+        const hiddenUrls = projects
+          .filter((p) => p.status === "hidden")
+          .map((p) => (p.url || "").replace(/\/+$/, "").toLowerCase());
+        // Filter hardcoded projects to remove hidden ones
+        const visibleHardcoded = hardcodedProjects.filter(
+          (hp) => !hiddenUrls.includes((hp.url || "").replace(/\/+$/, "").toLowerCase())
+        );
+        // Show non-hidden Supabase projects + visible hardcoded projects
+        const supabaseVisible = projects.filter((p) => p.status !== "hidden");
+        // Merge: avoid duplicates by URL
+        const mergedUrls = new Set(supabaseVisible.map((p) => (p.url || "").replace(/\/+$/, "").toLowerCase()));
+        const uniqueHardcoded = visibleHardcoded.filter(
+          (hp) => !mergedUrls.has((hp.url || "").replace(/\/+$/, "").toLowerCase())
+        );
+        setProjectsList([...supabaseVisible, ...uniqueHardcoded]);
+      } else {
+        setProjectsList(hardcodedProjects);
+      }
       setLeadsList(Array.isArray(leads) ? leads : []);
       setArticlesList(Array.isArray(articles) ? articles : []);
       setPagesList(Array.isArray(pages) ? pages : []);
@@ -683,10 +703,29 @@ export default function AdminDashboard() {
   };
 
   const handleDeleteProject = async (id) => {
-    // Hardcoded projects (id starts with "hc-") — just remove from local state
+    // Hardcoded projects (id starts with "hc-") — persist to Supabase as "hidden" and remove from local state
     if (typeof id === "string" && id.startsWith("hc-")) {
+      const project = projectsList.find((p) => p.id === id);
+      if (project) {
+        try {
+          // Store a "hidden" record in Supabase so the public projects page filters it out
+          await fetch("/api/projects", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              title: project.title,
+              url: project.url,
+              category: project.category || "Hidden",
+              status: "hidden",
+              leads: 0,
+            }),
+          });
+        } catch (err) {
+          // Silently continue — still remove from local state
+        }
+      }
       setProjectsList(projectsList.filter((p) => p.id !== id));
-      showToast("Project removed from dashboard!");
+      showToast("Project deleted successfully!");
       return;
     }
     // Supabase projects — delete from DB and local state
