@@ -97,12 +97,21 @@ function CustomDropdown({ value, onChange, options = [] }) {
   );
 }
 
-// Initial Demo Data State
-const initialProjects = [
-  { id: 1, title: "MobileCart E-Commerce", url: "https://mobilecart.ca", category: "Shopify Plus", status: "Published", leads: 14, date: "July 28, 2026" },
-  { id: 2, title: "Chateau Salon & Spa", url: "https://chateausalon.com", category: "WordPress & Booking", status: "Published", leads: 22, date: "July 22, 2026" },
-  { id: 3, title: "Eat Arra Organic Store", url: "https://eatarra.com", category: "WooCommerce & WhatsApp", status: "Published", leads: 18, date: "July 15, 2026" },
-  { id: 4, title: "Saferdot Cybersecurity", url: "https://saferdot.com", category: "MERN Stack Web App", status: "Published", leads: 9, date: "July 08, 2026" }
+// All hardcoded portfolio projects (fallback when Supabase returns empty)
+const hardcodedProjects = [
+  { id: "hc-1", title: "Peakloom UK", url: "https://peakloom.co.uk", category: "Shopify Development", status: "Published", leads: 12, date: "July 2026" },
+  { id: "hc-2", title: "Furmora UK", url: "https://furmora.co.uk", category: "Shopify Development", status: "Published", leads: 9, date: "July 2026" },
+  { id: "hc-3", title: "REGENT SCENT UAE", url: "https://regentscents.com", category: "Shopify Development", status: "Published", leads: 15, date: "July 2026" },
+  { id: "hc-4", title: "Chateau Salon & Spa", url: "https://chateausalon.com", category: "WordPress & WooCommerce", status: "Published", leads: 22, date: "June 2026" },
+  { id: "hc-5", title: "Eatarra Fresh E-Commerce", url: "https://eatarra.com", category: "WordPress & WooCommerce", status: "Published", leads: 18, date: "June 2026" },
+  { id: "hc-6", title: "GB Constructions", url: "https://gbconstructions.org", category: "WordPress & WooCommerce", status: "Published", leads: 7, date: "May 2026" },
+  { id: "hc-7", title: "Saferdot LMS & Driving Academy", url: "https://saferdot.com", category: "WordPress & WooCommerce", status: "Published", leads: 11, date: "Dec 2025" },
+  { id: "hc-8", title: "Incubee PK", url: "https://www.incubee.pk", category: "WordPress & WooCommerce", status: "Published", leads: 6, date: "Jan 2026" },
+  { id: "hc-9", title: "MobileCart Canada", url: "https://mobilecart.ca", category: "WordPress & WooCommerce", status: "Published", leads: 14, date: "Feb 2026" },
+  { id: "hc-10", title: "Shaham AI Chatbot", url: "https://shaham-ai.vercel.app", category: "AI Agents & Automations", status: "Published", leads: 5, date: "July 2026" },
+  { id: "hc-11", title: "AutoLeads AI Sales Agent", url: "https://next-js-portfolio-one-bay.vercel.app/admin", category: "AI Agents & Automations", status: "Published", leads: 8, date: "July 2026" },
+  { id: "hc-12", title: "HASC - Halal Animal Selling & Care", url: "https://halal-animal-selling-website.vercel.app", category: "Custom Development", status: "Published", leads: 10, date: "June 2026" },
+  { id: "hc-13", title: "TradingApp Pro", url: "https://trading-app-inky-gamma.vercel.app", category: "Custom Development", status: "Published", leads: 4, date: "June 2026" },
 ];
 
 const initialLeads = [
@@ -431,7 +440,7 @@ export default function AdminDashboard() {
         pagesRes.json(),
       ]);
 
-      setProjectsList(Array.isArray(projects) ? projects : []);
+      setProjectsList(Array.isArray(projects) && projects.length > 0 ? projects : hardcodedProjects);
       setLeadsList(Array.isArray(leads) ? leads : []);
       setArticlesList(Array.isArray(articles) ? articles : []);
       setPagesList(Array.isArray(pages) ? pages : []);
@@ -674,6 +683,13 @@ export default function AdminDashboard() {
   };
 
   const handleDeleteProject = async (id) => {
+    // Hardcoded projects (id starts with "hc-") — just remove from local state
+    if (typeof id === "string" && id.startsWith("hc-")) {
+      setProjectsList(projectsList.filter((p) => p.id !== id));
+      showToast("Project removed from dashboard!");
+      return;
+    }
+    // Supabase projects — delete from DB and local state
     try {
       const res = await fetch(`/api/projects?id=${id}`, { method: "DELETE" });
       if (res.ok) {
