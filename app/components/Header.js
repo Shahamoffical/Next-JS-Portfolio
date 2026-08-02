@@ -35,14 +35,19 @@ export default function Header() {
             isScrolled ? "is-scrolled" : ""
           }`}
         >
-          {/* Logo */}
           <Link
             href="/"
             onClick={handleNavClick}
-            className="text-lg sm:text-xl md:text-2xl font-bold font-mono tracking-tight text-text-heading hover:text-primary transition-colors flex items-center shrink-0"
+            className="flex items-center gap-2.5 group shrink-0"
           >
-            &lt;dev/
-            <span className="text-primary">shaham</span>&gt;
+            <img
+              src="/Logo.webp"
+              alt="DevShaham Logo"
+              className="w-8 h-8 rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform"
+            />
+            <span className="text-lg sm:text-xl md:text-2xl font-bold font-mono tracking-tight text-text-heading group-hover:text-primary transition-colors">
+              &lt;dev/<span className="text-primary">shaham</span>&gt;
+            </span>
           </Link>
 
           {/* Desktop Navigation */}

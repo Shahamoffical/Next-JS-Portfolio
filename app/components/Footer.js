@@ -14,7 +14,6 @@ export default function Footer() {
   }
 
   const handleScrollTop = (e) => {
-    // e.preventDefault();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -28,10 +27,16 @@ export default function Footer() {
           <Link
             href="/"
             onClick={handleScrollTop}
-            className="text-2xl font-bold font-mono tracking-tight text-text-heading hover:text-primary transition-colors"
+            className="flex items-center gap-3 group"
           >
-            &lt;dev/
-            <span className="text-primary">shaham</span>&gt;
+            <img
+              src="/Logo.webp"
+              alt="DevShaham Logo"
+              className="w-10 h-10 rounded-xl object-cover shadow-md group-hover:scale-105 transition-transform"
+            />
+            <span className="text-2xl font-bold font-mono tracking-tight text-text-heading group-hover:text-primary transition-colors">
+              &lt;dev/<span className="text-primary">shaham</span>&gt;
+            </span>
           </Link>
           <p className="text-xs text-text-secondary font-light max-w-xs leading-relaxed">
             Building premium, performance-optimized, and clean digital
@@ -84,7 +89,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-text-secondary font-light">
         <div>
           &copy; {currentYear} Shaham Abbas. All rights reserved. Built with
-          Next.js & GSAP.
+          Next.js &amp; GSAP.
         </div>
 
         <a
