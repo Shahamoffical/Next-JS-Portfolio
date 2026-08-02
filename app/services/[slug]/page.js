@@ -3,8 +3,11 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, CheckCircle2, ChevronRight, Sparkles, Shield, Cpu, Code2, Rocket, Zap, MessageSquare, PhoneCall } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CheckCircle2, ChevronRight, Sparkles, Shield, Cpu, Code2, Rocket, Zap, MessageSquare, Compass, Layers, ShieldCheck, Workflow } from "lucide-react";
 import { FaShopify, FaWordpress, FaReact, FaNodeJs } from "react-icons/fa";
+
+const capabilityIcons = [Sparkles, Code2, Zap, Layers, ShieldCheck, Workflow];
+const processIcons = [Compass, Code2, CheckCircle2, Rocket];
 
 const serviceDetails = {
   "shopify-development": {
@@ -24,10 +27,10 @@ const serviceDetails = {
     ],
     techStack: ["Shopify Plus", "Liquid OS 2.0", "Shopify Storefront API", "GraphQL", "JavaScript ES6", "Tailwind CSS", "Make.com"],
     process: [
-      { step: "01", title: "Architecture & Wireframing", desc: "Designing responsive UI layouts and mapping section schema requirements." },
-      { step: "02", title: "Custom Liquid Development", desc: "Writing clean, semantic Liquid code with zero bloat or slow app dependencies." },
-      { step: "03", title: "Speed & SEO Audit", desc: "Enforcing 95+ PageSpeed scores, Schema.org product markup, and Core Web Vitals." },
-      { step: "04", title: "Launch & Support", desc: "Staging deployment, domain DNS setup, and post-launch technical maintenance." }
+      { title: "Architecture & Wireframing", desc: "Designing responsive UI layouts and mapping section schema requirements." },
+      { title: "Custom Liquid Development", desc: "Writing clean, semantic Liquid code with zero bloat or slow app dependencies." },
+      { title: "Speed & SEO Audit", desc: "Enforcing 95+ PageSpeed scores, Schema.org product markup, and Core Web Vitals." },
+      { title: "Launch & Support", desc: "Staging deployment, domain DNS setup, and post-launch technical maintenance." }
     ],
     faq: [
       { q: "Can you turn our Figma design into a custom Shopify theme?", a: "Yes, we specialize in converting Figma designs directly into pixel-perfect custom Shopify Liquid OS 2.0 themes with full drag-and-drop section controls." },
@@ -52,10 +55,10 @@ const serviceDetails = {
     ],
     techStack: ["WordPress Core", "WooCommerce", "PHP", "WPGraphQL", "REST APIs", "Vagaro API", "Elementor Pro"],
     process: [
-      { step: "01", title: "Discovery & Planning", desc: "Defining site structure, booking integrations, and SEO keyword targets." },
-      { step: "02", title: "PHP Theme Engineering", desc: "Developing lightweight custom WordPress templates and WooCommerce hooks." },
-      { step: "03", title: "Performance Tuning", desc: "Caching configuration, database query cleanup, and asset minification." },
-      { step: "04", title: "Deployment & Training", desc: "Live site deployment, SSL installation, and admin walkthrough training." }
+      { title: "Discovery & Planning", desc: "Defining site structure, booking integrations, and SEO keyword targets." },
+      { title: "PHP Theme Engineering", desc: "Developing lightweight custom WordPress templates and WooCommerce hooks." },
+      { title: "Performance Tuning", desc: "Caching configuration, database query cleanup, and asset minification." },
+      { title: "Deployment & Training", desc: "Live site deployment, SSL installation, and admin walkthrough training." }
     ],
     faq: [
       { q: "Can you integrate our existing booking system into WordPress?", a: "Yes, we integrate third-party booking APIs (Vagaro, Mindbody, Acuity) directly into custom WordPress interfaces." },
@@ -80,10 +83,10 @@ const serviceDetails = {
     ],
     techStack: ["React.js", "Next.js", "Node.js", "Express", "MongoDB", "Supabase", "Tailwind CSS", "TypeScript"],
     process: [
-      { step: "01", title: "API Schema Design", desc: "Architecting database models, REST endpoints, and security auth flows." },
-      { step: "02", title: "Frontend Component Dev", desc: "Building modular React/Next.js components with Tailwind CSS." },
-      { step: "03", title: "Integration & Testing", desc: "End-to-end API integration, unit testing, and load testing." },
-      { step: "04", title: "Vercel Production Launch", desc: "Deploying production environment with automated SSL & CDN routing." }
+      { title: "API Schema Design", desc: "Architecting database models, REST endpoints, and security auth flows." },
+      { title: "Frontend Component Dev", desc: "Building modular React/Next.js components with Tailwind CSS." },
+      { title: "Integration & Testing", desc: "End-to-end API integration, unit testing, and load testing." },
+      { title: "Vercel Production Launch", desc: "Deploying production environment with automated SSL & CDN routing." }
     ],
     faq: [
       { q: "Why choose Next.js for web application development?", a: "Next.js provides server-side rendering, instant page transitions, sub-second speeds, and superior SEO performance compared to traditional SPA apps." },
@@ -108,10 +111,10 @@ const serviceDetails = {
     ],
     techStack: ["Make.com", "OpenAI API", "WhatsApp Business API", "Node.js", "Webhooks", "JSON", "Supabase"],
     process: [
-      { step: "01", title: "Workflow Audit", desc: "Mapping out repetitive business tasks and lead qualification bottlenecks." },
-      { step: "02", title: "Make.com Scenario Build", desc: "Building error-handled automation scenarios and API webhooks." },
-      { step: "03", title: "AI Prompt Tuning", desc: "Fine-tuning OpenAI assistant prompts for accurate business responses." },
-      { step: "04", title: "Live Automation Testing", desc: "Rigorous testing to ensure 100% reliable 24/7 execution." }
+      { title: "Workflow Audit", desc: "Mapping out repetitive business tasks and lead qualification bottlenecks." },
+      { title: "Make.com Scenario Build", desc: "Building error-handled automation scenarios and API webhooks." },
+      { title: "AI Prompt Tuning", desc: "Fine-tuning OpenAI assistant prompts for accurate business responses." },
+      { title: "Live Automation Testing", desc: "Rigorous testing to ensure 100% reliable 24/7 execution." }
     ],
     faq: [
       { q: "How fast does the AI agent respond to new website leads?", a: "Inquiries are processed in less than 5 seconds, triggering instant WhatsApp/Email alerts to both the customer and your sales team." },
@@ -136,10 +139,10 @@ const serviceDetails = {
     ],
     techStack: ["Google PageSpeed Insights", "Lighthouse", "Cloudflare CDN", "Schema.org JSON-LD", "Core Web Vitals", "GSC"],
     process: [
-      { step: "01", title: "Performance Audit", desc: "Analyzing initial Lighthouse scores, render-blocking resources, and LCP delays." },
-      { step: "02", title: "Code & Asset Optimization", desc: "Compressing media, refactoring Liquid/PHP loops, and minifying scripts." },
-      { step: "03", title: "Technical SEO Implementation", desc: "Injecting JSON-LD schema, optimizing title tags, and submitting sitemaps." },
-      { step: "04", title: "Verification & Report", desc: "Running post-optimization audits to confirm 95+ PageSpeed scores." }
+      { title: "Performance Audit", desc: "Analyzing initial Lighthouse scores, render-blocking resources, and LCP delays." },
+      { title: "Code & Asset Optimization", desc: "Compressing media, refactoring Liquid/PHP loops, and minifying scripts." },
+      { title: "Technical SEO Implementation", desc: "Injecting JSON-LD schema, optimizing title tags, and submitting sitemaps." },
+      { title: "Verification & Report", desc: "Running post-optimization audits to confirm 95+ PageSpeed scores." }
     ],
     faq: [
       { q: "Can you fix slow Shopify or WordPress sites without breaking design?", a: "Absolutely. All speed optimizations preserve your exact design layout while eliminating unnecessary script bottlenecks." },
@@ -212,7 +215,7 @@ export default function SingleServicePage() {
           </div>
         </div>
 
-        {/* Capabilities Grid (6 Cards) */}
+        {/* Capabilities Grid (6 Cards with SVG Icons) */}
         <div className="space-y-6">
           <div className="border-b border-slate-200 pb-3">
             <span className="text-[10px] font-mono text-primary uppercase font-bold tracking-wider">Features &amp; Deliverables</span>
@@ -220,15 +223,18 @@ export default function SingleServicePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {service.capabilities.map((cap, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-2 hover:border-primary/40 hover:shadow-md transition-all">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-mono font-bold text-xs">
-                  0{idx + 1}
+            {service.capabilities.map((cap, idx) => {
+              const CapIcon = capabilityIcons[idx % capabilityIcons.length];
+              return (
+                <div key={idx} className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-3 hover:border-primary/40 hover:shadow-md transition-all">
+                  <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 shadow-xs">
+                    <CapIcon className="w-4 h-4 text-primary" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 m-0">{cap.title}</h3>
+                  <p className="text-xs text-slate-500 font-light leading-relaxed m-0">{cap.desc}</p>
                 </div>
-                <h3 className="text-base font-bold text-slate-900 m-0">{cap.title}</h3>
-                <p className="text-xs text-slate-500 font-light leading-relaxed m-0">{cap.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -246,7 +252,7 @@ export default function SingleServicePage() {
           </div>
         </div>
 
-        {/* Process Timeline (4 Steps) */}
+        {/* Process Timeline (4 Steps with SVG Icons) */}
         <div className="space-y-6">
           <div className="border-b border-slate-200 pb-3">
             <span className="text-[10px] font-mono text-primary uppercase font-bold tracking-wider">Workflow</span>
@@ -254,13 +260,18 @@ export default function SingleServicePage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {service.process.map((p, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-3 relative overflow-hidden">
-                <span className="text-2xl font-black font-mono text-primary/20 absolute top-4 right-4">{p.step}</span>
-                <h3 className="text-base font-bold text-slate-900 m-0">{p.title}</h3>
-                <p className="text-xs text-slate-500 font-light leading-relaxed m-0">{p.desc}</p>
-              </div>
-            ))}
+            {service.process.map((p, idx) => {
+              const StepIcon = processIcons[idx % processIcons.length];
+              return (
+                <div key={idx} className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-3 relative overflow-hidden">
+                  <div className="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 absolute top-4 right-4">
+                    <StepIcon className="w-4 h-4 text-primary" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 m-0 pr-8">{p.title}</h3>
+                  <p className="text-xs text-slate-500 font-light leading-relaxed m-0">{p.desc}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
 

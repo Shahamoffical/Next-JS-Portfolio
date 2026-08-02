@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Brain, Code2, TrendingUp, Layout, Box, Cloud, Database, Lock } from "lucide-react";
+import { Brain, Code2, TrendingUp, Layout, Box, Cloud, Database, Lock, Sparkles } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -167,7 +167,9 @@ export default function Services() {
                 >
                   {svc.icon}
                 </div>
-                <span className="text-gray-300 font-bold text-sm tracking-widest">{svc.num}</span>
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center border border-slate-200/80 bg-slate-50 text-slate-400">
+                  <Sparkles className="w-3.5 h-3.5" style={{ color: svc.color }} />
+                </div>
               </div>
 
               {/* Title and Subtitle */}
