@@ -7,6 +7,69 @@ import { ArrowLeft, ArrowUpRight, CheckCircle2, ChevronRight, Sparkles, Shield, 
 import { FaGithub as Github, FaShopify, FaWordpress, FaReact } from "react-icons/fa";
 
 const projectDetails = {
+  "mobilecart-canada": {
+    title: "MobileCart Canada",
+    category: "WordPress & WooCommerce",
+    subtitle: "Mobile Selling & Tech E-Commerce Store",
+    client: "MobileCart Canada Inc.",
+    year: "Feb 2026",
+    role: "Lead WordPress & WooCommerce Developer",
+    liveDemo: "https://mobilecart.ca/",
+    github: "https://github.com/agency-portfolio/mobilecart-canada-wp",
+    featuredImage: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1200&auto=format&fit=crop&q=80",
+    overview: "MobileCart Canada is a premier Canadian mobile selling e-commerce portal offering smartphones, tablet accessories, fast nationwide shipping, and instant checkout for tech shoppers.",
+    challenge: "Optimizing heavy product catalog queries and mobile checkout speeds to achieve sub-1.2s page loads across Canadian provinces.",
+    solution: "Engineered a custom WooCommerce theme with dynamic AJAX product filters, optimized SQL database indexes, and fast CDN caching.",
+    results: [
+      "Sub-1.2s mobile page load speeds across Canada",
+      "+140% increase in mobile checkout conversion rate",
+      "Seamless multi-currency & tax calculations"
+    ],
+    techStack: ["WooCommerce", "WordPress", "Canada Mobile Store", "Feb 2026", "PHP"]
+  },
+
+  "incubee-pk": {
+    title: "Incubee PK",
+    category: "WordPress & WooCommerce",
+    subtitle: "Digital Courses & Software House Portal",
+    client: "Incubee Tech Academy",
+    year: "Jan 2026",
+    role: "Full Stack WordPress Engineer",
+    liveDemo: "https://www.incubee.pk/",
+    github: "https://github.com/agency-portfolio/incubee-wp",
+    featuredImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&auto=format&fit=crop&q=80",
+    overview: "Incubee PK is a leading digital training institute and software house web portal offering online tech courses, student enrollments, portfolio showcases, and corporate IT consultations.",
+    challenge: "Balancing course catalog navigation and software development agency portfolios in a single unified responsive platform.",
+    solution: "Customized a lightweight WordPress architecture with Elementor Pro course grids, student registration webhooks, and inquiry forms.",
+    results: [
+      "Sub-1.1s page load speeds for course registrants",
+      "+210% increase in online student course enrollments",
+      "100% responsive mobile course portal"
+    ],
+    techStack: ["WordPress Core", "Digital Courses", "Software House", "Jan 2026", "Elementor Pro"]
+  },
+
+  "saferdot-lms": {
+    title: "Saferdot LMS & Driving Academy",
+    category: "WordPress & WooCommerce",
+    subtitle: "LMS & Truck Driving Courses & Certification Portal",
+    client: "Saferdot Driving Academy",
+    year: "Dec 2025",
+    role: "WordPress LMS Architect",
+    liveDemo: "https://saferdot.com/",
+    github: "https://github.com/agency-portfolio/saferdot-lms-wp",
+    featuredImage: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=1200&auto=format&fit=crop&q=80",
+    overview: "Saferdot LMS is a specialized commercial truck driving education portal featuring online video modules, practice quizzes, enrollment tracking, and verifiable driver certifications.",
+    challenge: "Structuring multi-tier commercial driving course progression and automated certificate generation upon course completion.",
+    solution: "Integrated LearnDash LMS engine with WordPress custom post types, PDF certificate generators, and automated student progress tracking.",
+    results: [
+      "Automated truck driving course completion & certificate generation",
+      "100% automated student enrollment and progress tracking",
+      "Sub-1.2s portal loading speed"
+    ],
+    techStack: ["WordPress LMS", "LearnDash", "Truck Driving", "Certifications", "Dec 2025"]
+  },
+
   "gb-constructions": {
     title: "GB Constructions",
     category: "WordPress & WooCommerce",
@@ -17,9 +80,9 @@ const projectDetails = {
     liveDemo: "https://gbconstructions.org/",
     github: "https://github.com/agency-portfolio/gbconstructions-wp",
     featuredImage: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?w=1200&auto=format&fit=crop&q=80",
-    overview: "GB Constructions is a leading civil engineering enterprise specializing in high-speed road development, highway bridges, flyovers, and municipal infrastructure projects. Their web portal presents active construction portfolios, tender documentation, and corporate credentials.",
-    challenge: "Presenting multi-million dollar engineering project portfolios and heavy infrastructure tender documents with ultra-fast page speeds and accessible mobile navigation.",
-    solution: "Engineered a custom WordPress corporate architecture with dynamic project taxonomy filters, asynchronous PDF tender downloads, and technical local SEO schema.",
+    overview: "GB Constructions is a leading civil engineering enterprise specializing in high-speed road development, highway bridges, flyovers, and municipal infrastructure projects.",
+    challenge: "Presenting multi-million dollar engineering project portfolios and heavy infrastructure tender documents with ultra-fast page speeds.",
+    solution: "Engineered a custom WordPress corporate architecture with dynamic project taxonomy filters and technical local SEO schema.",
     results: [
       "Sub-1.2s page loading speed across desktop and mobile",
       "Streamlined tender document downloads for corporate clients",
@@ -39,8 +102,8 @@ const projectDetails = {
     github: "https://github.com/agency-portfolio/shaham-ai-bot",
     featuredImage: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80",
     overview: "Shaham AI Chatbot is an autonomous conversational AI web application engineered to handle 24/7 customer support inquiries, qualify leads, and provide instant real-time streaming answers.",
-    challenge: "Delivering sub-100ms response streaming latency while retaining accurate conversational context and business knowledge.",
-    solution: "Integrated OpenAI GPT-4 Turbo API with Next.js Server-Sent Events (SSE) streaming, vector memory retrieval, and responsive UI controls.",
+    challenge: "Delivering sub-100ms response streaming latency while retaining accurate conversational context.",
+    solution: "Integrated OpenAI GPT-4 Turbo API with Next.js Server-Sent Events (SSE) streaming and responsive UI controls.",
     results: [
       "<100ms real-time token streaming response",
       "24/7 autonomous customer lead qualification",
@@ -60,8 +123,8 @@ const projectDetails = {
     github: "https://github.com/Shahamoffical/HalalAnimalSellingWebsite",
     featuredImage: "https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=1200&auto=format&fit=crop&q=80",
     overview: "HASC is a comprehensive full-stack e-commerce platform designed for citizens to purchase livestock for Eid-ul-Adha and subscribe to monthly animal care and feeding services.",
-    challenge: "Handling complex seasonal Eid booking workflows alongside recurring monthly care subscription billing and live livestock tracking.",
-    solution: "Engineered a custom Node.js and MongoDB backend with Express REST endpoints, dynamic booking scheduling, and recurring payment handlers.",
+    challenge: "Handling complex seasonal Eid booking workflows alongside recurring monthly care subscription billing.",
+    solution: "Engineered a custom Node.js and MongoDB backend with Express REST endpoints and dynamic booking scheduling.",
     results: [
       "100% automated monthly animal care subscription processing",
       "Seamless Eid-ul-Adha livestock reservation workflow",
@@ -80,13 +143,13 @@ const projectDetails = {
     liveDemo: "https://trading-app-inky-gamma.vercel.app/",
     github: "https://github.com/agency-portfolio/trading-app",
     featuredImage: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&auto=format&fit=crop&q=80",
-    overview: "TradingApp Pro is an enterprise full-stack web trading platform engineered for real-time stock & crypto market analytics, interactive technical charting, and portfolio order execution.",
-    challenge: "Managing high-frequency live price streams and WebSocket telemetry without triggering UI re-render bottlenecks.",
-    solution: "Architected a decoupled React.js frontend with WebSocket price subscriptions, custom charting indicators, and Node.js backend microservices.",
+    overview: "TradingApp Pro is an enterprise full-stack web trading platform engineered for real-time stock & crypto market analytics and interactive charting.",
+    challenge: "Managing high-frequency live price streams and WebSocket telemetry without triggering UI bottlenecks.",
+    solution: "Architected a decoupled React.js frontend with WebSocket price subscriptions and custom charting indicators.",
     results: [
       "Real-time WebSocket price updates with zero UI lag",
       "Sub-50ms trading chart data streaming",
-      "Secure JWT authentication and portfolio tracking"
+      "Secure JWT authentication"
     ],
     techStack: ["React.js", "Node.js", "Express", "Financial Trading", "Tailwind CSS", "WebSocket"]
   },
@@ -101,14 +164,13 @@ const projectDetails = {
     liveDemo: "https://peakloom.co.uk",
     github: "https://github.com/agency-portfolio/peakloom-shopify",
     featuredImage: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=1200&auto=format&fit=crop&q=80",
-    overview: "Peakloom UK needed a high-performance custom Shopify Liquid storefront engineered specifically for gym goers and fitness enthusiasts buying creatine and workout supplements.",
-    challenge: "Fitness buyers demand instant product variant selection (flavors, pouch sizes, subscription frequencies) with zero page reload delays on mobile devices.",
-    solution: "Engineered a custom Shopify Liquid OS 2.0 theme with AJAX variant updates, dynamic creatine subscription bundle pricing, and sub-1.1s mobile LCP optimization.",
+    overview: "Peakloom UK needed a high-performance custom Shopify Liquid storefront engineered specifically for gym goers buying creatine and workout supplements.",
+    challenge: "Fitness buyers demand instant product variant selection with zero page reload delays.",
+    solution: "Engineered a custom Shopify Liquid OS 2.0 theme with AJAX variant updates and sub-1.1s mobile speed.",
     results: [
       "Sub-1.1s mobile Largest Contentful Paint (LCP)",
       "+185% increase in gym customer checkout conversions",
-      "99/100 Desktop Google PageSpeed score",
-      "Automated subscription bundle refills via Make.com"
+      "99/100 Desktop Google PageSpeed score"
     ],
     techStack: ["Shopify Plus", "Liquid OS 2.0", "Creatine Store", "UK E-Commerce", "Make.com"]
   },
@@ -123,9 +185,9 @@ const projectDetails = {
     liveDemo: "https://furmora.co.uk",
     github: "https://github.com/agency-portfolio/furmora-shopify",
     featuredImage: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=1200&auto=format&fit=crop&q=80",
-    overview: "Furmora UK required a streamlined Shopify storefront for selling puppy training pads and pet hygiene supplies across the United Kingdom.",
-    challenge: "High cart abandonment due to multi-step checkout processes for recurring puppy pad orders.",
-    solution: "Customized a Shopify Liquid theme with 1-click product bundle add-to-cart drawers, automated recurring subscription refills, and sub-1.2s mobile loading.",
+    overview: "Furmora UK required a streamlined Shopify storefront for selling puppy training pads across the United Kingdom.",
+    challenge: "High cart abandonment due to multi-step checkout processes.",
+    solution: "Customized a Shopify Liquid theme with 1-click product bundle add-to-cart drawers and automated refills.",
     results: [
       "1-Click puppy pad bundle selection",
       "Sub-1.2s mobile load speed",
@@ -144,37 +206,15 @@ const projectDetails = {
     liveDemo: "https://regentscents.com",
     github: "https://github.com/agency-portfolio/regent-scent-shopify",
     featuredImage: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1200&auto=format&fit=crop&q=80",
-    overview: "REGENT SCENT required a premium luxury fragrance storefront tailored for high-end perfume buyers across Dubai, Abu Dhabi, and international UAE markets.",
-    challenge: "Reflecting a high-end luxury aesthetic while maintaining fast mobile load times and seamless AED/USD multi-currency switching.",
-    solution: "Built a gold-themed custom Shopify Plus Liquid architecture featuring multi-currency localization, custom interactive fragrance note filters, and instant checkout.",
+    overview: "REGENT SCENT required a premium luxury fragrance storefront tailored for high-end perfume buyers across Dubai and international UAE markets.",
+    challenge: "Reflecting a high-end luxury aesthetic while maintaining fast mobile load times and AED/USD switching.",
+    solution: "Built a gold-themed custom Shopify Plus Liquid architecture featuring multi-currency localization and instant checkout.",
     results: [
       "Luxury responsive UI design",
       "Instant AED / USD multi-currency switching",
       "+160% increase in UAE luxury fragrance sales"
     ],
     techStack: ["Shopify Plus", "Liquid OS 2.0", "Luxury Perfume", "UAE Multi-Currency", "Fragrance Quiz"]
-  },
-
-  "mobilecart-canada": {
-    title: "MobileCart Canada",
-    category: "Shopify Development",
-    subtitle: "Shopify Plus & Mobile Commerce Engine",
-    client: "MobileCart Commerce Inc.",
-    year: "2026",
-    role: "Lead E-Commerce Architect",
-    liveDemo: "https://mobilecart.ca",
-    github: "https://github.com/agency-portfolio/mobilecart-shopify",
-    featuredImage: "/project_woo.png",
-    overview: "MobileCart Canada needed a complete Shopify Plus theme overhaul to support over 50,000 monthly active shoppers across desktop and mobile devices. Default Shopify OS 2.0 themes were failing Core Web Vitals LCP benchmarks.",
-    challenge: "The primary challenge was reducing initial mobile DOM rendering times while maintaining rich interactive product variant selectors, dynamic cart drawer upsells, and instant multi-currency checkout.",
-    solution: "Engineered a custom Shopify Liquid architecture with modular section rendering API hooks, async JavaScript asset bundling, and automated Make.com CRM webhooks for order processing.",
-    results: [
-      "Sub-1.2s mobile Largest Contentful Paint (LCP)",
-      "+140% increase in mobile checkout conversion rate",
-      "99/100 Desktop Google PageSpeed score",
-      "Seamless Make.com webhook sync for inventory management"
-    ],
-    techStack: ["Shopify Plus", "Liquid OS 2.0", "Make.com", "JavaScript ES6", "Tailwind CSS", "Technical SEO"]
   },
 
   "chateau-salon": {
@@ -187,15 +227,15 @@ const projectDetails = {
     liveDemo: "https://chateausalon.com",
     github: "https://github.com/agency-portfolio/chateausalon-wp",
     featuredImage: "/project_wp.png",
-    overview: "Chateau Salon required an ultra-fast local business web portal integrated with external Vagaro appointment booking systems and Google Maps local SEO schema.",
-    challenge: "Third-party booking scripts were severely degrading page load performance and causing layout shifts on mobile browsers.",
-    solution: "Built a custom lightweight WordPress theme with asynchronous Vagaro API modal triggers, local schema markup, and optimized image compression.",
+    overview: "Chateau Salon required an ultra-fast local business web portal integrated with Vagaro appointment booking systems.",
+    challenge: "Third-party booking scripts were severely degrading page load performance.",
+    solution: "Built a custom lightweight WordPress theme with asynchronous Vagaro API triggers.",
     results: [
       "#1 Google Maps Local Pack ranking for primary target keywords",
       "Sub-1.0s homepage load speed",
       "+85% increase in online appointment bookings"
     ],
-    techStack: ["WordPress Core", "PHP", "Vagaro API", "Elementor Pro", "Google Schema", "Technical SEO"]
+    techStack: ["WordPress Core", "PHP", "Vagaro API", "Elementor Pro", "Technical SEO"]
   },
 
   "eatarra-woocommerce": {
@@ -208,36 +248,15 @@ const projectDetails = {
     liveDemo: "https://eatarra.com",
     github: "https://github.com/agency-portfolio/eatarra-woocommerce",
     featuredImage: "/project_dash.png",
-    overview: "Eatarra needed a streamlined 1-click WooCommerce store tailored for international customer orders via direct WhatsApp checkout redirection.",
-    challenge: "Traditional multi-step checkout forms caused a 65% cart abandonment rate among mobile customers in target regions.",
-    solution: "Designed custom WooCommerce hook routines that instantly compile cart parameters and launch pre-filled WhatsApp customer order messages.",
+    overview: "Eatarra needed a 1-click WooCommerce store tailored for customer orders via direct WhatsApp checkout redirection.",
+    challenge: "Traditional multi-step checkout forms caused a 65% cart abandonment rate.",
+    solution: "Designed custom WooCommerce hook routines that instantly launch pre-filled WhatsApp customer orders.",
     results: [
       "85% checkout completion rate via WhatsApp redirection",
       "100,000+ orders processed seamlessly",
       "Zero cart abandonment on instant checkout routes"
     ],
     techStack: ["WooCommerce", "WordPress", "WhatsApp API", "PHP", "Speed Optimization"]
-  },
-
-  "saferdot-cybersecurity": {
-    title: "Saferdot Cybersecurity",
-    category: "Custom Development",
-    subtitle: "MERN Stack Corporate Application",
-    client: "Saferdot Technologies",
-    year: "2026",
-    role: "Full Stack MERN Developer",
-    liveDemo: "https://saferdot.com",
-    github: "https://github.com/agency-portfolio/saferdot-mern",
-    featuredImage: "/project_woo.png",
-    overview: "Saferdot required an enterprise-grade corporate platform with live threat monitoring dashboards and secure API authentication.",
-    challenge: "Managing real-time telemetry updates without impacting page responsiveness.",
-    solution: "Created a decoupled MERN stack application with Express REST endpoints, MongoDB database indexing, and React state management.",
-    results: [
-      "Sub-200ms API response latency",
-      "Enterprise security compliance",
-      "100% uptime architecture"
-    ],
-    techStack: ["React.js", "Node.js", "Express", "MongoDB", "Tailwind CSS"]
   },
 
   "autoleads-ai-assistant": {
@@ -250,9 +269,9 @@ const projectDetails = {
     liveDemo: "https://next-js-portfolio-one-bay.vercel.app/admin",
     github: "https://github.com/agency-portfolio/autoleads-ai",
     featuredImage: "/project_dash.png",
-    overview: "An autonomous lead qualification pipeline that intercepts website inquiries, analyzes requirements using OpenAI GPT-4, and alerts sales reps instantly via WhatsApp.",
-    challenge: "Eliminating manual lead qualification delays while keeping lead responses personal and accurate.",
-    solution: "Implemented Make.com scenario webhooks paired with OpenAI Assistants API and WhatsApp Business notification triggers.",
+    overview: "An autonomous lead qualification pipeline that intercepts website inquiries, analyzes requirements using OpenAI GPT-4, and alerts sales reps via WhatsApp.",
+    challenge: "Eliminating manual lead qualification delays.",
+    solution: "Implemented Make.com scenario webhooks paired with OpenAI Assistants API and WhatsApp triggers.",
     results: [
       "24/7 instant lead qualification in <5 seconds",
       "Zero missed prospect inquiries",
@@ -270,7 +289,7 @@ export default function SingleProjectPage() {
     window.scrollTo(0, 0);
   }, []);
 
-  const project = projectDetails[slug] || projectDetails["gb-constructions"];
+  const project = projectDetails[slug] || projectDetails["mobilecart-canada"];
 
   return (
     <div className="pt-28 pb-24 min-h-screen bg-slate-50 text-slate-900">
@@ -309,7 +328,7 @@ export default function SingleProjectPage() {
               <span className="font-bold text-slate-900">{project.client}</span>
             </div>
             <div>
-              <span className="text-slate-400 block mb-1">YEAR</span>
+              <span className="text-slate-400 block mb-1">COMPLETED</span>
               <span className="font-bold text-slate-900">{project.year}</span>
             </div>
             <div>
