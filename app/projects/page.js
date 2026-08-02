@@ -56,7 +56,7 @@ const projectsData = [
     categoryLabel: "WordPress & WooCommerce",
     subtitle: "Civil Infrastructure, Roads & Bridge Construction Portal",
     desc: "A high-performance WordPress corporate portal engineered for GB Constructions, showcasing major civil infrastructure projects, road works, bridge construction engineering, and municipal tenders.",
-    img: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?w=1200&auto=format&fit=crop&q=80",
+    img: "https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=1200&auto=format&fit=crop&q=80",
     stack: ["WordPress Core", "PHP", "Roads & Bridges", "Civil Engineering", "Technical SEO"],
     github: "https://github.com/agency-portfolio/gbconstructions-wp",
     liveDemo: "https://gbconstructions.org/",

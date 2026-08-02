@@ -79,7 +79,7 @@ const projectDetails = {
     role: "Lead WordPress Architect",
     liveDemo: "https://gbconstructions.org/",
     github: "https://github.com/agency-portfolio/gbconstructions-wp",
-    featuredImage: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?w=1200&auto=format&fit=crop&q=80",
+    featuredImage: "https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=1200&auto=format&fit=crop&q=80",
     overview: "GB Constructions is a leading civil engineering enterprise specializing in high-speed road development, highway bridges, flyovers, and municipal infrastructure projects.",
     challenge: "Presenting multi-million dollar engineering project portfolios and heavy infrastructure tender documents with ultra-fast page speeds.",
     solution: "Engineered a custom WordPress corporate architecture with dynamic project taxonomy filters and technical local SEO schema.",
