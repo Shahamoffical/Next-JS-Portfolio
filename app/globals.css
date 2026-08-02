@@ -65,6 +65,12 @@ body {
   }
 }
 
+/* Custom typography utility */
+.text-l {
+  font-size: var(--text-l, 1.125rem);
+  line-height: var(--tw-leading, var(--text-xs--line-height, 1.5rem));
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
