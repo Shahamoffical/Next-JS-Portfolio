@@ -8,6 +8,11 @@ export const metadata = {
   keywords:
     "Shopify Developer, Shopify Expert, Shopify Development, Shopify Plus Developer, WordPress Developer, WooCommerce Developer, Custom Website Development, Headless Commerce, Technical SEO",
   authors: [{ name: "Digital Solutions Agency" }],
+  icons: {
+    icon: "/Logo.webp",
+    shortcut: "/Logo.webp",
+    apple: "/Logo.webp",
+  },
   openGraph: {
     type: "website",
     title: "Premium Custom Website Development & Shopify Expert Solutions",
@@ -36,8 +41,8 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
         <link rel="icon" type="image/webp" href="/Logo.webp" />
+        <link rel="shortcut icon" type="image/webp" href="/Logo.webp" />
         <link rel="apple-touch-icon" href="/Logo.webp" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="preload" as="image" href="/Logo.webp" fetchPriority="high" />
         <link rel="preload" as="image" href="/Profile.jpeg" fetchPriority="high" />
         <link rel="preload" as="image" href="/profilecard.jpeg" />

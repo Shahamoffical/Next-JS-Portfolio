@@ -93,13 +93,13 @@ export default function Footer() {
 
         {/* Column 2: QUICK LINKS */}
         <div className="lg:col-span-2 space-y-5">
-          <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-slate-900 m-0">
+          <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-slate-900 mb-5">
             QUICK LINKS
           </h4>
           <ul className="space-y-3 text-xs sm:text-sm font-medium">
             <li>
               <Link href="/" onClick={handleScrollTop} className="text-primary font-bold hover:underline flex items-center gap-2">
-                <span className="text-primary">—</span> Home
+                Home
               </Link>
             </li>
             <li>
@@ -127,7 +127,7 @@ export default function Footer() {
 
         {/* Column 3: SERVICES */}
         <div className="lg:col-span-3 space-y-5">
-          <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-slate-900 m-0">
+          <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-slate-900 mb-5">
             SERVICES
           </h4>
           <ul className="space-y-3 text-xs sm:text-sm font-medium text-slate-600">
@@ -166,7 +166,7 @@ export default function Footer() {
 
         {/* Column 4: STAY IN THE LOOP (Newsletter & Direct Contact Light Theme) */}
         <div className="lg:col-span-3 space-y-4">
-          <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-slate-900 m-0">
+          <h4 className="text-xs font-mono font-bold uppercase tracking-widest text-slate-900 mb-5">
             STAY IN THE LOOP
           </h4>
           <p className="text-xs text-slate-600 font-light leading-relaxed">
