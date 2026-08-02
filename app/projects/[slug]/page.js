@@ -7,6 +7,70 @@ import { ArrowLeft, ArrowUpRight, CheckCircle2, ChevronRight, Sparkles, Shield, 
 import { FaGithub as Github, FaShopify, FaWordpress, FaReact } from "react-icons/fa";
 
 const projectDetails = {
+  "peakloom": {
+    title: "Peakloom UK",
+    category: "Shopify Development",
+    subtitle: "Gym Creatine & Fitness Supplement Store",
+    client: "Peakloom UK Ltd",
+    year: "2026",
+    role: "Shopify Plus Architect",
+    liveDemo: "https://peakloom.co.uk",
+    github: "https://github.com/agency-portfolio/peakloom-shopify",
+    featuredImage: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=1200&auto=format&fit=crop&q=80",
+    overview: "Peakloom UK needed a high-performance custom Shopify Liquid storefront engineered specifically for gym goers and fitness enthusiasts buying creatine and workout supplements.",
+    challenge: "Fitness buyers demand instant product variant selection (flavors, pouch sizes, subscription frequencies) with zero page reload delays on mobile devices.",
+    solution: "Engineered a custom Shopify Liquid OS 2.0 theme with AJAX variant updates, dynamic creatine subscription bundle pricing, and sub-1.1s mobile LCP optimization.",
+    results: [
+      "Sub-1.1s mobile Largest Contentful Paint (LCP)",
+      "+185% increase in gym customer checkout conversions",
+      "99/100 Desktop Google PageSpeed score",
+      "Automated subscription bundle refills via Make.com"
+    ],
+    techStack: ["Shopify Plus", "Liquid OS 2.0", "Creatine Store", "UK E-Commerce", "Make.com"]
+  },
+
+  "furmora": {
+    title: "Furmora UK",
+    category: "Shopify Development",
+    subtitle: "Puppy Pads & Pet Supplies Store",
+    client: "Furmora Pet Products UK",
+    year: "2026",
+    role: "Lead E-Commerce Developer",
+    liveDemo: "https://furmora.co.uk",
+    github: "https://github.com/agency-portfolio/furmora-shopify",
+    featuredImage: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=1200&auto=format&fit=crop&q=80",
+    overview: "Furmora UK required a streamlined Shopify storefront for selling puppy training pads and pet hygiene supplies across the United Kingdom.",
+    challenge: "High cart abandonment due to multi-step checkout processes for recurring puppy pad orders.",
+    solution: "Customized a Shopify Liquid theme with 1-click product bundle add-to-cart drawers, automated recurring subscription refills, and sub-1.2s mobile loading.",
+    results: [
+      "1-Click puppy pad bundle selection",
+      "Sub-1.2s mobile load speed",
+      "+120% increase in repeat subscription orders"
+    ],
+    techStack: ["Shopify OS 2.0", "Liquid", "Puppy Pads", "UK Pet Store", "Cart Drawer"]
+  },
+
+  "regent-scent": {
+    title: "REGENT SCENT UAE",
+    category: "Shopify Development",
+    subtitle: "Luxury Perfume & Fragrance Store",
+    client: "REGENT SCENT Perfumes UAE",
+    year: "2026",
+    role: "Shopify Solutions Architect",
+    liveDemo: "https://regentscents.com",
+    github: "https://github.com/agency-portfolio/regent-scent-shopify",
+    featuredImage: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1200&auto=format&fit=crop&q=80",
+    overview: "REGENT SCENT required a premium luxury fragrance storefront tailored for high-end perfume buyers across Dubai, Abu Dhabi, and international UAE markets.",
+    challenge: "Reflecting a high-end luxury aesthetic while maintaining fast mobile load times and seamless AED/USD multi-currency switching.",
+    solution: "Built a gold-themed custom Shopify Plus Liquid architecture featuring multi-currency localization, custom interactive fragrance note filters, and instant checkout.",
+    results: [
+      "Luxury responsive UI design",
+      "Instant AED / USD multi-currency switching",
+      "+160% increase in UAE luxury fragrance sales"
+    ],
+    techStack: ["Shopify Plus", "Liquid OS 2.0", "Luxury Perfume", "UAE Multi-Currency", "Fragrance Quiz"]
+  },
+
   "mobilecart-canada": {
     title: "MobileCart Canada",
     category: "Shopify Development",
@@ -28,6 +92,7 @@ const projectDetails = {
     ],
     techStack: ["Shopify Plus", "Liquid OS 2.0", "Make.com", "JavaScript ES6", "Tailwind CSS", "Technical SEO"]
   },
+
   "chateau-salon": {
     title: "Chateau Salon & Spa",
     category: "WordPress & WooCommerce",
@@ -48,6 +113,7 @@ const projectDetails = {
     ],
     techStack: ["WordPress Core", "PHP", "Vagaro API", "Elementor Pro", "Google Schema", "Technical SEO"]
   },
+
   "eatarra-woocommerce": {
     title: "Eatarra Fresh E-Commerce",
     category: "WordPress & WooCommerce",
@@ -68,6 +134,7 @@ const projectDetails = {
     ],
     techStack: ["WooCommerce", "WordPress", "WhatsApp API", "PHP", "Speed Optimization"]
   },
+
   "saferdot-cybersecurity": {
     title: "Saferdot Cybersecurity",
     category: "Custom Development",
@@ -88,6 +155,7 @@ const projectDetails = {
     ],
     techStack: ["React.js", "Node.js", "Express", "MongoDB", "Tailwind CSS"]
   },
+
   "autoleads-ai-assistant": {
     title: "AutoLeads AI Sales Agent",
     category: "AI Agents & Automations",
@@ -118,7 +186,7 @@ export default function SingleProjectPage() {
     window.scrollTo(0, 0);
   }, []);
 
-  const project = projectDetails[slug] || projectDetails["mobilecart-canada"];
+  const project = projectDetails[slug] || projectDetails["peakloom"];
 
   return (
     <div className="pt-28 pb-24 min-h-screen bg-slate-50 text-slate-900">

@@ -10,6 +10,39 @@ gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
+    title: "Peakloom UK",
+    url: "https://peakloom.co.uk",
+    subtitle: "Gym Creatine & Fitness Supplement Store",
+    desc: "A high-performance custom Shopify Liquid OS 2.0 storefront engineered for Peakloom UK, specializing in premium gym creatine, workout supplements, subscription bundles, and sub-1.1s mobile speed.",
+    img: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=1200&auto=format&fit=crop&q=80",
+    stack: ["Shopify Plus", "Liquid OS 2.0", "Creatine Store", "UK E-Commerce", "Make.com"],
+    github: "https://github.com/agency-portfolio/peakloom-shopify",
+    liveDemo: "https://peakloom.co.uk",
+    gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
+  },
+  {
+    title: "Furmora UK",
+    url: "https://furmora.co.uk",
+    subtitle: "Puppy Pads & Pet Supplies Store",
+    desc: "Custom Shopify storefront engineered for Furmora UK, featuring 1-click puppy pad product bundles, automated subscription refills, custom slide-out cart drawers, and instant checkout.",
+    img: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=1200&auto=format&fit=crop&q=80",
+    stack: ["Shopify OS 2.0", "Liquid", "Puppy Pads", "UK Pet Store", "Cart Drawer"],
+    github: "https://github.com/agency-portfolio/furmora-shopify",
+    liveDemo: "https://furmora.co.uk",
+    gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
+  },
+  {
+    title: "REGENT SCENT UAE",
+    url: "https://regentscents.com",
+    subtitle: "Luxury Perfume & Fragrance Store",
+    desc: "Bespoke luxury fragrance Shopify Plus storefront built for REGENT SCENT UAE, featuring multi-currency AED/USD switching, gold-themed luxury UI, custom fragrance quiz filtering, and instant checkout.",
+    img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1200&auto=format&fit=crop&q=80",
+    stack: ["Shopify Plus", "Liquid OS 2.0", "Luxury Perfume", "UAE Multi-Currency", "Fragrance Quiz"],
+    github: "https://github.com/agency-portfolio/regent-scent-shopify",
+    liveDemo: "https://regentscents.com",
+    gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
+  },
+  {
     title: "MobileCart Canada",
     url: "https://mobilecart.ca",
     subtitle: "Shopify Plus & Mobile Commerce Engine",
@@ -41,18 +74,7 @@ const projects = [
     github: "https://github.com/agency-portfolio/eatarra-woocommerce",
     liveDemo: "https://eatarra.com",
     gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
-  },
-  {
-    title: "Saferdot Cybersecurity",
-    url: "https://saferdot.com",
-    subtitle: "MERN Stack Corporate Application",
-    desc: "A modern full-stack MERN application with real-time threat dashboards, decoupled REST APIs, automated security webhooks, and responsive glassmorphism UI.",
-    img: "/project_woo.png",
-    stack: ["React.js", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
-    github: "https://github.com/agency-portfolio/saferdot-mern",
-    liveDemo: "https://saferdot.com",
-    gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
-  },
+  }
 ];
 
 export default function Projects() {
