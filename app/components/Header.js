@@ -48,10 +48,12 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-7">
             {[
+              { name: "Projects", path: "/projects" },
               { name: "Services", path: "/services" },
               { name: "About", path: "/about" },
+              { name: "Pricing", path: "/pricing" },
               { name: "Blog", path: "/blog" },
               { name: "Contact", path: "/contact" },
             ].map((item) => {
@@ -107,11 +109,13 @@ export default function Header() {
             : "opacity-0 -translate-y-4 pointer-events-none"
         }`}
       >
-        <nav className="flex flex-col items-center justify-center py-8 space-y-6 px-6">
+        <nav className="flex flex-col items-center justify-center py-8 space-y-5 px-6">
           {[
             { name: "Home", path: "/" },
+            { name: "Projects", path: "/projects" },
             { name: "Services", path: "/services" },
             { name: "About", path: "/about" },
+            { name: "Pricing", path: "/pricing" },
             { name: "Blog", path: "/blog" },
             { name: "Contact", path: "/contact" },
           ].map((item) => (

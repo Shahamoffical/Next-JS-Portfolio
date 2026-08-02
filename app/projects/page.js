@@ -7,6 +7,20 @@ import { FaGithub as Github, FaShopify, FaWordpress, FaReact } from "react-icons
 
 const projectsData = [
   {
+    id: "gb-constructions",
+    slug: "gb-constructions",
+    title: "GB Constructions",
+    category: "wordpress",
+    categoryLabel: "WordPress & WooCommerce",
+    subtitle: "Civil Infrastructure, Roads & Bridge Construction Portal",
+    desc: "A high-performance WordPress corporate portal engineered for GB Constructions, showcasing major civil infrastructure projects, road works, bridge construction engineering, and municipal tenders.",
+    img: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?w=1200&auto=format&fit=crop&q=80",
+    stack: ["WordPress Core", "PHP", "Roads & Bridges", "Civil Engineering", "Technical SEO"],
+    github: "https://github.com/agency-portfolio/gbconstructions-wp",
+    liveDemo: "https://gbconstructions.org/",
+    metrics: "Civil Infrastructure • Roads & Bridge Tenders",
+  },
+  {
     id: "shaham-ai-bot",
     slug: "shaham-ai-bot",
     title: "Shaham AI Chatbot",

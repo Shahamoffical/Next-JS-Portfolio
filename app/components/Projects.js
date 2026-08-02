@@ -10,6 +10,17 @@ gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
+    title: "GB Constructions",
+    url: "https://gbconstructions.org/",
+    subtitle: "Civil Infrastructure, Roads & Bridge Construction Portal",
+    desc: "A high-performance WordPress corporate portal engineered for GB Constructions, showcasing major civil infrastructure projects, road works, bridge construction engineering, and municipal tenders.",
+    img: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?w=1200&auto=format&fit=crop&q=80",
+    stack: ["WordPress Core", "PHP", "Roads & Bridges", "Civil Engineering", "Technical SEO"],
+    github: "https://github.com/agency-portfolio/gbconstructions-wp",
+    liveDemo: "https://gbconstructions.org/",
+    gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
+  },
+  {
     title: "Shaham AI Chatbot",
     url: "https://shaham-ai.vercel.app/",
     subtitle: "Autonomous AI Assistant & Conversational Bot",
@@ -63,17 +74,6 @@ const projects = [
     github: "https://github.com/agency-portfolio/furmora-shopify",
     liveDemo: "https://furmora.co.uk",
     gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
-  },
-  {
-    title: "REGENT SCENT UAE",
-    url: "https://regentscents.com",
-    subtitle: "Luxury Perfume & Fragrance Store",
-    desc: "Bespoke luxury fragrance Shopify Plus storefront built for REGENT SCENT UAE, featuring multi-currency AED/USD switching, gold-themed luxury UI, custom fragrance quiz filtering, and instant checkout.",
-    img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=1200&auto=format&fit=crop&q=80",
-    stack: ["Shopify Plus", "Liquid OS 2.0", "Luxury Perfume", "UAE Multi-Currency", "Fragrance Quiz"],
-    github: "https://github.com/agency-portfolio/regent-scent-shopify",
-    liveDemo: "https://regentscents.com",
-    gridClass: "lg:col-span-6 h-[420px] md:h-[460px]",
   }
 ];
 
@@ -120,10 +120,10 @@ export default function Projects() {
           Live Project Demos &amp; Web Configurations
         </h2>
         <h3 className="text-xl sm:text-2xl font-semibold text-primary font-sans m-0">
-          E-commerce, Custom Web &amp; AI Chatbot Builds
+          WordPress, E-commerce, Custom Web &amp; AI Chatbot Builds
         </h3>
         <p className="text-text-secondary font-light text-base max-w-xl mx-auto">
-          Explore production builds engineered for client success across Shopify Plus, MERN stack full-stack applications, and autonomous AI Chatbots.
+          Explore production builds engineered for client success across WordPress, Shopify Plus, MERN stack full-stack applications, and autonomous AI Chatbots.
         </p>
       </div>
 

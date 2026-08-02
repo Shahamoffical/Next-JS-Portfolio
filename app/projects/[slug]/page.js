@@ -7,6 +7,27 @@ import { ArrowLeft, ArrowUpRight, CheckCircle2, ChevronRight, Sparkles, Shield, 
 import { FaGithub as Github, FaShopify, FaWordpress, FaReact } from "react-icons/fa";
 
 const projectDetails = {
+  "gb-constructions": {
+    title: "GB Constructions",
+    category: "WordPress & WooCommerce",
+    subtitle: "Civil Infrastructure, Roads & Bridge Construction Portal",
+    client: "GB Constructions Pvt Ltd",
+    year: "2026",
+    role: "Lead WordPress Architect",
+    liveDemo: "https://gbconstructions.org/",
+    github: "https://github.com/agency-portfolio/gbconstructions-wp",
+    featuredImage: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?w=1200&auto=format&fit=crop&q=80",
+    overview: "GB Constructions is a leading civil engineering enterprise specializing in high-speed road development, highway bridges, flyovers, and municipal infrastructure projects. Their web portal presents active construction portfolios, tender documentation, and corporate credentials.",
+    challenge: "Presenting multi-million dollar engineering project portfolios and heavy infrastructure tender documents with ultra-fast page speeds and accessible mobile navigation.",
+    solution: "Engineered a custom WordPress corporate architecture with dynamic project taxonomy filters, asynchronous PDF tender downloads, and technical local SEO schema.",
+    results: [
+      "Sub-1.2s page loading speed across desktop and mobile",
+      "Streamlined tender document downloads for corporate clients",
+      "#1 Google search visibility for regional civil infrastructure tenders"
+    ],
+    techStack: ["WordPress Core", "PHP", "Roads & Bridges", "Civil Engineering", "Technical SEO"]
+  },
+
   "shaham-ai-bot": {
     title: "Shaham AI Chatbot",
     category: "AI Agents & Automations",
@@ -249,7 +270,7 @@ export default function SingleProjectPage() {
     window.scrollTo(0, 0);
   }, []);
 
-  const project = projectDetails[slug] || projectDetails["shaham-ai-bot"];
+  const project = projectDetails[slug] || projectDetails["gb-constructions"];
 
   return (
     <div className="pt-28 pb-24 min-h-screen bg-slate-50 text-slate-900">
