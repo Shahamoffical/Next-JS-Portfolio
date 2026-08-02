@@ -1131,7 +1131,7 @@ export default function AdminDashboard() {
                       onClick={handleOpenNewPost}
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary-dark transition-all shadow-[0_4px_16px_rgba(192,0,0,0.3)] shrink-0"
                     >
-                      <Plus className="w-4 h-4" /> + New Post
+                      <Plus className="w-4 h-4" /> New Post
                     </button>
                   </div>
 
@@ -1690,11 +1690,11 @@ export default function AdminDashboard() {
                       onClick={() => {
                         setActivePage({
                           id: Date.now(),
-                          title: "New Page",
-                          slug: "/new-page/",
-                          liveUrl: "devshaham.com/new-page/",
-                          status: "Published",
-                          content: "<p>New page content...</p>",
+                          title: "Untitled Custom Page",
+                          slug: "/page-new",
+                          status: "Draft",
+                          liveUrl: "https://devshaham.com/page-new",
+                          content: "<h2>Custom Page Heading</h2>\n<p>Start writing custom page content here...</p>",
                           metaTitle: "",
                           metaDesc: "",
                           bannerImage: null
@@ -1703,7 +1703,7 @@ export default function AdminDashboard() {
                       }}
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white text-xs font-bold hover:bg-primary-dark transition-all shadow-[0_4px_16px_rgba(192,0,0,0.3)] shrink-0"
                     >
-                      <Plus className="w-4 h-4" /> + New Page
+                      <Plus className="w-4 h-4" /> New Page
                     </button>
                   </div>
 

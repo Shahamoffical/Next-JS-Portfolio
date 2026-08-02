@@ -1,13 +1,14 @@
 "use client";
 
 import React from "react";
-import { ArrowUpRight, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, Cpu } from "lucide-react";
 import { FaShopify, FaWordpress, FaReact } from "react-icons/fa";
-import { SiGoogleanalytics, SiSpeedtest } from "react-icons/si";
+import { SiSpeedtest } from "react-icons/si";
 import Link from "next/link";
 
 const servicesList = [
   {
+    slug: "shopify-development",
     icon: <FaShopify className="w-8 h-8 text-[#96bf48]" />,
     color: "#96bf48",
     title: "Shopify & Shopify Plus Development",
@@ -15,6 +16,7 @@ const servicesList = [
     bullets: ["Custom Liquid Themes", "Shopify Plus Replatforming", "Sub-2s Speed Optimization"]
   },
   {
+    slug: "wordpress-woocommerce",
     icon: <FaWordpress className="w-8 h-8 text-[#21759b]" />,
     color: "#21759b",
     title: "WordPress & WooCommerce Engineering",
@@ -22,6 +24,7 @@ const servicesList = [
     bullets: ["Headless WPGraphQL Builds", "WooCommerce Automation", "Custom Plugin Development"]
   },
   {
+    slug: "custom-development",
     icon: <FaReact className="w-8 h-8 text-[#61dafb]" />,
     color: "#61dafb",
     title: "MERN Stack Web Applications",
@@ -29,6 +32,15 @@ const servicesList = [
     bullets: ["React & Next.js SSR/SSG", "REST & GraphQL APIs", "Secure Admin Portals"]
   },
   {
+    slug: "ai-agents-automations",
+    icon: <Cpu className="w-8 h-8 text-[#8b5cf6]" />,
+    color: "#8b5cf6",
+    title: "AI Agents & Workflow Automations",
+    desc: "24/7 autonomous lead qualification pipelines, OpenAI GPT-4 API workflows, and WhatsApp Business API bots.",
+    bullets: ["Make.com Scenario Build", "OpenAI GPT-4 Agents", "WhatsApp Order Bots"]
+  },
+  {
+    slug: "website-speed-seo",
     icon: <SiSpeedtest className="w-8 h-8 text-[#ec4899]" />,
     color: "#ec4899",
     title: "Technical SEO & Speed Optimization",
@@ -52,41 +64,53 @@ export default function ServicesOverview() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {servicesList.map((service, idx) => (
           <div
             key={idx}
-            className="p-8 rounded-3xl border border-slate-200 bg-white hover:shadow-xl transition-all duration-300 space-y-6 group"
+            className="p-8 rounded-3xl border border-slate-200 bg-white hover:shadow-xl transition-all duration-300 space-y-6 flex flex-col justify-between group"
             style={{
-              boxShadow: `rgba(${parseInt(service.color.slice(1, 3), 16)}, ${parseInt(service.color.slice(3, 5), 16)}, ${parseInt(service.color.slice(5, 7), 16)}, 0.08) 0px 12px 30px`,
               borderColor: `${service.color}40`,
               borderWidth: "1px"
             }}
           >
-            <div className="flex items-center justify-between">
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">{service.icon}</div>
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100">{service.icon}</div>
+                <Link
+                  href={`/services/${service.slug}`}
+                  className="p-2.5 rounded-full bg-slate-50 group-hover:bg-primary group-hover:text-white transition-colors text-slate-400"
+                >
+                  <ArrowUpRight className="w-5 h-5" />
+                </Link>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold text-slate-900 group-hover:text-primary transition-colors">
+                  <Link href={`/services/${service.slug}`}>
+                    {service.title}
+                  </Link>
+                </h3>
+                <p className="text-xs text-slate-500 font-light leading-relaxed">{service.desc}</p>
+              </div>
+
+              <div className="pt-2 border-t border-slate-100 space-y-2 text-xs font-mono font-medium text-slate-700">
+                {service.bullets.map((bullet, bIdx) => (
+                  <div key={bIdx} className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                    <span>{bullet}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-100">
               <Link
-                href="/contact"
-                className="p-2.5 rounded-full bg-slate-50 group-hover:bg-primary group-hover:text-white transition-colors text-slate-400"
+                href={`/services/${service.slug}`}
+                className="w-full py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-mono font-bold hover:bg-primary hover:text-white hover:border-primary transition-all text-center block"
               >
-                <ArrowUpRight className="w-5 h-5" />
+                View Service Details &rarr;
               </Link>
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="text-xl font-bold text-slate-900 group-hover:text-primary transition-colors">
-                {service.title}
-              </h3>
-              <p className="text-xs text-slate-500 font-light leading-relaxed">{service.desc}</p>
-            </div>
-
-            <div className="pt-2 border-t border-slate-100 space-y-2 text-xs font-mono font-medium text-slate-700">
-              {service.bullets.map((bullet, bIdx) => (
-                <div key={bIdx} className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                  <span>{bullet}</span>
-                </div>
-              ))}
             </div>
           </div>
         ))}
