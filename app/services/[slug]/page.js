@@ -1,10 +1,30 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, CheckCircle2, ChevronRight, Sparkles, Shield, Cpu, Code2, Rocket, Zap, MessageSquare, Compass, Layers, ShieldCheck, Workflow } from "lucide-react";
-import { FaShopify, FaWordpress, FaReact, FaNodeJs } from "react-icons/fa";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  CheckCircle2,
+  ChevronRight,
+  ChevronDown,
+  Sparkles,
+  ShieldCheck,
+  Cpu,
+  Code2,
+  Rocket,
+  Zap,
+  MessageSquare,
+  Compass,
+  Layers,
+  Workflow,
+  ShoppingBag,
+  Globe,
+  Clock,
+  Award
+} from "lucide-react";
+import { FaShopify, FaWordpress, FaReact } from "react-icons/fa";
 
 const capabilityIcons = [Sparkles, Code2, Zap, Layers, ShieldCheck, Workflow];
 const processIcons = [Compass, Code2, CheckCircle2, Rocket];
@@ -33,8 +53,31 @@ const serviceDetails = {
       { title: "Launch & Support", desc: "Staging deployment, domain DNS setup, and post-launch technical maintenance." }
     ],
     faq: [
-      { q: "Can you turn our Figma design into a custom Shopify theme?", a: "Yes, we specialize in converting Figma designs directly into pixel-perfect custom Shopify Liquid OS 2.0 themes with full drag-and-drop section controls." },
-      { q: "Will our Shopify site load fast on mobile devices?", a: "Guaranteed. We optimize all Liquid code, asset loading, and image sizes to achieve sub-2 second mobile load times." }
+      {
+        q: "Can you convert our custom Figma designs into a Shopify Liquid OS 2.0 theme?",
+        a: "Yes, we specialize in converting Figma designs directly into pixel-perfect custom Shopify Liquid OS 2.0 themes with full drag-and-drop section controls.",
+        icon: ShoppingBag
+      },
+      {
+        q: "Will our custom Shopify store pass Google Core Web Vitals on mobile?",
+        a: "Guaranteed. We optimize Liquid loops, asset loading, and image compression to achieve sub-2 second mobile load times and 95+ PageSpeed scores.",
+        icon: Zap
+      },
+      {
+        q: "How do you handle Shopify Plus replatforming without losing SEO traffic?",
+        a: "We implement 1-to-1 URL redirect maps (301s), preserve meta schemas, and migrate all customer & order history with zero data loss or ranking drops.",
+        icon: ShieldCheck
+      },
+      {
+        q: "Can you build custom slide-out cart drawers with upsell offers?",
+        a: "Yes, we build custom AJAX slide-out cart drawers with dynamic free-shipping progress bars, upsell product recommendations, and custom gift notes.",
+        icon: Code2
+      },
+      {
+        q: "Do you integrate Make.com workflows for automated inventory sync?",
+        a: "Yes, we build automated Make.com webhook scenarios connecting your Shopify store directly with inventory management, CRMs, and ERP systems.",
+        icon: Cpu
+      }
     ]
   },
 
@@ -61,8 +104,31 @@ const serviceDetails = {
       { title: "Deployment & Training", desc: "Live site deployment, SSL installation, and admin walkthrough training." }
     ],
     faq: [
-      { q: "Can you integrate our existing booking system into WordPress?", a: "Yes, we integrate third-party booking APIs (Vagaro, Mindbody, Acuity) directly into custom WordPress interfaces." },
-      { q: "Do you offer WooCommerce WhatsApp checkout redirection?", a: "Yes, we build 1-click WooCommerce checkouts that launch pre-filled WhatsApp customer order messages instantly." }
+      {
+        q: "Can you build a custom WordPress theme without heavy page builders?",
+        a: "Yes, we write clean custom PHP themes and Gutenberg blocks to ensure lightweight performance and sub-1 second page loads.",
+        icon: Globe
+      },
+      {
+        q: "How does WooCommerce WhatsApp checkout redirection work?",
+        a: "We build custom 1-click WooCommerce checkout flows that launch pre-filled WhatsApp customer order messages instantly.",
+        icon: MessageSquare
+      },
+      {
+        q: "Can you build a Headless WordPress architecture with Next.js & WPGraphQL?",
+        a: "Yes, we decouple WordPress backend with Next.js frontend via WPGraphQL APIs for sub-second speeds and maximum security.",
+        icon: Zap
+      },
+      {
+        q: "Do you integrate Vagaro or external booking APIs into WordPress?",
+        a: "Yes, we integrate third-party booking APIs (Vagaro, Mindbody, Acuity) directly into custom WordPress user interfaces.",
+        icon: ShieldCheck
+      },
+      {
+        q: "How do you secure WordPress against malware and security breaches?",
+        a: "We implement hardened security headers, SSL firewalls, automated daily backups, and malware protection routines.",
+        icon: Clock
+      }
     ]
   },
 
@@ -89,8 +155,31 @@ const serviceDetails = {
       { title: "Vercel Production Launch", desc: "Deploying production environment with automated SSL & CDN routing." }
     ],
     faq: [
-      { q: "Why choose Next.js for web application development?", a: "Next.js provides server-side rendering, instant page transitions, sub-second speeds, and superior SEO performance compared to traditional SPA apps." },
-      { q: "Do you handle custom database integrations?", a: "Yes, we design and manage MongoDB, PostgreSQL, and Supabase database schemas with automated backup routines." }
+      {
+        q: "Why choose Next.js & React over traditional web applications?",
+        a: "Next.js provides server-side rendering (SSR), incremental static regeneration (ISR), instant page transitions, and superior search engine indexing.",
+        icon: Code2
+      },
+      {
+        q: "Do you handle custom REST and GraphQL API development?",
+        a: "Yes, we design secure Node.js and Express backend microservices with JWT authentication, rate limiting, and database indexing.",
+        icon: Cpu
+      },
+      {
+        q: "Can you build custom admin CMS dashboards tailored to our business?",
+        a: "Yes, we engineer custom admin dashboards for managing projects, client leads, order workflows, and real-time analytics.",
+        icon: ShieldCheck
+      },
+      {
+        q: "How do you integrate payment gateways like Stripe & PayPal?",
+        a: "We build PCI-compliant Stripe and PayPal integrations with webhook handlers for single purchases and recurring subscription billing.",
+        icon: Zap
+      },
+      {
+        q: "What database solutions do you implement for MERN stack builds?",
+        a: "We design and manage MongoDB, PostgreSQL, and Supabase database schemas with automated daily backup routines.",
+        icon: Clock
+      }
     ]
   },
 
@@ -117,8 +206,31 @@ const serviceDetails = {
       { title: "Live Automation Testing", desc: "Rigorous testing to ensure 100% reliable 24/7 execution." }
     ],
     faq: [
-      { q: "How fast does the AI agent respond to new website leads?", a: "Inquiries are processed in less than 5 seconds, triggering instant WhatsApp/Email alerts to both the customer and your sales team." },
-      { q: "Do we need coding experience to maintain Make.com scenarios?", a: "No, Make.com features a visual workflow builder. We provide complete setup documentation and video walkthroughs." }
+      {
+        q: "How fast does the AI agent respond to incoming website leads?",
+        a: "Inquiries are processed in less than 5 seconds, qualifying prospects via OpenAI GPT-4 and sending instant WhatsApp alerts to your sales team.",
+        icon: Cpu
+      },
+      {
+        q: "Do we need coding experience to manage Make.com scenarios?",
+        a: "No, Make.com features a visual workflow builder. We provide complete setup documentation and video walkthroughs for your team.",
+        icon: Workflow
+      },
+      {
+        q: "Can you build a 24/7 automated WhatsApp customer support bot?",
+        a: "Yes, we build intelligent WhatsApp Business API bots trained on your business data for automated order tracking and FAQs.",
+        icon: MessageSquare
+      },
+      {
+        q: "Is our customer and business data secure with AI workflows?",
+        a: "Yes, all OpenAI and Make.com integrations use enterprise API security with zero data retention for model training.",
+        icon: ShieldCheck
+      },
+      {
+        q: "Can AI automations sync Shopify and Google Sheets in real-time?",
+        a: "Yes, we build two-way automated webhooks that sync Shopify orders, customer details, and inventory into Google Sheets or CRMs.",
+        icon: Clock
+      }
     ]
   },
 
@@ -145,8 +257,31 @@ const serviceDetails = {
       { title: "Verification & Report", desc: "Running post-optimization audits to confirm 95+ PageSpeed scores." }
     ],
     faq: [
-      { q: "Can you fix slow Shopify or WordPress sites without breaking design?", a: "Absolutely. All speed optimizations preserve your exact design layout while eliminating unnecessary script bottlenecks." },
-      { q: "How long does it take to see SEO ranking improvements?", a: "Technical SEO fixes and schema improvements typically reflect in Google Search Console within 2 to 4 weeks." }
+      {
+        q: "Can you fix slow Shopify or WordPress sites without breaking design?",
+        a: "Absolutely. All speed optimizations preserve your exact design layout while eliminating unnecessary script bottlenecks.",
+        icon: Zap
+      },
+      {
+        q: "How do you achieve #1 Google Maps Local Pack rankings?",
+        a: "We implement structured Schema.org LocalBusiness data, optimize Google Business Profiles, and build authoritative local citations.",
+        icon: Award
+      },
+      {
+        q: "What Core Web Vitals metrics do you optimize for Google?",
+        a: "We optimize Largest Contentful Paint (LCP < 1.2s), Cumulative Layout Shift (CLS = 0), and Interaction to Next Paint (INP).",
+        icon: ShieldCheck
+      },
+      {
+        q: "What is Schema.org JSON-LD structured data and why is it vital?",
+        a: "JSON-LD schema gives Google search bots clear product, pricing, review, and author data to generate rich search snippets.",
+        icon: Code2
+      },
+      {
+        q: "How long does it take to see organic Google SEO ranking improvements?",
+        a: "Technical SEO fixes and schema injection typically reflect in Google Search Console rankings within 2 to 4 weeks.",
+        icon: Clock
+      }
     ]
   }
 };
@@ -154,6 +289,8 @@ const serviceDetails = {
 export default function SingleServicePage() {
   const params = useParams();
   const slug = params?.slug;
+
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -275,22 +412,48 @@ export default function SingleServicePage() {
           </div>
         </div>
 
-        {/* FAQ Section */}
+        {/* FAQ Section Matching Reference Image (5 Custom Questions Per Service) */}
         <div className="space-y-6">
           <div className="border-b border-slate-200 pb-3">
-            <span className="text-[10px] font-mono text-primary uppercase font-bold tracking-wider">Questions</span>
+            <span className="text-[10px] font-mono text-primary uppercase font-bold tracking-wider">Service FAQs</span>
             <h2 className="text-2xl font-bold text-slate-900 m-0">Frequently Asked Questions</h2>
           </div>
 
-          <div className="space-y-4">
-            {service.faq.map((item, idx) => (
-              <div key={idx} className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-2">
-                <h3 className="text-sm font-bold text-slate-900 m-0 flex items-center gap-2">
-                  <span className="text-primary font-mono font-extrabold">Q.</span> {item.q}
-                </h3>
-                <p className="text-xs text-slate-600 font-light leading-relaxed m-0 pl-6">{item.a}</p>
-              </div>
-            ))}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-md divide-y divide-slate-200">
+            {service.faq.map((item, idx) => {
+              const QuestionIcon = item.icon || Sparkles;
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div key={idx} className="py-5 first:pt-0 last:pb-0 transition-colors">
+                  <button
+                    onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
+                    className="w-full flex items-center justify-between text-left gap-4 group cursor-pointer focus:outline-none"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`p-2.5 rounded-xl transition-colors shrink-0 ${
+                        isOpen ? "bg-primary text-white" : "bg-slate-100 text-slate-900 group-hover:bg-primary group-hover:text-white"
+                      }`}>
+                        <QuestionIcon className="w-5 h-5" />
+                      </div>
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-primary transition-colors m-0">
+                        {item.q}
+                      </h3>
+                    </div>
+                    <ChevronDown
+                      className={`w-5 h-5 text-slate-400 shrink-0 transition-transform duration-300 ${
+                        isOpen ? "rotate-180 text-primary" : "group-hover:text-slate-700"
+                      }`}
+                    />
+                  </button>
+
+                  {isOpen && (
+                    <div className="pl-14 pt-3 text-xs sm:text-sm text-slate-600 font-light leading-relaxed animate-in fade-in duration-200">
+                      {item.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 

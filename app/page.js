@@ -8,6 +8,7 @@ import Projects from "./components/Projects";
 import CaseStudies from "./components/CaseStudies";
 import BlogSection from "./components/BlogSection";
 import Testimonials from "./components/Testimonials";
+import FAQ from "./components/FAQ";
 import CTA from "./components/CTA";
 
 export default function Home() {
@@ -42,6 +43,7 @@ export default function Home() {
       <CaseStudies />
       <BlogSection />
       <Testimonials />
+      <FAQ />
       <CTA />
     </>
   );

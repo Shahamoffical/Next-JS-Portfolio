@@ -54,8 +54,7 @@ body {
 @layer base {
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    color: var(--color-text-heading);
-    letter-spacing: -0.02em;
+    letter-spacing: -.02em;
   }
   
   /* The serif italic accent style */
