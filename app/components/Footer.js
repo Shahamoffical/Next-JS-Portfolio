@@ -15,7 +15,8 @@ import {
   FaLinkedin as Linkedin,
   FaFacebookF as Facebook,
   FaInstagram as Instagram,
-  FaWhatsapp as Whatsapp
+  FaWhatsapp as Whatsapp,
+  FaTwitter as Twitter
 } from "react-icons/fa";
 
 export default function Footer() {
@@ -69,13 +70,14 @@ export default function Footer() {
           </p>
 
           {/* Social Icons inside rounded light boxes matching Light Theme */}
-          <div className="flex items-center gap-2.5 pt-2">
+          <div className="flex items-center gap-2 pt-2">
             {[
-              { href: "https://github.com", icon: <Github className="w-4 h-4" />, label: "GitHub" },
-              { href: "https://linkedin.com", icon: <Linkedin className="w-4 h-4" />, label: "LinkedIn" },
-              { href: "https://facebook.com", icon: <Facebook className="w-4 h-4" />, label: "Facebook" },
-              { href: "https://instagram.com", icon: <Instagram className="w-4 h-4" />, label: "Instagram" },
-              { href: "https://wa.me/923000000000", icon: <Whatsapp className="w-4 h-4" />, label: "WhatsApp" }
+              { href: "https://github.com/Shahamabbas", icon: <Github className="w-4 h-4" />, label: "GitHub" },
+              { href: "https://www.linkedin.com/in/shahamabbas", icon: <Linkedin className="w-4 h-4" />, label: "LinkedIn" },
+              { href: "https://www.facebook.com/share/1BnNJiiwi5/", icon: <Facebook className="w-4 h-4" />, label: "Facebook" },
+              { href: "https://www.instagram.com/shahamabbasdev", icon: <Instagram className="w-4 h-4" />, label: "Instagram" },
+              { href: "https://x.com/Shahamabbasdev", icon: <Twitter className="w-4 h-4" />, label: "Twitter / X" },
+              { href: "https://wa.me/923213567058", icon: <Whatsapp className="w-4 h-4" />, label: "WhatsApp" }
             ].map((social, idx) => (
               <a
                 key={idx}
@@ -83,7 +85,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={social.label}
-                className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:text-white hover:bg-primary hover:border-primary shadow-sm transition-all duration-300"
+                className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:text-white hover:bg-primary hover:border-primary shadow-sm transition-all duration-300"
               >
                 {social.icon}
               </a>
@@ -230,7 +232,7 @@ export default function Footer() {
             </a>
 
             <a
-              href="https://wa.me/923000000000"
+              href="https://wa.me/923213567058"
               target="_blank"
               rel="noreferrer"
               className="w-full p-2.5 rounded-xl bg-slate-100/90 border border-slate-200 text-slate-700 hover:text-emerald-600 hover:border-emerald-500/50 flex items-center gap-3 transition-colors"
@@ -238,7 +240,7 @@ export default function Footer() {
               <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0">
                 <Whatsapp className="w-3.5 h-3.5" />
               </div>
-              <span className="font-mono">WhatsApp Chat</span>
+              <span className="font-mono">WhatsApp Chat (+92 321 3567058)</span>
             </a>
           </div>
         </div>

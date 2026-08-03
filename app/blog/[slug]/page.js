@@ -23,7 +23,7 @@ import {
   Calendar,
   ThumbsUp
 } from "lucide-react";
-import { FaTwitter, FaLinkedin, FaWhatsapp, FaGithub } from "react-icons/fa";
+import { FaTwitter, FaLinkedin, FaWhatsapp, FaGithub, FaFacebookF, FaInstagram } from "react-icons/fa";
 
 // Default Demo Fallback Posts for Dynamic Matching
 const defaultDemoPosts = [
@@ -177,7 +177,7 @@ Injecting accurate Schema markup directly onto your homepage and product pages i
   "name": "DevShaham - Digital Agency",
   "url": "https://devshaham.com",
   "priceRange": "$$$",
-  "telephone": "+923000000000"
+  "telephone": "+923213567058"
 }
 \`\`\`
 
@@ -772,15 +772,24 @@ export default function SingleBlogPostPage() {
               <p className="text-xs text-slate-500 font-light leading-relaxed">
                 Building high-converting Shopify Plus stores and technical SEO infrastructure.
               </p>
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-center gap-3 text-slate-600">
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="p-2 rounded-xl bg-slate-100 hover:text-slate-900 hover:bg-slate-200 transition-colors">
+              <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-center gap-2 text-slate-600">
+                <a href="https://github.com/Shahamabbas" target="_blank" rel="noopener noreferrer" title="GitHub" className="p-2 rounded-xl bg-slate-100 hover:text-slate-900 hover:bg-slate-200 transition-colors">
                   <FaGithub className="w-4 h-4" />
                 </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 rounded-xl bg-slate-100 hover:text-blue-600 hover:bg-slate-200 transition-colors">
+                <a href="https://www.linkedin.com/in/shahamabbas" target="_blank" rel="noopener noreferrer" title="LinkedIn" className="p-2 rounded-xl bg-slate-100 hover:text-blue-600 hover:bg-slate-200 transition-colors">
                   <FaLinkedin className="w-4 h-4" />
                 </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="p-2 rounded-xl bg-slate-100 hover:text-sky-500 hover:bg-slate-200 transition-colors">
+                <a href="https://www.facebook.com/share/1BnNJiiwi5/" target="_blank" rel="noopener noreferrer" title="Facebook" className="p-2 rounded-xl bg-slate-100 hover:text-blue-700 hover:bg-slate-200 transition-colors">
+                  <FaFacebookF className="w-4 h-4" />
+                </a>
+                <a href="https://www.instagram.com/shahamabbasdev" target="_blank" rel="noopener noreferrer" title="Instagram" className="p-2 rounded-xl bg-slate-100 hover:text-pink-600 hover:bg-slate-200 transition-colors">
+                  <FaInstagram className="w-4 h-4" />
+                </a>
+                <a href="https://x.com/Shahamabbasdev" target="_blank" rel="noopener noreferrer" title="Twitter / X" className="p-2 rounded-xl bg-slate-100 hover:text-slate-900 hover:bg-slate-200 transition-colors">
                   <FaTwitter className="w-4 h-4" />
+                </a>
+                <a href="https://wa.me/923213567058" target="_blank" rel="noopener noreferrer" title="WhatsApp" className="p-2 rounded-xl bg-slate-100 hover:text-emerald-600 hover:bg-slate-200 transition-colors">
+                  <FaWhatsapp className="w-4 h-4" />
                 </a>
               </div>
             </div>

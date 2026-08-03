@@ -89,6 +89,7 @@ export default function CTA() {
 
           <div className="pt-2 flex flex-col space-y-2 text-xs font-mono text-white/90">
             <div><strong>Direct Email:</strong> <a href="mailto:shahamabbasdev@gmail.com" className="underline hover:text-white">shahamabbasdev@gmail.com</a></div>
+            <div><strong>WhatsApp Direct:</strong> <a href="https://wa.me/923213567058" target="_blank" rel="noreferrer" className="underline hover:text-white">+92 321 3567058</a></div>
             <div><strong>Location:</strong> Available Worldwide (Remote &amp; Contract)</div>
           </div>
         </div>

@@ -349,6 +349,14 @@ export default function SingleServicePage() {
             >
               Direct Email &rarr;
             </a>
+            <a
+              href="https://wa.me/923213567058"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-700 text-xs font-mono font-bold hover:bg-emerald-100 transition-colors"
+            >
+              WhatsApp Chat &rarr;
+            </a>
           </div>
         </div>
 
