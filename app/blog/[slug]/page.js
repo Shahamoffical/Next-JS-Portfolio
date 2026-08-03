@@ -493,11 +493,11 @@ export default function SingleBlogPostPage() {
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent"></div>
-          <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between text-xs font-mono">
-            <span className="bg-white/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-800 font-semibold shadow-sm">
+          <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 right-3 sm:right-6 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-mono z-10">
+            <span className="bg-white/95 backdrop-blur-md px-3 sm:px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-800 font-semibold shadow-sm text-[10px] sm:text-xs text-center">
               📷 High-Resolution Technical Reference
             </span>
-            <span className="bg-[#c00000] text-white font-bold px-3.5 py-1.5 rounded-xl shadow-md">
+            <span className="bg-[#c00000] text-white font-bold px-3 sm:px-3.5 py-1.5 rounded-xl shadow-md text-[10px] sm:text-xs text-center">
               DevShaham Exclusive Guide
             </span>
           </div>
@@ -710,16 +710,16 @@ export default function SingleBlogPostPage() {
                 className="w-20 h-20 rounded-full object-cover shadow-lg border-2 border-[#c00000] shrink-0"
               />
               <div className="space-y-3 text-center sm:text-left">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <h3 className="text-xl font-bold text-slate-900 m-0">Written by Shaham Abbas</h3>
                     <p className="text-xs font-mono text-[#c00000] mt-0.5">Senior Shopify Developer &amp; Technical SEO Architect</p>
                   </div>
                   <Link
                     href="/contact"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-[#c00000] transition-all shadow-sm"
+                    className="inline-flex items-center justify-center text-center w-fit self-center sm:self-auto px-5 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-[#c00000] transition-all shadow-sm shrink-0"
                   >
-                    Hire Shaham →
+                    Hire Shaham &rarr;
                   </Link>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-600 font-light leading-relaxed m-0">
