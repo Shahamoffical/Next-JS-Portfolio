@@ -2,8 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, CheckCircle2, Sparkles, Filter, Code2, Cpu, Globe, ShoppingBag } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, Sparkles, Filter, Code2, Cpu, Globe, ShoppingBag, ChevronLeft, ChevronRight } from "lucide-react";
 import { FaGithub as Github, FaShopify, FaWordpress, FaReact } from "react-icons/fa";
+
+const PROJECTS_PER_PAGE = 4;
 
 const projectsData = [
   {
@@ -201,6 +203,7 @@ const categoryTabs = [
 export default function ProjectsPage() {
   const [activeTab, setActiveTab] = useState("all");
   const [hiddenUrls, setHiddenUrls] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -218,6 +221,11 @@ export default function ProjectsPage() {
       .catch(() => {});
   }, []);
 
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    setCurrentPage(1);
+  };
+
   const visibleProjects = projectsData.filter(
     (p) => !hiddenUrls.includes((p.liveDemo || "").replace(/\/+$/, "").toLowerCase())
   );
@@ -225,6 +233,23 @@ export default function ProjectsPage() {
   const filteredProjects = activeTab === "all"
     ? visibleProjects
     : visibleProjects.filter((p) => p.category === activeTab);
+
+  const totalPages = Math.ceil(filteredProjects.length / PROJECTS_PER_PAGE);
+
+  const paginatedProjects = filteredProjects.slice(
+    (currentPage - 1) * PROJECTS_PER_PAGE,
+    currentPage * PROJECTS_PER_PAGE
+  );
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    const gridEl = document.getElementById("projects-grid-top");
+    if (gridEl) {
+      gridEl.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 300, behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="pt-28 pb-24 min-h-screen max-w-7xl mx-auto px-6 md:px-12 space-y-12">
@@ -242,14 +267,14 @@ export default function ProjectsPage() {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 p-2 rounded-2xl bg-slate-100/80 border border-slate-200/80 max-w-4xl mx-auto">
+      <div id="projects-grid-top" className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 p-2 rounded-2xl bg-slate-100/80 border border-slate-200/80 max-w-4xl mx-auto">
         {categoryTabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => handleTabChange(tab.id)}
               className={`px-4 py-2.5 rounded-xl text-xs font-bold font-mono transition-all duration-300 flex items-center gap-2 ${
                 isActive
                   ? "bg-primary text-white shadow-md shadow-primary/25 scale-[1.02]"
@@ -265,7 +290,7 @@ export default function ProjectsPage() {
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {filteredProjects.map((project) => (
+        {paginatedProjects.map((project) => (
           <div
             key={project.id}
             className="group rounded-3xl border border-slate-200/80 bg-white hover:border-primary/50 hover:shadow-2xl transition-all duration-500 flex flex-col justify-between overflow-hidden relative"
@@ -352,6 +377,67 @@ export default function ProjectsPage() {
           </div>
         ))}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-slate-200/80 max-w-4xl mx-auto">
+          <div className="text-xs text-slate-500 font-mono">
+            Showing <span className="font-bold text-slate-900">{(currentPage - 1) * PROJECTS_PER_PAGE + 1}</span> to{" "}
+            <span className="font-bold text-slate-900">
+              {Math.min(currentPage * PROJECTS_PER_PAGE, filteredProjects.length)}
+            </span>{" "}
+            of <span className="font-bold text-slate-900">{filteredProjects.length}</span> projects
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* Prev Button */}
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all duration-200 flex items-center gap-1.5 border ${
+                currentPage === 1
+                  ? "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 shadow-sm"
+              }`}
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span>Previous</span>
+            </button>
+
+            {/* Page Number Buttons */}
+            <div className="flex items-center gap-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                <button
+                  key={pageNum}
+                  onClick={() => handlePageChange(pageNum)}
+                  className={`w-9 h-9 rounded-xl text-xs font-bold font-mono transition-all duration-200 flex items-center justify-center border ${
+                    currentPage === pageNum
+                      ? "bg-primary text-white border-primary shadow-md shadow-primary/25 scale-105"
+                      : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-slate-300"
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              ))}
+            </div>
+
+            {/* Next Button */}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all duration-200 flex items-center gap-1.5 border ${
+                currentPage === totalPages
+                  ? "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 shadow-sm"
+              }`}
+            >
+              <span>Next</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
