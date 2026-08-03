@@ -64,7 +64,7 @@ export default function Testimonials() {
   }, [activeIndex]);
 
   return (
-    <section id="testimonials" className="testimonials-section py-24 px-6 md:px-12 max-w-7xl mx-auto bg-white overflow-hidden w-full">
+    <section id="testimonials" className="testimonials-section py-12 px-6 md:px-12 max-w-7xl mx-auto bg-white overflow-hidden w-full">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
         {/* Left Column */}
         <div className="md:col-span-5 space-y-3">

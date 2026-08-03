@@ -102,11 +102,11 @@ export default function Experience() {
     <section
       id="experience"
       ref={containerRef}
-      className="experience-section py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-border relative"
+      className="experience-section py-12 px-6 md:px-12 max-w-7xl mx-auto border-t border-border relative"
     >
       <div className="absolute left-10 top-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full radial-bg-blue opacity-30 -z-10"></div>
 
-      <div className="timeline-header text-center mb-20 space-y-4">
+      <div className="timeline-header text-center mb-8 space-y-3">
         <span className="inline-block text-xs font-mono uppercase tracking-widest text-primary px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5">
           Timeline
         </span>

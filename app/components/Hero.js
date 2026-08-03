@@ -71,7 +71,7 @@ export default function Hero() {
     <section
       id="home"
       ref={containerRef}
-      className="hero-section relative min-h-screen flex items-center justify-center pt-24 pb-12 overflow-hidden w-full"
+      className="hero-section relative min-h-screen flex items-center justify-center pt-16 pb-6 overflow-hidden w-full"
     >
       {/* 3D Canvas Background */}
       <ThreeCanvas />

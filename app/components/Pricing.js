@@ -76,8 +76,8 @@ export default function Pricing() {
   }, []);
 
   return (
-    <section id="pricing" ref={containerRef} className="pricing-section py-24 px-6 md:px-12 max-w-7xl mx-auto min-h-screen pt-32">
-      <div className="text-center mb-16">
+    <section id="pricing" ref={containerRef} className="pricing-section py-12 px-6 md:px-12 max-w-7xl mx-auto pt-16">
+      <div className="text-center mb-8">
         <h2 className="text-3xl md:text-5xl font-bold font-sans tracking-tight text-text-heading mb-4">
           Simple, Transparent <span className="gradient-text">Pricing</span>
         </h2>

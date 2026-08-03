@@ -115,14 +115,14 @@ export default function Services() {
     <section
       id="services"
       ref={sectionRef}
-      className="services-section py-24 px-6 md:px-12 max-w-7xl mx-auto relative overflow-hidden"
+      className="services-section py-12 px-6 md:px-12 max-w-7xl mx-auto relative overflow-hidden"
     >
       {/* Background decorations - soft blurred spots */}
       <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-red-50/40 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
       <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-red-100/30 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
 
       {/* Header */}
-      <div className="services-title text-center mb-16 space-y-3">
+      <div className="services-title text-center mb-8 space-y-3">
         <span className="inline-block text-xs font-mono uppercase tracking-widest text-primary px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5">
           Agency Capabilities
         </span>

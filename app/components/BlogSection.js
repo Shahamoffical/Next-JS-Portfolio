@@ -65,12 +65,12 @@ export default function BlogSection() {
     <section
       id="blog"
       ref={containerRef}
-      className="blog-section py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-border relative overflow-hidden"
+      className="blog-section py-12 px-6 md:px-12 max-w-7xl mx-auto border-t border-border relative overflow-hidden"
     >
       <div className="absolute top-1/2 right-1/4 w-[350px] h-[350px] rounded-full radial-bg-blue opacity-20 -z-10"></div>
 
       {/* Header */}
-      <div className="blog-header text-center max-w-3xl mx-auto mb-16 space-y-3">
+      <div className="blog-header text-center max-w-3xl mx-auto mb-8 space-y-3">
         <span className="inline-block text-xs font-mono uppercase tracking-widest text-primary px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5">
           Content Hub
         </span>

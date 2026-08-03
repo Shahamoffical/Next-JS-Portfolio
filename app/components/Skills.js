@@ -91,7 +91,7 @@ export default function Skills() {
     <section
       id="skills"
       ref={containerRef}
-      className="skills-section py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-border relative overflow-hidden"
+      className="skills-section py-12 px-6 md:px-12 max-w-7xl mx-auto border-t border-border relative overflow-hidden"
     >
       {/* Background */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-50 -z-10 radial-bg-indigo"></div>
@@ -99,7 +99,7 @@ export default function Skills() {
       <div className="absolute inset-0 -z-10 opacity-[0.4] dot-grid"></div>
 
       {/* Header */}
-      <div className="skills-header text-center max-w-2xl mx-auto mb-16 space-y-4">
+      <div className="skills-header text-center max-w-2xl mx-auto mb-8 space-y-3">
         <span className="inline-block text-xs font-mono uppercase tracking-widest text-primary px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5">
           Top Skills
         </span>

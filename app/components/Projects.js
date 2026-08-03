@@ -128,11 +128,11 @@ export default function Projects() {
     <section
       id="projects"
       ref={sectionRef}
-      className="projects-section py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-border relative"
+      className="projects-section py-12 px-6 md:px-12 max-w-7xl mx-auto border-t border-border relative"
     >
       <div className="absolute left-1/4 top-1/3 w-[350px] h-[350px] rounded-full radial-bg-blue opacity-20 -z-10"></div>
 
-      <div className="projects-header text-center max-w-3xl mx-auto mb-16 space-y-3">
+      <div className="projects-header text-center max-w-3xl mx-auto mb-8 space-y-3">
         <span className="inline-block text-xs font-mono uppercase tracking-widest text-primary px-4 py-1.5 rounded-full border border-primary/20 bg-primary/5">
           Live Portfolio
         </span>

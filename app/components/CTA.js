@@ -62,7 +62,7 @@ export default function CTA() {
     <section
       ref={containerRef}
       id="cta"
-      className="cta-section py-20 px-6 md:px-12 max-w-7xl mx-auto w-full relative"
+      className="cta-section py-10 px-6 md:px-12 max-w-7xl mx-auto w-full relative"
     >
       <div className="absolute left-10 bottom-10 w-[300px] h-[300px] rounded-full radial-bg-blue opacity-20 -z-10"></div>
       <div className="absolute right-10 top-10 w-[300px] h-[300px] rounded-full radial-bg-indigo opacity-15 -z-10"></div>

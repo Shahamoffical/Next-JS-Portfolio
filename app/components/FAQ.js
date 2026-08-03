@@ -41,8 +41,8 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section id="faq" className="py-20 px-6 md:px-12 max-w-5xl mx-auto w-full">
-      <div className="text-center space-y-4 mb-14">
+    <section id="faq" className="py-10 px-6 md:px-12 max-w-5xl mx-auto w-full">
+      <div className="text-center space-y-3 mb-7">
         <span className="px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary font-mono text-xs font-extrabold uppercase tracking-wider inline-flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5" /> Got Questions?
         </span>
