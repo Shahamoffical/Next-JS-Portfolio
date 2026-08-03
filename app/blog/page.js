@@ -180,7 +180,7 @@ export default function BlogPage() {
                 </div>
 
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <span className="font-mono text-slate-400">DevShaham Guide</span>
+                  <span className="font-mono text-slate-400">Shaham Abbas Dev Guide</span>
                   <span className="font-bold text-[#c00000] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                     Read Full Article <ArrowUpRight className="w-4 h-4" />
                   </span>

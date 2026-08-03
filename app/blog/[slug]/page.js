@@ -174,7 +174,7 @@ Injecting accurate Schema markup directly onto your homepage and product pages i
 {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
-  "name": "DevShaham - Digital Agency",
+  "name": "Shaham Abbas Dev - Digital Agency",
   "url": "https://devshaham.com",
   "priceRange": "$$$",
   "telephone": "+923213567058"
@@ -498,7 +498,7 @@ export default function SingleBlogPostPage() {
               📷 High-Resolution Technical Reference
             </span>
             <span className="bg-[#c00000] text-white font-bold px-3 sm:px-3.5 py-1.5 rounded-xl shadow-md text-[10px] sm:text-xs text-center">
-              DevShaham Exclusive Guide
+              Shaham Abbas Dev Exclusive Guide
             </span>
           </div>
         </div>

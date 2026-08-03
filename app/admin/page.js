@@ -285,9 +285,9 @@ export default function AdminDashboard() {
 
   // Schema Manager State
   const [schemasList, setSchemasList] = useState([
-    { id: 1, name: "Organization", type: "Organization", status: "Active", jsonLd: '{\n  "@url": "https://next-js-portfolio-one-bay.vercel.app",\n  "@type": "Organization",\n  "name": "DevShaham",\n  "email": "shahamabbasdev@gmail.com"\n}' },
-    { id: 2, name: "LocalBusiness (Digital Agency)", type: "LocalBusiness", status: "Active", jsonLd: '{\n  "@type": "LocalBusiness",\n  "name": "DevShaham Digital Agency"\n}' },
-    { id: 3, name: "WebSite", type: "WebSite", status: "Active", jsonLd: '{\n  "@type": "WebSite",\n  "name": "DevShaham Portfolio"\n}' },
+    { id: 1, name: "Organization", type: "Organization", status: "Active", jsonLd: '{\n  "@url": "https://next-js-portfolio-one-bay.vercel.app",\n  "@type": "Organization",\n  "name": "Shaham Abbas Dev",\n  "email": "shahamabbasdev@gmail.com"\n}' },
+    { id: 2, name: "LocalBusiness (Digital Agency)", type: "LocalBusiness", status: "Active", jsonLd: '{\n  "@type": "LocalBusiness",\n  "name": "Shaham Abbas Dev Digital Agency"\n}' },
+    { id: 3, name: "WebSite", type: "WebSite", status: "Active", jsonLd: '{\n  "@type": "WebSite",\n  "name": "Shaham Abbas Dev Portfolio"\n}' },
     { id: 4, name: "Service (Custom Engineering)", type: "Service", status: "Active", jsonLd: '{\n  "@type": "Service",\n  "name": "Shopify & WordPress Engineering"\n}' }
   ]);
   const [editingSchema, setEditingSchema] = useState(null);

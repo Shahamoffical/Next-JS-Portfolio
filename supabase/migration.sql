@@ -1,5 +1,5 @@
 -- ============================================
--- DevShaham Portfolio — Safe Idempotent Migration SQL
+-- Shaham Abbas Dev Portfolio — Safe Idempotent Migration SQL
 -- Run this in: Supabase Dashboard → SQL Editor
 -- ============================================
 

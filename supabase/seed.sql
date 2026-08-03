@@ -1,5 +1,5 @@
 -- ============================================
--- DevShaham Portfolio — Safe Idempotent Seed Data
+-- Shaham Abbas Dev Portfolio — Safe Idempotent Seed Data
 -- Run AFTER migration.sql in Supabase SQL Editor
 -- ============================================
 
@@ -93,5 +93,5 @@ ON CONFLICT DO NOTHING;
 -- SETTINGS
 INSERT INTO settings (key, value) VALUES
   ('brand', '{"primaryColor": "#c00000", "hoverColor": "#820000", "headingFont": "Plus Jakarta Sans", "bodyFont": "Inter"}'),
-  ('seo', '{"defaultTitle": "DevShaham - Premium Custom Website Development", "defaultDesc": "Scaling E-commerce & Digital Experiences", "coreWebVitalsTarget": "Sub-2s"}')
+  ('seo', '{"defaultTitle": "Shaham Abbas Dev - Premium Custom Website Development", "defaultDesc": "Scaling E-commerce & Digital Experiences", "coreWebVitalsTarget": "Sub-2s"}')
 ON CONFLICT (key) DO NOTHING;

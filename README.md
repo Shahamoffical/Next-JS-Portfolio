@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/Supabase-SSR-3ecf8e?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
 </p>
 
-# 🚀 DevShaham — High-Performance E-Commerce & Full-Stack Portfolio CMS
+# 🚀 Shaham Abbas Dev — High-Performance E-Commerce & Full-Stack Portfolio CMS
 
 A **premium, full-stack digital agency portfolio & CMS dashboard** built with **Next.js 16 App Router**, **Supabase SSR Auth**, **GSAP Animations**, and **Tailwind CSS 4.0**. Engineered for custom **Shopify Plus**, **WordPress & WooCommerce**, **MERN Stack Applications**, and **AI Automations**.
 
@@ -31,7 +31,7 @@ A **premium, full-stack digital agency portfolio & CMS dashboard** built with **
 
 ## 🌐 Overview
 
-DevShaham is a **production-ready full-stack portfolio** engineered to showcase high-converting e-commerce builds, custom web applications, and autonomous AI agents. It features a complete **Admin CMS Dashboard** (`/admin`) guarded by **Supabase Authentication**, enabling direct management of portfolio projects, blog articles, leads, and SEO metadata.
+Shaham Abbas Dev is a **production-ready full-stack portfolio** engineered to showcase high-converting e-commerce builds, custom web applications, and autonomous AI agents. It features a complete **Admin CMS Dashboard** (`/admin`) guarded by **Supabase Authentication**, enabling direct management of portfolio projects, blog articles, leads, and SEO metadata.
 
 ### 🌟 Key Highlights
 
@@ -156,7 +156,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 📜 License
 
-This project is proprietary software developed for **DevShaham Digital Agency**. All rights reserved.
+This project is proprietary software developed for **Shaham Abbas Dev Digital Agency**. All rights reserved.
 
 <p align="center">
   Crafted with ❤️ by <a href="https://devshaham.com">Shaham Abbas</a> — Scaling E-Commerce & Full-Stack Solutions
