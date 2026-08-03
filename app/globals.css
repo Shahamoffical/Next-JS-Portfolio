@@ -261,4 +261,8 @@ body {
   width: 100%;
 }
 
-
+@media (min-width: 768px) {
+  .md\:px-12 {
+    padding-inline: calc(var(--spacing, 0.25rem) * 8);
+  }
+}
